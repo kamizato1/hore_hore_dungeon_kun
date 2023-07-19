@@ -7,6 +7,7 @@
 #define PLAYER_SIZE_Y 25
 
 #define JUMP_SPEED 10
+#define PLAYER_SPEED 2
 
 
 Player::Player()
@@ -32,11 +33,11 @@ void Player::Update(Key* key, Stage* stage)
 
     //‚±‚±‚©‚ç‰º«xÀ•W‚ÌˆÚ“®
     float all_speed_x_record_calculation = 0;
-    float now_speed_x, old_speed_x;
+    float now_speed_x = 0;
+    float old_speed_x = 0;
    
-    now_speed_x = 0;
-    if (key->KeyPressed(RIGHT))now_speed_x = 2;
-    else if (key->KeyPressed(LEFT))now_speed_x = -2;
+    if (key->KeyPressed(RIGHT))now_speed_x = PLAYER_SPEED;
+    else if (key->KeyPressed(LEFT))now_speed_x = -PLAYER_SPEED;
 
     for (int i = 0; i < SPEED_X_RECORD_NUM; i++)
     {
@@ -45,7 +46,6 @@ void Player::Update(Key* key, Stage* stage)
         now_speed_x = old_speed_x;
         all_speed_x_record_calculation += speed_x_record[i];
     }
-
     speed.x = (all_speed_x_record_calculation / SPEED_X_RECORD_NUM);
     location.x += speed.x;
 
@@ -57,7 +57,6 @@ void Player::Update(Key* key, Stage* stage)
     }
 
     //‚±‚±‚©‚ç‰º«yÀ•W‚ÌˆÚ“®
-
     if ((speed.y += GRAVITY_POWER) > JUMP_SPEED)speed.y = JUMP_SPEED;
     location.y += speed.y;
 
@@ -122,7 +121,7 @@ void Player::Update(Key* key, Stage* stage)
         {
             if (key->KeyDown(L))pickaxe = new Pickaxe(location, pickaxe_speed);
         }
-        if (key->KeyDown(R))stage->UseItem(cursor_x_num, cursor_y_num, ITEM_TYPE::BLOCK);
+        if (key->KeyDown(R))stage->UseItem(cursor_location, ITEM_TYPE::BLOCK);
     }
 }
 

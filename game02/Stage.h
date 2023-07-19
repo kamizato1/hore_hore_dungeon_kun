@@ -1,6 +1,5 @@
 #pragma once
-
-//#include <vector>
+#include <vector>
 #include"StageBlock.h"
 #include"Item.h"
 #include"BoxCollider.h"
@@ -11,7 +10,8 @@ class Stage
 private:
 
     int break_block_se;
-    StageBlock* stageblock[STAGE_BLOCK_NUM_Y][STAGE_BLOCK_NUM_X];
+    //StageBlock* stageblock[STAGE_BLOCK_NUM_Y][STAGE_BLOCK_NUM_X];
+    std::vector<StageBlock>stageblock;
     class Item* item[15];
     int block_image[7];
 
@@ -28,5 +28,5 @@ public:
     bool HitPickaxe(BoxCollider* bc);
     bool HitStage(BoxCollider* bc);
 
-    void UseItem(int x, int y, ITEM_TYPE item_type);
+    bool UseItem(DATA location, ITEM_TYPE item_type);
 };
