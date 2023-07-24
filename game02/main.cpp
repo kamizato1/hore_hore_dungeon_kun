@@ -27,7 +27,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     if (DxLib_Init() == -1) return -1;	// DXライブラリの初期化処理
 
 
-    //SetDrawScreen(DX_SCREEN_BACK);	// 描画先画面を裏にする
+    SetDrawScreen(DX_SCREEN_BACK);	// 描画先画面を裏にする
 
     SetFontSize(20);		// 文字サイズを設定
 

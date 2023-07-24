@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include"StageBlock.h"
-#include"Item.h"
+#include"Treasure.h"
 #include"BoxCollider.h"
 #include"define.h"
 
@@ -10,10 +10,10 @@ class Stage
 private:
 
     int break_block_se;
-    //StageBlock* stageblock[STAGE_BLOCK_NUM_Y][STAGE_BLOCK_NUM_X];
     std::vector<StageBlock>stageblock;
-    class Item* item[15];
+    std::vector<class Treasure>treasure;
     int block_image[7];
+    int treasure_image[4];
 
 public:
 

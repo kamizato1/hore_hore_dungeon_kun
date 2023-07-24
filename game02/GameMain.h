@@ -15,6 +15,9 @@ private:
     Player* player;
     Ui* ui;
 
+    float camera_work_record[20];
+    float camera_work;
+
 public:
 
     GameMain();

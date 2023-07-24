@@ -5,7 +5,7 @@
 #include"define.h"
 
 
-class Item : public BoxCollider
+class Treasure : public BoxCollider
 {
 private:
 
@@ -15,7 +15,7 @@ private:
     
 public:
 
-    Item(int x, int y, int type, int image);
+    Treasure(int x, int y, int type, int image);
     void Update(class Stage* stage);
     void Draw(float camera_work) const;
 };

@@ -37,4 +37,7 @@ public:
 
     void Update(Key* key, Stage* stage);
     void Draw(float camera_work) const;
+
+    void MoveX(Key* key, Stage* stage);
+    void MoveY(Key* key, Stage* stage);
 };

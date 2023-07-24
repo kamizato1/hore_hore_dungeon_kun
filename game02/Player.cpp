@@ -29,51 +29,9 @@ Player::Player()
 
 void Player::Update(Key* key, Stage* stage)
 {
-    //ここから下↓プレイヤーの移動処理
-
-    //ここから下↓x座標の移動
-    float all_speed_x_record_calculation = 0;
-    float now_speed_x = 0;
-    float old_speed_x = 0;
-   
-    if (key->KeyPressed(RIGHT))now_speed_x = PLAYER_SPEED;
-    else if (key->KeyPressed(LEFT))now_speed_x = -PLAYER_SPEED;
-
-    for (int i = 0; i < SPEED_X_RECORD_NUM; i++)
-    {
-        old_speed_x = speed_x_record[i];
-        speed_x_record[i] = now_speed_x;
-        now_speed_x = old_speed_x;
-        all_speed_x_record_calculation += speed_x_record[i];
-    }
-    speed.x = (all_speed_x_record_calculation / SPEED_X_RECORD_NUM);
-    location.x += speed.x;
-
-    if (stage->HitStage(this))
-    {
-        location.x = floor(location.x);
-        float sign = -(speed.x / fabsf(speed.x));
-        while (stage->HitStage(this))location.x += sign;
-    }
-
-    //ここから下↓y座標の移動
-    if ((speed.y += GRAVITY_POWER) > JUMP_SPEED)speed.y = JUMP_SPEED;
-    location.y += speed.y;
-
-    if (stage->HitStage(this))
-    {
-        location.y = floor(location.y);
-        float sign = -(speed.y / fabsf(speed.y));
-        while (stage->HitStage(this))location.y += sign;
-
-        speed.y = 0;
-
-        if (sign == -1)//地面に触れているとき
-        {
-            if (key->KeyDown(A))speed.y = -JUMP_SPEED;
-        }
-    }
-
+    MoveX(key, stage);
+    MoveY(key, stage);
+    
     //ここから下↓つるはしを投げるときの処理
 
     DATA all_r_stick_angle_record_calculation = { 0,0 };
@@ -122,6 +80,54 @@ void Player::Update(Key* key, Stage* stage)
             if (key->KeyDown(L))pickaxe = new Pickaxe(location, pickaxe_speed);
         }
         if (key->KeyDown(R))stage->UseItem(cursor_location, ITEM_TYPE::BLOCK);
+    }
+}
+
+void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
+{
+    float all_speed_x_record_calculation = 0;
+    float now_speed_x = 0;
+    float old_speed_x = 0;
+
+    if (key->KeyPressed(RIGHT))now_speed_x = PLAYER_SPEED;
+    else if (key->KeyPressed(LEFT))now_speed_x = -PLAYER_SPEED;
+
+    for (int i = 0; i < SPEED_X_RECORD_NUM; i++)
+    {
+        old_speed_x = speed_x_record[i];
+        speed_x_record[i] = now_speed_x;
+        now_speed_x = old_speed_x;
+        all_speed_x_record_calculation += speed_x_record[i];
+    }
+
+    speed.x = (all_speed_x_record_calculation / SPEED_X_RECORD_NUM);
+    location.x += speed.x;
+
+    if (stage->HitStage(this))
+    {
+        location.x = floor(location.x);
+        float sign = -(speed.x / fabsf(speed.x));
+        while (stage->HitStage(this))location.x += sign;
+    }
+}
+
+void Player::MoveY(Key* key, Stage* stage)//Ｙ座標の移動
+{
+    if ((speed.y += GRAVITY_POWER) > JUMP_SPEED)speed.y = JUMP_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
+    location.y += speed.y;//スピードをY座標に足す。
+
+    if (stage->HitStage(this))//ステージにぶつかっていたら、
+    {
+        location.y = floor(location.y);
+        float sign = -(speed.y / fabsf(speed.y));
+        while (stage->HitStage(this))location.y += sign;
+
+        speed.y = 0;
+
+        if (sign == -1)//地面に触れているとき
+        {
+            if (key->KeyDown(A))speed.y = -JUMP_SPEED;
+        }
     }
 }
 

@@ -154,7 +154,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="FpsControll.cpp" />
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pickaxe.cpp" />
@@ -171,7 +171,7 @@
     <ClInclude Include="define.h" />
     <ClInclude Include="FpsControll.h" />
     <ClInclude Include="GameMain.h" />
-    <ClInclude Include="Item.h" />
+    <ClInclude Include="Treasure.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Pickaxe.h" />
     <ClInclude Include="Player.h" />

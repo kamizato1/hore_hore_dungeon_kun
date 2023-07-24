@@ -44,9 +44,8 @@ enum class ITEM_TYPE
 
 enum class TREASURE_TYPE
 {
-    KEY = 1,
+    KEY,
     BAG,
     BOM,
     ANGRY_BOM
-
 };
