@@ -6,13 +6,10 @@
 #define KEY_NUM 10
 
 #define STAGE_BLOCK_NUM_X 100
-#define STAGE_BLOCK_NUM_Y 21
+#define STAGE_BLOCK_NUM_Y 20
 
-#define STAGE_BLOCK_SIZE_X 30
-#define STAGE_BLOCK_SIZE_Y 30
-
-#define MINI_MAP_SIZE_X 15
-#define MINI_MAP_SIZE_Y 15
+#define STAGE_BLOCK_SIZE_X 36
+#define STAGE_BLOCK_SIZE_Y 36
 
 #define GRAVITY_POWER 0.4
 

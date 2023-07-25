@@ -11,6 +11,6 @@ void Ui::Update()
 
 void Ui::Draw() const
 {
-	DrawBox(0, 630, 1280, 720, 0x000000, TRUE);
-	DrawBox(0, 630, 1280, 720, 0xffffff, FALSE);
+	////DrawBox(0, 630, 1280, 720, 0x000000, TRUE);
+	//D/rawBox(0, 630, 1280, 720, 0xffffff, FALSE);
 }

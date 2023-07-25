@@ -3,13 +3,13 @@
 
 Stage::Stage()
 {
-	LoadDivGraph("images/block.png", 7, 7, 1, STAGE_BLOCK_SIZE_X, STAGE_BLOCK_SIZE_Y, block_image);
+	LoadDivGraph("images/block02.png", 7, 7, 1, STAGE_BLOCK_SIZE_X, STAGE_BLOCK_SIZE_Y, block_image);
 	LoadDivGraph("images/treasure.png", 4, 4, 1, 25, 25, treasure_image);
 
 	FILE* fp_s;//ステージ１ファイル読み込み
 	FILE* fp_t;//アイテム１ファイル読み込み
-	fopen_s(&fp_s, "data/stage/stage01.txt", "r");
-	fopen_s(&fp_t, "data/stage/treasure01.txt", "r");
+	fopen_s(&fp_s, "data/stage/stage02.txt", "r");
+	fopen_s(&fp_t, "data/stage/treasure02.txt", "r");
 
 	for (int i = 0; i < STAGE_BLOCK_NUM_Y; i++)
 	{

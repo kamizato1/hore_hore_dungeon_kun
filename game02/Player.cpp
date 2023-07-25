@@ -3,8 +3,8 @@
 
 #include"Player.h"
 
-#define PLAYER_SIZE_X 25
-#define PLAYER_SIZE_Y 25
+#define PLAYER_SIZE_X 30
+#define PLAYER_SIZE_Y 30
 
 #define JUMP_SPEED 10
 #define PLAYER_SPEED 2
