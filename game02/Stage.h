@@ -3,6 +3,7 @@
 #include"StageBlock.h"
 #include"Treasure.h"
 #include"BoxCollider.h"
+#include"BreakBlock.h"
 #include"define.h"
 
 class Stage
@@ -12,6 +13,7 @@ private:
     int break_block_se;
     std::vector<StageBlock>stageblock;
     std::vector<class Treasure>treasure;
+    std::vector<class BreakBlock>breakblock;
     int block_image[7];
     int treasure_image[4];
 
