@@ -3,7 +3,7 @@
 
 bool BoxCollider::HitBox(BoxCollider* bc)
 {
-    float sx1 = location.x - radius.x - 1 ;
+    float sx1 = location.x - radius.x - 1;
     float sx2 = location.x + radius.x + 1;
     float sy1 = location.y - radius.y - 1;
     float sy2 = location.y + radius.y + 1;

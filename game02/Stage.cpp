@@ -33,18 +33,24 @@ Stage::~Stage()
 {
 	stageblock.clear();
 	treasure.clear();
+	breakblock.clear();
 }
 
 void Stage::Update()
 {
 	for (int i = 0; i < treasure.size(); i++)treasure[i].Update(this);  // 全要素に対するループ（宝物のアップデート）
+	for (int i = 0; i < breakblock.size(); i++)
+	{
+		breakblock[i].Update();
+		if(breakblock[i].CanDelete())breakblock.erase(breakblock.begin() + i);
+	}
 }
 
 void Stage::Draw(float camera_work) const
 {
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
 	for (int i = 0; i < stageblock.size(); i++)stageblock[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
-	DrawFormatString(0, 50, 0xffffff, "%d", stageblock.size());
+	for (int i = 0; i < breakblock.size(); i++)breakblock[i].Draw(camera_work);
 }
 
 bool Stage::HitStage(BoxCollider* bc)
@@ -68,6 +74,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 			int type = static_cast<int>(stageblock[i].GetBlockType());
 			if ((type > 0) && (type < 5))//ブロックが土だったら
 			{
+				breakblock.emplace_back(stageblock[i].GetLocation());
 				stageblock.erase(stageblock.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 			}
@@ -89,6 +96,7 @@ bool Stage::UseItem(DATA location, ITEM_TYPE item_type)
 				int type = static_cast<int>(stageblock[i].GetBlockType());
 				if ((type > 0) && (type < 4))//ブロックが土だったら
 				{
+					breakblock.emplace_back(stageblock[i].GetLocation());
 					if (--type == 0)stageblock.erase(stageblock.begin() + i);
 					else stageblock[i].SetBlockType(static_cast<BLOCK_TYPE>(type), block_image[type]);
 					//PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
