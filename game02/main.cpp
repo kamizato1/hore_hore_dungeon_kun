@@ -17,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPSTR lpCmdLine, int nCmdShow) {
 
     // タイトルを test に変更
-    SetMainWindowText("シューティングゲーム");
+    SetMainWindowText("惚れ掘れダンジョン君");
 
     SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 16);
     ChangeWindowMode(TRUE);		// ウィンドウモードで起動
@@ -25,7 +25,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     SetWaitVSyncFlag(0);
 
     if (DxLib_Init() == -1) return -1;	// DXライブラリの初期化処理
-
 
     SetDrawScreen(DX_SCREEN_BACK);	// 描画先画面を裏にする
 
@@ -49,9 +48,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         //フレームレート表示
         FpsControll_Draw();
 
-        ScreenFlip();			// 裏画面の内容を表画面に反映
-
         sceneMng->ChangeScene();
+        
+        ScreenFlip();			// 裏画面の内容を表画面に反映
 
         //待機
         FpsControll_Wait();
