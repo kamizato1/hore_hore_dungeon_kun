@@ -16,6 +16,7 @@ private:
     std::vector<class BreakBlock>breakblock;
     int block_image[7];
     int treasure_image[4];
+    int break_block_image[2][BREAK_BLOCK_IMAGE_TYPE];
 
 public:
 

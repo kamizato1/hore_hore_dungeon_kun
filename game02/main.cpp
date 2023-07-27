@@ -42,6 +42,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
         sceneMng->Update(key);
 
+        sceneMng->ChangeScene();
+
+        //待機
+        FpsControll_Wait();
+
         ClearDrawScreen();		// 画面の初期化
 
         sceneMng->Draw();
@@ -50,11 +55,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         FpsControll_Draw();
 
         ScreenFlip();			// 裏画面の内容を表画面に反映
-
-        sceneMng->ChangeScene();
-
-        //待機
-        FpsControll_Wait();
     }
 
 

@@ -79,7 +79,7 @@ void Player::Update(Key* key, Stage* stage)
         {
             if (key->KeyDown(L))pickaxe = new Pickaxe(location, pickaxe_speed);
         }
-        if (key->KeyDown(R))stage->UseItem(cursor_location, ITEM_TYPE::BLOCK);
+        if (key->KeyDown(R))stage->UseItem(cursor_location, ITEM_TYPE::PICKAXE);
     }
 }
 

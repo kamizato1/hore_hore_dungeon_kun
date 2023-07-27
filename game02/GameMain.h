@@ -13,6 +13,7 @@ private:
 
     Stage* stage;
     Player* player;
+    int back_ground_image[3];
 
 public:
 

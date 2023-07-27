@@ -1,7 +1,7 @@
 #pragma once
 #include"define.h"
 
-#define IMAGE_TYPE 10
+#define BREAK_BLOCK_IMAGE_TYPE 10
 
 
 class BreakBlock
@@ -9,14 +9,14 @@ class BreakBlock
 private:
 
 	DATA location;
-	int image[IMAGE_TYPE];
+	int image[BREAK_BLOCK_IMAGE_TYPE];
 	int image_change_time;
 	int image_type;
 	bool can_delete;
 
 public:
 
-	BreakBlock(DATA location);
+	BreakBlock(DATA location, int *image);
 	//~BreakBlock();
 
 	void Update();
