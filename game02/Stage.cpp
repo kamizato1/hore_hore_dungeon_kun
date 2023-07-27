@@ -3,7 +3,7 @@
 
 Stage::Stage()
 {
-	LoadDivGraph("images/block02.png", 7, 7, 1, STAGE_BLOCK_SIZE_X, STAGE_BLOCK_SIZE_Y, block_image);
+	LoadDivGraph("images/block.png", 7, 7, 1, STAGE_BLOCK_SIZE_X, STAGE_BLOCK_SIZE_Y, block_image);
 	LoadDivGraph("images/treasure.png", 4, 4, 1, 25, 25, treasure_image);
 
 	FILE* fp_s;//ステージ１ファイル読み込み
@@ -27,6 +27,8 @@ Stage::Stage()
 	fclose(fp_t);
 
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
+	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, break_block_image[0]);
+	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, break_block_image[1]);
 }
 
 Stage::~Stage()
@@ -51,6 +53,7 @@ void Stage::Draw(float camera_work) const
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
 	for (int i = 0; i < stageblock.size(); i++)stageblock[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
 	for (int i = 0; i < breakblock.size(); i++)breakblock[i].Draw(camera_work);
+	DrawFormatString(0, 30, 0xffffff, "%d", breakblock.size());
 }
 
 bool Stage::HitStage(BoxCollider* bc)
@@ -74,7 +77,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 			int type = static_cast<int>(stageblock[i].GetBlockType());
 			if ((type > 0) && (type < 5))//ブロックが土だったら
 			{
-				breakblock.emplace_back(stageblock[i].GetLocation());
+				breakblock.emplace_back(stageblock[i].GetLocation(), break_block_image[1]);
 				stageblock.erase(stageblock.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 			}
@@ -96,9 +99,16 @@ bool Stage::UseItem(DATA location, ITEM_TYPE item_type)
 				int type = static_cast<int>(stageblock[i].GetBlockType());
 				if ((type > 0) && (type < 4))//ブロックが土だったら
 				{
-					breakblock.emplace_back(stageblock[i].GetLocation());
-					if (--type == 0)stageblock.erase(stageblock.begin() + i);
-					else stageblock[i].SetBlockType(static_cast<BLOCK_TYPE>(type), block_image[type]);
+					if (--type == 0)
+					{
+						breakblock.emplace_back(stageblock[i].GetLocation(), break_block_image[1]);
+						stageblock.erase(stageblock.begin() + i);
+					}
+					else
+					{
+						stageblock[i].SetBlockType(static_cast<BLOCK_TYPE>(type), block_image[type]);
+						breakblock.emplace_back(stageblock[i].GetLocation(), break_block_image[0]);
+					}
 					//PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 				}
 			}

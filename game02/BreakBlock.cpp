@@ -1,13 +1,13 @@
 #include"DxLib.h"
 #include"BreakBlock.h"
 
-#define IMAGE_CHANGE_TIME 5
+#define IMAGE_CHANGE_TIME 2
 
-BreakBlock::BreakBlock(DATA location)
+BreakBlock::BreakBlock(DATA location, int *image)
 {
 	this->location = location;
 	image_change_time = 0;
-	LoadDivGraph("images/kakera02.png", 10, 10, 1, 180, 180, image);
+	for (int i = 0; i < BREAK_BLOCK_IMAGE_TYPE; i++)this->image[i] = image[i];
 	can_delete = FALSE;
 	image_type = 0;
 }
@@ -16,9 +16,9 @@ void BreakBlock::Update()
 {
 	if (++image_change_time > IMAGE_CHANGE_TIME)
 	{
-		if (++image_type > IMAGE_TYPE)
+		if (++image_type > BREAK_BLOCK_IMAGE_TYPE)
 		{
-			image_type = IMAGE_TYPE;
+			image_type = BREAK_BLOCK_IMAGE_TYPE;
 			can_delete = TRUE;
 		}
 		image_change_time = 0;
