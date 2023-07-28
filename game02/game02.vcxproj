@@ -155,6 +155,8 @@
     <ClCompile Include="BreakBlock.cpp" />
     <ClCompile Include="FpsControll.cpp" />
     <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="main.cpp" />
@@ -173,6 +175,8 @@
     <ClInclude Include="define.h" />
     <ClInclude Include="FpsControll.h" />
     <ClInclude Include="GameMain.h" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="StageSelect.h" />
     <ClInclude Include="Treasure.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Pickaxe.h" />

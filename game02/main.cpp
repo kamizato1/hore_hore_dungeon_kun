@@ -56,6 +56,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         ScreenFlip();			// 裏画面の内容を表画面に反映
     }
 
+    //消去
+    delete key;
 
     DxLib_End();	// DXライブラリ使用の終了処理
 
