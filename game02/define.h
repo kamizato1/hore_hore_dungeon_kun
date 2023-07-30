@@ -1,5 +1,7 @@
 #pragma once
 
+#define FPS 60
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
@@ -10,6 +12,11 @@
 
 #define STAGE_BLOCK_SIZE_X 36
 #define STAGE_BLOCK_SIZE_Y 36
+
+#define ITEM_SIZE_X 35
+#define ITEM_SIZE_Y 35
+
+#define ITEM_TYPE_NUM 3
 
 #define GRAVITY_POWER 0.4
 
@@ -41,6 +48,7 @@ enum class ITEM_TYPE
 
 enum class TREASURE_TYPE
 {
+    NONE = -1,
     KEY,
     BAG,
     BOM,

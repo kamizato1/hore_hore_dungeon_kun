@@ -24,14 +24,18 @@ void Key::Update()
 	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B)) now_key[B].flg = TRUE;//Bボタンが押されているか
 	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6)) now_key[R].flg = TRUE;//Rボタンが押されているか
 	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5)) now_key[L].flg = TRUE;//Lボタンが押されているか
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_UP))now_key[UP].flg = TRUE;//UPボタンが押されているか
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_DOWN))now_key[DOWN].flg = TRUE;//DOWNボタンが押されているか
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT))now_key[RIGHT].flg = TRUE;//RIGHTボタンが押されているか
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT))now_key[LEFT].flg = TRUE;//LEFTボタンが押されているか
 
 	GetJoypadAnalogInputRight(&r_stick_angle.x, &r_stick_angle.y, DX_INPUT_PAD1); // 入力状態を取得
 	GetJoypadAnalogInput(&l_stick_angle.x, &l_stick_angle.y, DX_INPUT_PAD1); // 入力状態を取得
 
-	if (l_stick_angle.y < 0)now_key[UP].flg = TRUE; else now_key[UP].flg = FALSE;
+	/*if (l_stick_angle.y < 0)now_key[UP].flg = TRUE; else now_key[UP].flg = FALSE;
 	if (l_stick_angle.y > 0)now_key[DOWN].flg = TRUE; else now_key[DOWN].flg = FALSE;
 	if (l_stick_angle.x < 0)now_key[LEFT].flg = TRUE; else now_key[LEFT].flg = FALSE;
-	if (l_stick_angle.x > 0)now_key[RIGHT].flg = TRUE; else now_key[RIGHT].flg = FALSE;
+	if (l_stick_angle.x > 0)now_key[RIGHT].flg = TRUE; else now_key[RIGHT].flg = FALSE;*/
 }
 
 bool Key::KeyPressed(int key_type)//押してるとき

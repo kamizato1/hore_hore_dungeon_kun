@@ -1,6 +1,5 @@
 #include"DxLib.h"
 #include <math.h>
-
 #include"Player.h"
 
 #define PLAYER_SIZE_X 30
@@ -12,12 +11,11 @@
 
 Player::Player()
 {
-    pickaxe = nullptr;
     location = { 10, 300 };
     cursor_location = location;
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
-    pickaxe_speed = { 0,0 };
+    throw_speed = { 0,0 };
    
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
     for (int i = 0; i < SPEED_X_RECORD_NUM; i++)speed_x_record[i] = 0;
@@ -25,6 +23,8 @@ Player::Player()
     cursor_image = LoadGraph("images/cursor.png");
     item_type = ITEM_TYPE::PICKAXE;
     can_use_item = FALSE;
+
+    for (int i = 0; i < 3; i++)item_num[i] = 0;
 }
 
 void Player::Update(Key* key, Stage* stage)
@@ -32,13 +32,18 @@ void Player::Update(Key* key, Stage* stage)
     MoveX(key, stage);
     MoveY(key, stage);
     
+    if (stage->HitTreasure(this, TRUE) == TREASURE_TYPE::BOM)
+    {
+        item_num[static_cast<int>(ITEM_TYPE::BOM)]++;
+    }
+
     //‚±‚±‚©‚ç‰º«‚Â‚é‚Í‚µ‚ð“Š‚°‚é‚Æ‚«‚Ìˆ—
 
     DATA all_r_stick_angle_record_calculation = { 0,0 };
     DATA now_r_stick_angle, old_r_stick_angle;
 
-    now_r_stick_angle.x = -(key->GetStickAngle(R).x / 60);
-    now_r_stick_angle.y = -(key->GetStickAngle(R).y / 60);
+    now_r_stick_angle.x = -(key->GetStickAngle(R).x / 50);
+    now_r_stick_angle.y = -(key->GetStickAngle(R).y / 50);
     
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
     {
@@ -49,16 +54,16 @@ void Player::Update(Key* key, Stage* stage)
         all_r_stick_angle_record_calculation.y += r_stick_angle_record[i].y;
     }
 
-    pickaxe_speed.x = (all_r_stick_angle_record_calculation.x / R_STICK_ANGLE_RECORD_NUM);
-    pickaxe_speed.y = (all_r_stick_angle_record_calculation.y / R_STICK_ANGLE_RECORD_NUM);
+    throw_speed.x = (all_r_stick_angle_record_calculation.x / R_STICK_ANGLE_RECORD_NUM);
+    throw_speed.y = (all_r_stick_angle_record_calculation.y / R_STICK_ANGLE_RECORD_NUM);
 
-    if ((pickaxe_speed.x == 0) && (pickaxe_speed.y == 0))can_use_item = FALSE;
+    if ((throw_speed.x == 0) && (throw_speed.y == 0))can_use_item = FALSE;
     else can_use_item = TRUE;
 
     int cursor_sign_x = 0;
-    if (pickaxe_speed.x != 0)cursor_sign_x = -(pickaxe_speed.x / fabsf(pickaxe_speed.x));
+    if (throw_speed.x != 0)cursor_sign_x = -(throw_speed.x / fabsf(throw_speed.x));
     int cursor_sign_y = 0;
-    if (pickaxe_speed.y != 0)cursor_sign_y = -(pickaxe_speed.y / fabsf(pickaxe_speed.y));
+    if (throw_speed.y != 0)cursor_sign_y = -(throw_speed.y / fabsf(throw_speed.y));
 
     int cursor_x_num = (location.x / STAGE_BLOCK_SIZE_X) + cursor_sign_x;
     if (cursor_sign_y == 0)cursor_x_num = (location.x + (radius.x * cursor_sign_x)) / STAGE_BLOCK_SIZE_X + cursor_sign_x;
@@ -67,19 +72,24 @@ void Player::Update(Key* key, Stage* stage)
     cursor_location.x = (cursor_x_num * STAGE_BLOCK_SIZE_X) + (STAGE_BLOCK_SIZE_X / 2);
     cursor_location.y = (cursor_y_num * STAGE_BLOCK_SIZE_Y) + (STAGE_BLOCK_SIZE_Y / 2);
 
-    if(pickaxe != nullptr)
+    if (speed.x == 0)
     {
-        if (pickaxe->CanDelete())pickaxe = nullptr;
-        else pickaxe->Update(stage);
+        int item_type = static_cast<int>(this->item_type);
+        if (key->KeyDown(RIGHT))
+        {
+            if (++item_type >= ITEM_TYPE_NUM)item_type = 0;
+        }
+        else if (key->KeyDown(LEFT))
+        {
+            if(--item_type < 0)item_type = ITEM_TYPE_NUM - 1;
+        }
+        this->item_type = static_cast<ITEM_TYPE>(item_type);
     }
 
     if (can_use_item)
     {
-        if (pickaxe == nullptr)
-        {
-            if (key->KeyDown(L))pickaxe = new Pickaxe(location, pickaxe_speed);
-        }
-        if (key->KeyDown(R))stage->UseItem(cursor_location, ITEM_TYPE::PICKAXE);
+        if (key->KeyDown(L))stage->ThrowItem(location, throw_speed, item_type);
+        else if (key->KeyDown(R))stage->PutItem(cursor_location, item_type);
     }
 }
 
@@ -89,8 +99,8 @@ void Player::MoveX(Key* key, Stage* stage)//‚wÀ•W‚ÌˆÚ“®
     float now_speed_x = 0;
     float old_speed_x = 0;
 
-    if (key->KeyPressed(RIGHT))now_speed_x = PLAYER_SPEED;
-    else if (key->KeyPressed(LEFT))now_speed_x = -PLAYER_SPEED;
+    if (key->GetStickAngle(L).x > 0)now_speed_x = PLAYER_SPEED;
+    else if (key->GetStickAngle(L).x < 0)now_speed_x = -PLAYER_SPEED;
 
     for (int i = 0; i < SPEED_X_RECORD_NUM; i++)
     {
@@ -140,15 +150,16 @@ void Player::Draw(float camera_work) const
         DrawRotaGraph(cursor_location.x + camera_work, cursor_location.y, 1, 0, cursor_image, TRUE);
 
         float gravity = 0;
-        DATA draw_pickaxe = location;
-        while (draw_pickaxe.y < SCREEN_HEIGHT)
+        DATA throw_location = location;
+        int count = 0;
+        while (throw_location.y < SCREEN_HEIGHT)
         {
-            draw_pickaxe.x -= pickaxe_speed.x;
-            draw_pickaxe.y -= (pickaxe_speed.y - gravity);
+            throw_location.x -= throw_speed.x;
+            throw_location.y -= (throw_speed.y - gravity);
             gravity += GRAVITY_POWER;
-            DrawCircle(draw_pickaxe.x + camera_work, draw_pickaxe.y, 3, 0xffffff, FALSE);
+            if(!(++count % 3))DrawCircle(throw_location.x + camera_work, throw_location.y, 3, 0xffffff, FALSE);
         }
     }
 
-    if (pickaxe != nullptr)pickaxe->Draw(camera_work);
+    DrawFormatString(0, 30, 0xffffff, "%d", static_cast<int>(this->item_type));
 }

@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bom.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BreakBlock.cpp" />
     <ClCompile Include="FpsControll.cpp" />
@@ -168,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h" />
+    <ClInclude Include="Bom.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="BreakBlock.h" />
     <ClInclude Include="define.h" />

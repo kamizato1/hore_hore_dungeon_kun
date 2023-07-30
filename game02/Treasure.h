@@ -18,4 +18,5 @@ public:
     Treasure(int x, int y, int type, int image);
     void Update(class Stage* stage);
     void Draw(float camera_work) const;
+    TREASURE_TYPE GetTreasureType() { return treasure_type; }
 };
