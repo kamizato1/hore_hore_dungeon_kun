@@ -4,6 +4,7 @@
 #include"Bom.h"
 
 #define BOM_COUNT 5
+#define BLAST_RANGE STAGE_BLOCK_NUM * 7
 
 Bom::Bom(DATA location, DATA speed)
 {

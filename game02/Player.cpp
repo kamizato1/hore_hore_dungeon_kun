@@ -12,7 +12,6 @@
 Player::Player()
 {
     location = { 10, 300 };
-    cursor_location = location;
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
     throw_speed = { 0,0 };
@@ -60,17 +59,7 @@ void Player::Update(Key* key, Stage* stage)
     if ((throw_speed.x == 0) && (throw_speed.y == 0))can_use_item = FALSE;
     else can_use_item = TRUE;
 
-    int cursor_sign_x = 0;
-    if (throw_speed.x != 0)cursor_sign_x = -(throw_speed.x / fabsf(throw_speed.x));
-    int cursor_sign_y = 0;
-    if (throw_speed.y != 0)cursor_sign_y = -(throw_speed.y / fabsf(throw_speed.y));
-
-    int cursor_x_num = (location.x / STAGE_BLOCK_SIZE_X) + cursor_sign_x;
-    if (cursor_sign_y == 0)cursor_x_num = (location.x + (radius.x * cursor_sign_x)) / STAGE_BLOCK_SIZE_X + cursor_sign_x;
-    int cursor_y_num = (location.y + (radius.y * cursor_sign_y)) / STAGE_BLOCK_SIZE_Y + cursor_sign_y;
-
-    cursor_location.x = (cursor_x_num * STAGE_BLOCK_SIZE_X) + (STAGE_BLOCK_SIZE_X / 2);
-    cursor_location.y = (cursor_y_num * STAGE_BLOCK_SIZE_Y) + (STAGE_BLOCK_SIZE_Y / 2);
+    if(can_use_item)Cursor();
 
     if (speed.x == 0)
     {
@@ -90,6 +79,24 @@ void Player::Update(Key* key, Stage* stage)
     {
         if (key->KeyDown(L))stage->ThrowItem(location, throw_speed, item_type);
         else if (key->KeyDown(R))stage->PutItem(cursor_location, item_type);
+    }
+}
+
+void Player::Cursor()
+{
+    int cursor_sign_x = 0;
+    if (throw_speed.x != 0)cursor_sign_x = -(throw_speed.x / fabsf(throw_speed.x));
+    int cursor_sign_y = 0;
+    if (throw_speed.y != 0)cursor_sign_y = -(throw_speed.y / fabsf(throw_speed.y));
+
+    DATA cursor_radius = { STAGE_BLOCK_SIZE_X / 2, STAGE_BLOCK_SIZE_Y / 2 };
+    cursor_location.x = (floor(location.x / STAGE_BLOCK_SIZE_X) * STAGE_BLOCK_SIZE_X) + cursor_radius.x;
+    cursor_location.y = (floor(location.y / STAGE_BLOCK_SIZE_Y) * STAGE_BLOCK_SIZE_Y) + cursor_radius.y;
+    
+    while (HitBox(cursor_location, cursor_radius))
+    {
+        cursor_location.x += (STAGE_BLOCK_SIZE_X * cursor_sign_x);
+        cursor_location.y += (STAGE_BLOCK_SIZE_Y * cursor_sign_y);
     }
 }
 
@@ -161,5 +168,6 @@ void Player::Draw(float camera_work) const
         }
     }
 
-    DrawFormatString(0, 30, 0xffffff, "%d", static_cast<int>(this->item_type));
+
+    //DrawFormatString(0, 30, 0xff0000, "ç∂ %f", ((location.x - radius.x))/ STAGE_BLOCK_SIZE_X) - 1;
 }

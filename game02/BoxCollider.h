@@ -11,6 +11,7 @@ protected:
 public:
 
 	bool HitBox(BoxCollider* bc);
+	bool HitBox(DATA location, DATA radius);
 
 	DATA GetLocation(void);
 	DATA GetRadius(void);
