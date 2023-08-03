@@ -8,6 +8,7 @@ StageBlock::StageBlock(int x, int y, int type, int image)
     location.y = (y * STAGE_BLOCK_SIZE_Y) + radius.y;
     this->type = static_cast<BLOCK_TYPE>(type);
     this->image = image;
+    hit_explosion = FALSE;
 }
 
 void StageBlock::Update()

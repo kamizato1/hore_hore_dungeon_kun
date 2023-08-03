@@ -19,12 +19,12 @@ bool BoxCollider::HitBox(BoxCollider* bc)
     return FALSE;
 }
 
-bool BoxCollider::HitBox(DATA location, DATA radius)
+bool BoxCollider::HitBox(BoxCollider* bc, DATA location, DATA radius)const
 {
-    float sx1 = this->location.x - this->radius.x - 1;
-    float sx2 = this->location.x + this->radius.x + 1;
-    float sy1 = this->location.y - this->radius.y - 1;
-    float sy2 = this->location.y + this->radius.y + 1;
+    float sx1 = bc->location.x - bc->radius.x - 1;
+    float sx2 = bc->location.x + bc->radius.x + 1;
+    float sy1 = bc->location.y - bc->radius.y - 1;
+    float sy2 = bc->location.y + bc->radius.y + 1;
 
     float dx1 = location.x - radius.x;
     float dx2 = location.x + radius.x;
@@ -37,12 +37,12 @@ bool BoxCollider::HitBox(DATA location, DATA radius)
     return FALSE;
 }
 
-DATA BoxCollider::GetLocation()
+DATA BoxCollider::GetLocation()const
 {
     return location;
 }
 
-DATA BoxCollider::GetRadius()
+DATA BoxCollider::GetRadius()const
 {
     return radius;
 }

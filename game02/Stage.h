@@ -20,6 +20,7 @@ private:
     class Pickaxe* pickaxe;
     int block_image[7];
     int treasure_image[4];
+    int caveat_image;
     int break_block_image[2][BREAK_BLOCK_IMAGE_TYPE];
 
 public:

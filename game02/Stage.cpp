@@ -29,6 +29,7 @@ Stage::Stage()
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
 	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, break_block_image[0]);
 	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, break_block_image[1]);
+	caveat_image = LoadGraph("images/warning.png");
 
 	pickaxe = nullptr;
 }
@@ -50,10 +51,30 @@ void Stage::Update()
 		breakblock[i].Update();
 		if(breakblock[i].CanDelete())breakblock.erase(breakblock.begin() + i);
 	}
+	for (int i = 0; i < stageblock.size(); i++)stageblock[i].SetHitEcplosion(FALSE);
 	for (int i = 0; i < bom.size(); i++)
 	{
 		bom[i].Update(this);
-		if(bom[i].CanDelete())bom.erase(bom.begin() + i);
+		for (int j = 0; j < stageblock.size(); j++)
+		{
+			if (bom[i].HitExplosion(&stageblock[j]))
+			{
+				stageblock[j].SetHitEcplosion(TRUE);
+			}
+		}
+		if (bom[i].CanDelete())
+		{
+			bom.erase(bom.begin() + i);
+			for (int j = 0; j < stageblock.size(); j++)
+			{
+				if (stageblock[j].GetHitExplosion())
+				{
+					breakblock.emplace_back(stageblock[j].GetLocation(), break_block_image[1]);
+					stageblock.erase(stageblock.begin() + j);
+					j--;
+				}
+			}
+		}
 	}
 	if (pickaxe != nullptr)
 	{
@@ -65,7 +86,11 @@ void Stage::Update()
 void Stage::Draw(float camera_work) const
 {
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
-	for (int i = 0; i < stageblock.size(); i++)stageblock[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
+	for (int i = 0; i < stageblock.size(); i++)
+	{
+		stageblock[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
+		if (stageblock[i].GetHitExplosion())DrawRotaGraph(stageblock[i].GetLocation().x + camera_work, stageblock[i].GetLocation().y, 1, 0, caveat_image, TRUE);
+	}
 	for (int i = 0; i < breakblock.size(); i++)breakblock[i].Draw(camera_work);
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);

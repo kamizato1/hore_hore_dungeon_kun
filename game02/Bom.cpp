@@ -3,8 +3,9 @@
 #include <math.h>
 #include"Bom.h"
 
+#define BOM_RADIUS ITEM_SIZE_X / 2
 #define BOM_COUNT 5
-#define BLAST_RANGE STAGE_BLOCK_NUM * 7
+#define EXPLOSION_RADIUS STAGE_BLOCK_SIZE_X * 7
 
 Bom::Bom(DATA location, DATA speed)
 {
@@ -12,7 +13,7 @@ Bom::Bom(DATA location, DATA speed)
     this->speed = speed;
     throw_flg = TRUE;
     if ((speed.x == 0) && (speed.y == 0))throw_flg = FALSE;
-    radius = {ITEM_SIZE_X / 2, ITEM_SIZE_Y / 2 };
+    radius = { BOM_RADIUS, BOM_RADIUS };
     image = LoadGraph("images/angrybom.png");
     can_delete = FALSE;
     angle = 0;
@@ -39,6 +40,14 @@ void Bom::Update(Stage* stage)
     }
 
     if (location.y > SCREEN_HEIGHT)can_delete = TRUE;
+}
+
+bool Bom::HitExplosion(BoxCollider* bc)const
+{
+    bool flg = FALSE;
+    DATA radius = { EXPLOSION_RADIUS / 2, EXPLOSION_RADIUS / 2 };
+    if (HitBox(bc, location, radius))flg = TRUE;
+    return flg;
 }
 
 void Bom::Draw(float camera_work) const

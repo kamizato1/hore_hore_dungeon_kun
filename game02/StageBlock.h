@@ -20,6 +20,7 @@ private:
 
     BLOCK_TYPE type;
     int image;
+    bool hit_explosion;
 
 public:
 
@@ -32,4 +33,6 @@ public:
 
     BLOCK_TYPE GetBlockType() { return type; }
     void SetBlockType(BLOCK_TYPE type, int image);
+    bool GetHitExplosion() const { return hit_explosion; }
+    void SetHitEcplosion(bool flg) { hit_explosion = flg; }
 };
