@@ -52,31 +52,31 @@ void Stage::Update()
 		breakblock[i].Update();
 		if(breakblock[i].CanDelete())breakblock.erase(breakblock.begin() + i);
 	}
+
 	for (int i = 0; i < stageblock.size(); i++)stageblock[i].SetHitEcplosion(FALSE);
 	for (int i = 0; i < bom.size(); i++)
 	{
 		bom[i].Update(this);
+
 		for (int j = 0; j < stageblock.size(); j++)
 		{
-			if (bom[i].HitExplosion(&stageblock[j]))
+			if(bom[i].HitExplosion(&stageblock[j]))
 			{
-				stageblock[j].SetHitEcplosion(TRUE);
-			}
-		}
-		if (bom[i].CanDelete())
-		{
-			bom.erase(bom.begin() + i);
-			for (int j = 0; j < stageblock.size(); j++)
-			{
-				if (stageblock[j].GetHitExplosion())
+				if ((stageblock[j].GetBlockType() != BLOCK_TYPE::VERY_HARD_BLOCK) && (stageblock[j].GetBlockType() != BLOCK_TYPE::NONE))
 				{
-					breakblock.emplace_back(stageblock[j].GetLocation(), break_block_image[1]);
-					stageblock.erase(stageblock.begin() + j);
-					j--;
+					if (bom[i].CanDelete())
+					{
+						breakblock.emplace_back(stageblock[j].GetLocation(), break_block_image[1]);
+						stageblock.erase(stageblock.begin() + j);
+						j--;
+					}
+					else stageblock[j].SetHitEcplosion(TRUE);
 				}
 			}
 		}
+		if (bom[i].CanDelete())bom.erase(bom.begin() + i);
 	}
+
 	if (pickaxe != nullptr)
 	{
 		pickaxe->Update(this);
@@ -100,9 +100,6 @@ void Stage::Draw2(float camera_work) const
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
 }
-
-
-
 
 bool Stage::HitStage(BoxCollider* bc)
 {

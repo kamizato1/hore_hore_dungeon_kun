@@ -5,7 +5,7 @@
 #include"Stage.h"
 #include"define.h"
 
-#define R_STICK_ANGLE_RECORD_NUM 15
+#define R_STICK_ANGLE_RECORD_NUM 20
 #define SPEED_X_RECORD_NUM 15
 
 class Player : public BoxCollider

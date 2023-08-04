@@ -12,12 +12,14 @@ private:
     int blast_range_image;
     int angle;
     int angle_direction;
-    
+    float bom_size;
+    float bom_size_add;
+    int bom_size_change_time;
     DATA speed;
     bool can_delete;
     bool throw_flg;
-
     int count;
+    int number_image[6];
 
 public:
 
