@@ -41,8 +41,8 @@ void Player::Update(Key* key, Stage* stage)
     DATA all_r_stick_angle_record_calculation = { 0,0 };
     DATA now_r_stick_angle, old_r_stick_angle;
 
-    now_r_stick_angle.x = -(key->GetStickAngle(R).y / 50);
-    now_r_stick_angle.y = -(key->GetStickAngle(R).x / 50);
+    now_r_stick_angle.x = -(key->GetStickAngle(R).x / 50);
+    now_r_stick_angle.y = -(key->GetStickAngle(R).y / 50);
     
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
     {
@@ -89,14 +89,14 @@ void Player::Cursor()
     int cursor_sign_y = 0;
     if (throw_speed.y != 0)cursor_sign_y = -(throw_speed.y / fabsf(throw_speed.y));
 
-    DATA cursor_radius = { STAGE_BLOCK_SIZE_X / 2, STAGE_BLOCK_SIZE_Y / 2 };
-    cursor_location.x = (floor(location.x / STAGE_BLOCK_SIZE_X) * STAGE_BLOCK_SIZE_X) + cursor_radius.x;
-    cursor_location.y = (floor(location.y / STAGE_BLOCK_SIZE_Y) * STAGE_BLOCK_SIZE_Y) + cursor_radius.y;
+    DATA cursor_radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
+    cursor_location.x = (floor(location.x / BLOCK_SIZE_X) * BLOCK_SIZE_X) + cursor_radius.x;
+    cursor_location.y = (floor(location.y / BLOCK_SIZE_Y) * BLOCK_SIZE_Y) + cursor_radius.y;
     
     while (HitBox(this, cursor_location, cursor_radius))
     {
-        cursor_location.x += (STAGE_BLOCK_SIZE_X * cursor_sign_x);
-        cursor_location.y += (STAGE_BLOCK_SIZE_Y * cursor_sign_y);
+        cursor_location.x += (BLOCK_SIZE_X * cursor_sign_x);
+        cursor_location.y += (BLOCK_SIZE_Y * cursor_sign_y);
     }
 }
 

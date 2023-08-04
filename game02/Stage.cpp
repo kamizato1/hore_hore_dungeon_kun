@@ -3,7 +3,7 @@
 
 Stage::Stage()
 {
-	LoadDivGraph("images/block01.png", 7, 7, 1, STAGE_BLOCK_SIZE_X, STAGE_BLOCK_SIZE_Y, block_image);
+	LoadDivGraph("images/block01.png", 7, 7, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, block_image);
 	LoadDivGraph("images/treasure.png", 4, 4, 1, 35, 35, treasure_image);
 
 	FILE* fp_s;//ステージ１ファイル読み込み
@@ -29,6 +29,7 @@ Stage::Stage()
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
 	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, break_block_image[0]);
 	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, break_block_image[1]);
+	
 	caveat_image = LoadGraph("images/warning.png");
 
 	pickaxe = nullptr;
@@ -83,7 +84,7 @@ void Stage::Update()
 	}
 }
 
-void Stage::Draw(float camera_work) const
+void Stage::Draw1(float camera_work) const
 {
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
 	for (int i = 0; i < stageblock.size(); i++)
@@ -91,10 +92,17 @@ void Stage::Draw(float camera_work) const
 		stageblock[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
 		if (stageblock[i].GetHitExplosion())DrawRotaGraph(stageblock[i].GetLocation().x + camera_work, stageblock[i].GetLocation().y, 1, 0, caveat_image, TRUE);
 	}
+}
+
+void Stage::Draw2(float camera_work) const
+{
 	for (int i = 0; i < breakblock.size(); i++)breakblock[i].Draw(camera_work);
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
 }
+
+
+
 
 bool Stage::HitStage(BoxCollider* bc)
 {
@@ -180,8 +188,8 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 	{
 		if (!exist_block)
 		{
-			int x = location.x / STAGE_BLOCK_SIZE_X;
-			int y = location.y / STAGE_BLOCK_SIZE_Y;
+			int x = location.x / BLOCK_SIZE_X;
+			int y = location.y / BLOCK_SIZE_Y;
 			stageblock.emplace_back(x, y, 4, block_image[4]);
 			if (HitTreasure(&stageblock[stageblock.size() - 1], FALSE) != TREASURE_TYPE::NONE)
 			{
@@ -195,8 +203,8 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 	{
 		if (!exist_block)
 		{
-			int x = location.x / STAGE_BLOCK_SIZE_X;
-			int y = location.y / STAGE_BLOCK_SIZE_Y;
+			int x = location.x / BLOCK_SIZE_X;
+			int y = location.y / BLOCK_SIZE_Y;
 			stageblock.emplace_back(x, y, 4, block_image[4]);
 			TREASURE_TYPE hit_item = HitTreasure(&stageblock[stageblock.size() - 1], FALSE);
 			stageblock.erase(stageblock.end() - 1);

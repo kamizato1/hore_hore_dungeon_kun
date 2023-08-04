@@ -11,6 +11,7 @@ class GameMain : public AbstractScene
 {
 private:
 
+    bool stop;
     Stage* stage;
     Player* player;
     int back_ground_image[3];

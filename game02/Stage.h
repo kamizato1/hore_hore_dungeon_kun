@@ -21,6 +21,7 @@ private:
     int block_image[7];
     int treasure_image[4];
     int caveat_image;
+    
     int break_block_image[2][BREAK_BLOCK_IMAGE_TYPE];
 
 public:
@@ -31,7 +32,8 @@ public:
     //•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é
     void Update();
     //•`‰æ‚ÉŠÖ‚·‚é‚±‚Æ‚ğÀ‘•‚·‚é
-    void Draw(float camera_work) const;
+    void Draw1(float camera_work) const;
+    void Draw2(float camera_work) const;
 
     bool HitPickaxe(BoxCollider* bc);
     bool HitStage(BoxCollider* bc);

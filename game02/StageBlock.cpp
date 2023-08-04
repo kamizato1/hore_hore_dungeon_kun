@@ -3,9 +3,9 @@
 
 StageBlock::StageBlock(int x, int y, int type, int image)
 {
-    radius = { STAGE_BLOCK_SIZE_X / 2 ,STAGE_BLOCK_SIZE_Y / 2};
-    location.x = (x * STAGE_BLOCK_SIZE_X) + radius.x;
-    location.y = (y * STAGE_BLOCK_SIZE_Y) + radius.y;
+    radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2};
+    location.x = (x * BLOCK_SIZE_X) + radius.x;
+    location.y = (y * BLOCK_SIZE_Y) + radius.y;
     this->type = static_cast<BLOCK_TYPE>(type);
     this->image = image;
     hit_explosion = FALSE;

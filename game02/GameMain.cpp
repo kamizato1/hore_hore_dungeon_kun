@@ -8,6 +8,7 @@ GameMain::GameMain()
     back_ground_image[0] = LoadGraph("images/background01.png");
     back_ground_image[1] = LoadGraph("images/background02.png");
     back_ground_image[2] = LoadGraph("images/background03.png");
+    stop = FALSE;
 }
 GameMain::~GameMain()
 {
@@ -17,8 +18,13 @@ GameMain::~GameMain()
 
 void GameMain::Update(Key* key)
 {
-    stage->Update();
-    player->Update(key, stage);
+    if (key->KeyDown(START))stop = !stop;
+
+    if (!stop)
+    {
+        stage->Update();
+        player->Update(key, stage);
+    }
 }
 
 void GameMain::Draw() const
@@ -31,8 +37,9 @@ void GameMain::Draw() const
     DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
     DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
     SetDrawBright(255, 255, 255);
-    stage->Draw(camera_work);
+    stage->Draw1(camera_work);
     player->Draw(camera_work);
+    stage->Draw2(camera_work);
 }
 
 AbstractScene* GameMain::ChangeScene()
