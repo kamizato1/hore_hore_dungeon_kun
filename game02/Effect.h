@@ -4,7 +4,7 @@
 #define BREAK_BLOCK_IMAGE_TYPE 10
 
 
-class BreakBlock
+class Effect
 {
 private:
 
@@ -16,7 +16,7 @@ private:
 
 public:
 
-	BreakBlock(DATA location, int *image);
+	Effect(DATA location, int *image);
 	//~BreakBlock();
 
 	void Update();

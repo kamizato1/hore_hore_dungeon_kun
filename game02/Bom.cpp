@@ -3,7 +3,7 @@
 #include <math.h>
 #include"Bom.h"
 
-#define BOM_COUNT 5
+#define BOM_COUNT 6
 #define EXPLOSION_SIZE BLOCK_SIZE_X * 7
 #define BOM_SIZE_CHANGE_TIME 6
 
@@ -16,7 +16,7 @@ Bom::Bom(DATA location, DATA speed)
     radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
     image = LoadGraph("images/angrybom.png");
     blast_range_image = LoadGraph("images/wakuwaku.png");
-    LoadDivGraph("images/number3.png", 6, 6, 1, 14, 23, number_image);
+    LoadDivGraph("images/number.png", 6, 6, 1, 14, 23, number_image);
     can_delete = FALSE;
     angle = 0;
     angle_direction = 3;

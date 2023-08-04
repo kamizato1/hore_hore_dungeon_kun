@@ -27,8 +27,10 @@ Stage::Stage()
 	fclose(fp_t);
 
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
-	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, break_block_image[0]);
-	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, break_block_image[1]);
+	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, effect_image[0]);
+	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, effect_image[1]);
+	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, effect_image[2]);
+	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, effect_image[3]);
 	
 	caveat_image = LoadGraph("images/warning.png");
 
@@ -39,7 +41,7 @@ Stage::~Stage()
 {
 	stageblock.clear();
 	treasure.clear();
-	breakblock.clear();
+	effect.clear();
 	bom.clear();
 	delete pickaxe;
 }
@@ -47,10 +49,10 @@ Stage::~Stage()
 void Stage::Update()
 {
 	for (int i = 0; i < treasure.size(); i++)treasure[i].Update(this);  // 全要素に対するループ（宝物のアップデート）
-	for (int i = 0; i < breakblock.size(); i++)
+	for (int i = 0; i < effect.size(); i++)
 	{
-		breakblock[i].Update();
-		if(breakblock[i].CanDelete())breakblock.erase(breakblock.begin() + i);
+		effect[i].Update();
+		if(effect[i].CanDelete())effect.erase(effect.begin() + i);
 	}
 
 	for (int i = 0; i < stageblock.size(); i++)stageblock[i].SetHitEcplosion(FALSE);
@@ -62,11 +64,17 @@ void Stage::Update()
 		{
 			if(bom[i].HitExplosion(&stageblock[j]))
 			{
-				if ((stageblock[j].GetBlockType() != BLOCK_TYPE::VERY_HARD_BLOCK) && (stageblock[j].GetBlockType() != BLOCK_TYPE::NONE))
+				BLOCK_TYPE type = stageblock[j].GetBlockType();
+
+				if ((type != BLOCK_TYPE::VERY_HARD_BLOCK) && (type != BLOCK_TYPE::NONE))
 				{
+					int image = 1;
+					if (type == BLOCK_TYPE::HARD_BLOCK)image = 2;
+					else if (type == BLOCK_TYPE::GROUND_BLOCK)image = 3;
+
 					if (bom[i].CanDelete())
 					{
-						breakblock.emplace_back(stageblock[j].GetLocation(), break_block_image[1]);
+						effect.emplace_back(stageblock[j].GetLocation(), effect_image[image]);
 						stageblock.erase(stageblock.begin() + j);
 						j--;
 					}
@@ -96,7 +104,7 @@ void Stage::Draw1(float camera_work) const
 
 void Stage::Draw2(float camera_work) const
 {
-	for (int i = 0; i < breakblock.size(); i++)breakblock[i].Draw(camera_work);
+	for (int i = 0; i < effect.size(); i++)effect[i].Draw(camera_work);
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
 }
@@ -122,7 +130,9 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 			int type = static_cast<int>(stageblock[i].GetBlockType());
 			if ((type > 0) && (type < 5))//ブロックが土だったら
 			{
-				breakblock.emplace_back(stageblock[i].GetLocation(), break_block_image[1]);
+				int image = 1;
+				if (type == 4)image = 3;
+				effect.emplace_back(stageblock[i].GetLocation(), effect_image[image]);
 				stageblock.erase(stageblock.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 			}
@@ -151,14 +161,15 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 	int block_type = 0;
 	int block_num = 0;
 	bool exist_block = FALSE;
+	DATA radius = { 1,1 };
 	for (int i = 0; i < stageblock.size(); i++)
 	{
-		DATA block_location = stageblock[i].GetLocation();
-		if ((block_location.x == location.x) && (block_location.y == location.y))
+		if (stageblock[i].HitBox(&stageblock[i], location, radius))
 		{
 			exist_block = TRUE;
 			block_num = i;
 			block_type = static_cast<int>(stageblock[i].GetBlockType());
+			break;
 		}
 	}
 
@@ -170,13 +181,14 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 			{
 				if (--block_type == 0)
 				{
-					breakblock.emplace_back(stageblock[block_num].GetLocation(), break_block_image[1]);
+					effect.emplace_back(stageblock[block_num].GetLocation(), effect_image[1]);
 					stageblock.erase(stageblock.begin() + block_num);
 				}
 				else
 				{
+					effect.emplace_back(stageblock[block_num].GetLocation(), effect_image[0]);
 					stageblock[block_num].SetBlockType(static_cast<BLOCK_TYPE>(block_type), block_image[block_type]);
-					breakblock.emplace_back(stageblock[block_num].GetLocation(), break_block_image[0]);
+					
 				}
 			}
 		}
