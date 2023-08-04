@@ -1,17 +1,27 @@
 #pragma once
 #include "AbstractScene.h"
+#include "define.h"
+
 class Result :
     public AbstractScene
 {
 private:
 
+    int score; //スコア
 
+    TREASURE_TYPE treasure; //所持していたアイテムを保存する。
+
+    int time; //残り時間を格納する。
+
+    int block_break; //破壊したブロックの数
+
+    int block; //所持していたブロックの数（お助けアイテム）
 
 public:
 
     
     //コンストラクタ
-    Result(int block_break,int time);//壊したブロックの数、時間、持っているブロックの数,宝の種類と種類
+    Result(int block_break,int time, int block, TREASURE_TYPE treasure);//壊したブロックの数、時間、持っているブロックの数,宝の種類と種類
 
     //デストラクタ
     ~Result();
