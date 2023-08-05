@@ -8,7 +8,10 @@ private:
     //ƒXƒRƒA
     int score;
 
-    //‘JˆÚ‚·‚é‚Ì‚©‚µ‚È‚¢‚Ì‚©
+    //‰æ‘œ
+    int image;
+
+    //‘JˆÚ‚·‚é‚Ì‚©
     bool transition;
 
 public:

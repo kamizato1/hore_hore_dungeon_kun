@@ -7,6 +7,10 @@
 Result::Result(int block_break, int time, int item_block)
 {
 	
+	image = 0;
+
+	score = 0;
+
 	transition = false;
 
 	//アイテム（ブロック）
@@ -63,9 +67,13 @@ void Result::Update(Key* key)
 void Result::Draw() const
 {
 
+	//DrawGraph(0, 0, image, false);
+
 	DrawString(620, 10, "Result", 0xffffff);
 
-	DrawFormatString(640, 310, 0xFFFFFF, "%スコア  d", score);
+	DrawFormatString(640, 310, 0xFFFFFF, "スコア %d", score);
+
+	//スコア正式決定後、それぞれのスコアの得点を表示
 
 
 }
