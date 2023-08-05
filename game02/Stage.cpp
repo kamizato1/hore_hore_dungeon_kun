@@ -3,8 +3,17 @@
 
 Stage::Stage()
 {
+	int treasure_image[4];
+
+	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
+	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, effect_image[0]);
+	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, effect_image[1]);
+	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, effect_image[2]);
+	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, effect_image[3]);
 	LoadDivGraph("images/block01.png", 7, 7, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, block_image);
 	LoadDivGraph("images/treasure.png", 4, 4, 1, 35, 35, treasure_image);
+	LoadDivGraph("images/explosion.png", 9, 9, 1, 320, 320, explosion_image);
+	caveat_image = LoadGraph("images/warning.png");
 
 	FILE* fp_s;//ステージ１ファイル読み込み
 	FILE* fp_t;//アイテム１ファイル読み込み
@@ -15,24 +24,16 @@ Stage::Stage()
 	{
 		for (int j = 0; j < STAGE_BLOCK_NUM_X; j++)
 		{
-			int stage_type, treasure_type;
-			fscanf_s(fp_s, "%d", &stage_type);
+			int block_type, treasure_type;
+			fscanf_s(fp_s, "%d", &block_type);
 			fscanf_s(fp_t, "%d", &treasure_type);
 
-			if (stage_type != -1)stageblock.emplace_back(j, i, stage_type, block_image[stage_type]);
-			if (treasure_type != -1)treasure.emplace_back(j, i, treasure_type, treasure_image[treasure_type]);
+			if (block_type != -1)stageblock.emplace_back(j, i, static_cast<BLOCK_TYPE>(block_type), block_image[block_type], caveat_image);
+			if (treasure_type != -1)treasure.emplace_back(j, i, static_cast<TREASURE_TYPE>(treasure_type), treasure_image[treasure_type]);
 		}
 	}
 	fclose(fp_s);
 	fclose(fp_t);
-
-	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
-	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, effect_image[0]);
-	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, effect_image[1]);
-	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, effect_image[2]);
-	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, effect_image[3]);
-	
-	caveat_image = LoadGraph("images/warning.png");
 
 	pickaxe = nullptr;
 }
@@ -64,17 +65,15 @@ void Stage::Update()
 		{
 			if(bom[i].HitExplosion(&stageblock[j]))
 			{
-				BLOCK_TYPE type = stageblock[j].GetBlockType();
-
-				if ((type != BLOCK_TYPE::VERY_HARD_BLOCK) && (type != BLOCK_TYPE::NONE))
+				BLOCK_TYPE block_type = stageblock[j].GetBlockType();
+				if ((block_type != BLOCK_TYPE::VERY_HARD_BLOCK) && (block_type != BLOCK_TYPE::NONE))
 				{
-					int image = 1;
-					if (type == BLOCK_TYPE::HARD_BLOCK)image = 2;
-					else if (type == BLOCK_TYPE::GROUND_BLOCK)image = 3;
-
 					if (bom[i].CanDelete())
 					{
-						effect.emplace_back(stageblock[j].GetLocation(), effect_image[image]);
+						int effect_image_type = 1;
+						if (block_type == BLOCK_TYPE::HARD_BLOCK)effect_image_type = 2;
+						else if (block_type == BLOCK_TYPE::GROUND_BLOCK)effect_image_type = 3;
+						effect.emplace_back(stageblock[j].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
 						stageblock.erase(stageblock.begin() + j);
 						j--;
 					}
@@ -82,7 +81,12 @@ void Stage::Update()
 				}
 			}
 		}
-		if (bom[i].CanDelete())bom.erase(bom.begin() + i);
+		if (bom[i].CanDelete())
+		{
+			effect.emplace_back(bom[i].GetLocation(), explosion_image, EXPLOSION_IMAGE_NUM);
+			bom.erase(bom.begin() + i);
+		}
+		else if(bom[i].GetLocation().y > SCREEN_HEIGHT + 300)bom.erase(bom.begin() + i);
 	}
 
 	if (pickaxe != nullptr)
@@ -95,11 +99,7 @@ void Stage::Update()
 void Stage::Draw1(float camera_work) const
 {
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
-	for (int i = 0; i < stageblock.size(); i++)
-	{
-		stageblock[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
-		if (stageblock[i].GetHitExplosion())DrawRotaGraph(stageblock[i].GetLocation().x + camera_work, stageblock[i].GetLocation().y, 1, 0, caveat_image, TRUE);
-	}
+	for (int i = 0; i < stageblock.size(); i++)stageblock[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
 }
 
 void Stage::Draw2(float camera_work) const
@@ -107,6 +107,8 @@ void Stage::Draw2(float camera_work) const
 	for (int i = 0; i < effect.size(); i++)effect[i].Draw(camera_work);
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
+
+	DrawFormatString(0, 30, 0xffffff, "%d", bom.size());
 }
 
 bool Stage::HitStage(BoxCollider* bc)
@@ -127,16 +129,16 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 	{
 		if (stageblock[i].HitBox(bc))
 		{
-			int type = static_cast<int>(stageblock[i].GetBlockType());
-			if ((type > 0) && (type < 5))//ブロックが土だったら
+			int block_type = static_cast<int>(stageblock[i].GetBlockType());
+			if ((block_type >= 1) && (block_type <= 4))//ブロックが土だったら
 			{
-				int image = 1;
-				if (type == 4)image = 3;
-				effect.emplace_back(stageblock[i].GetLocation(), effect_image[image]);
+				int effect_image_type = 1;
+				if (block_type == 4)effect_image_type = 3;
+				effect.emplace_back(stageblock[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
 				stageblock.erase(stageblock.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 			}
-			else if (type >= 5)return TRUE;//かたいブロックに当たったのでflgをTRUEにする
+			else if (block_type >= 5)return TRUE;//かたいブロックに当たったのでflgをTRUEにする
 		}
 	}
 	return FALSE;
@@ -148,9 +150,9 @@ TREASURE_TYPE Stage::HitTreasure(BoxCollider* bc, bool can_delete)
 	{
 		if (treasure[i].HitBox(bc))
 		{
-			TREASURE_TYPE tt = treasure[i].GetTreasureType();
+			TREASURE_TYPE treasure_type = treasure[i].GetTreasureType();
 			if(can_delete)treasure.erase(treasure.begin() + i);
-			return tt;
+			return treasure_type;
 		}
 	}
 	return TREASURE_TYPE::NONE;
@@ -181,12 +183,12 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 			{
 				if (--block_type == 0)
 				{
-					effect.emplace_back(stageblock[block_num].GetLocation(), effect_image[1]);
+					effect.emplace_back(stageblock[block_num].GetLocation(), effect_image[1], BREAK_BLOCK_IMAGE_NUM);
 					stageblock.erase(stageblock.begin() + block_num);
 				}
 				else
 				{
-					effect.emplace_back(stageblock[block_num].GetLocation(), effect_image[0]);
+					effect.emplace_back(stageblock[block_num].GetLocation(), effect_image[0], BREAK_BLOCK_IMAGE_NUM);
 					stageblock[block_num].SetBlockType(static_cast<BLOCK_TYPE>(block_type), block_image[block_type]);
 					
 				}
@@ -199,7 +201,7 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 		{
 			int x = location.x / BLOCK_SIZE_X;
 			int y = location.y / BLOCK_SIZE_Y;
-			stageblock.emplace_back(x, y, 4, block_image[4]);
+			stageblock.emplace_back(x, y, BLOCK_TYPE::GROUND_BLOCK, block_image[4], caveat_image);
 			if (HitTreasure(&stageblock[stageblock.size() - 1], FALSE) != TREASURE_TYPE::NONE)
 			{
 				stageblock.erase(stageblock.end() - 1);
@@ -214,7 +216,7 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 		{
 			int x = location.x / BLOCK_SIZE_X;
 			int y = location.y / BLOCK_SIZE_Y;
-			stageblock.emplace_back(x, y, 4, block_image[4]);
+			stageblock.emplace_back(x, y, BLOCK_TYPE::GROUND_BLOCK, block_image[4], caveat_image);
 			TREASURE_TYPE hit_item = HitTreasure(&stageblock[stageblock.size() - 1], FALSE);
 			stageblock.erase(stageblock.end() - 1);
 			if (hit_item == TREASURE_TYPE::NONE)
@@ -224,10 +226,8 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 			}
 		}
 	}
-	
 	return FALSE;
 }
-
 
 void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 {
@@ -244,4 +244,3 @@ void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 		bom.emplace_back(location, speed);
 	}
 }
-

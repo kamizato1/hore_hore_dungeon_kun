@@ -61,8 +61,6 @@ void Bom::Update(Stage* stage)
 
         if (--count <= 0)can_delete = TRUE;
     }
-
-    if (location.y > SCREEN_HEIGHT)can_delete = TRUE;
 }
 
 bool Bom::HitExplosion(BoxCollider* bc)const

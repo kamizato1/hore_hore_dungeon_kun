@@ -11,12 +11,12 @@ private:
 
     int image;
     DATA speed;
-    TREASURE_TYPE treasure_type;
+    TREASURE_TYPE type;
     
 public:
 
-    Treasure(int x, int y, int type, int image);
+    Treasure(int x, int y, TREASURE_TYPE type, int image);
     void Update(class Stage* stage);
     void Draw(float camera_work) const;
-    TREASURE_TYPE GetTreasureType() { return treasure_type; }
+    TREASURE_TYPE GetTreasureType() { return type; }
 };

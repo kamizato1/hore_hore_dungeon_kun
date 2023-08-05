@@ -1,12 +1,12 @@
 #include"DxLib.h"
 #include"Treasure.h"
 
-Treasure::Treasure(int x, int y, int type, int image)
+Treasure::Treasure(int x, int y, TREASURE_TYPE type, int image)
 {
     radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2 };
     location.x = (x * BLOCK_SIZE_X) + (BLOCK_SIZE_X / 2);
     location.y = (y * BLOCK_SIZE_Y) + (BLOCK_SIZE_Y / 2);
-    treasure_type = static_cast<TREASURE_TYPE>(type);
+    this->type = type;
     this->image = image;
 }
 

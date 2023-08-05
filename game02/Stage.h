@@ -8,21 +8,25 @@
 #include"Pickaxe.h"
 #include"define.h"
 
+#define BREAK_BLOCK_IMAGE_NUM 10
+#define EXPLOSION_IMAGE_NUM 9
+
 class Stage
 {
 private:
 
-    int break_block_se;
     std::vector<StageBlock>stageblock;
     std::vector<class Treasure>treasure;
     std::vector<class Effect>effect;
     std::vector<class Bom>bom;
     class Pickaxe* pickaxe;
-    int block_image[7];
-    int treasure_image[4];
+
+    int block_image[7]; 
+    int effect_image[4][BREAK_BLOCK_IMAGE_NUM];
+    int explosion_image[EXPLOSION_IMAGE_NUM];
     int caveat_image;
-    
-    int effect_image[4][10];
+
+    int break_block_se;
 
 public:
 
