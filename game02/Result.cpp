@@ -1,21 +1,41 @@
 #include "Result.h"
+#include"DxLib.h"
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Result::Result(int block_break, int time)
+Result::Result(int block_break, int time, int item_block)
 {
 	
+	transition = false;
+
+	//アイテム（ブロック）
+	int block = 0;
 
 
-	if (block_break == 0)
+	//アイテムのブロックの数が0だったらブロックの数を１に変更
+	if (item_block == 0)
 	{
-
+		block = 1;
+	}
+	else
+	{
+		block = item_block;
 	}
 	
-
+	//スコア計算
 	//残りブロック＊時間
-	score = block_break * time;
+	score = block * time;
+
+	//壊したブロックの数*(調整中)
+	score += 20 * block_break;
+
+//-----------------------------------
+// 宝のスコアについて（思考中）
+// 
+// カギ 
+//-----------------------------------
+	
 }
 
 //-----------------------------------
@@ -31,7 +51,10 @@ Result::~Result()
 //-----------------------------------
 void Result::Update(Key* key)
 {
-
+	if (key->KeyDown(B))
+	{
+		transition = true;
+	}
 }
 
 //-----------------------------------
@@ -40,6 +63,11 @@ void Result::Update(Key* key)
 void Result::Draw() const
 {
 
+	DrawString(620, 10, "Result", 0xffffff);
+
+	DrawFormatString(640, 310, 0xFFFFFF, "%スコア  d", score);
+
+
 }
 
 //-----------------------------------
@@ -47,5 +75,13 @@ void Result::Draw() const
 //-----------------------------------
 AbstractScene* Result::ChangeScene()
 {
+
+	if (transition)
+	{
+		//テスト
+		//タイトルにする予定
+		return nullptr;
+	}
+
 	return this;
 }

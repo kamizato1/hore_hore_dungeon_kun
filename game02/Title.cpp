@@ -63,6 +63,7 @@ void Title::Draw() const
 //-----------------------------------
 AbstractScene* Title::ChangeScene()
 {
+
     if (can_scene_change)
     {
         return new GameMain(); //ŽŸ‚Ì‘JˆÚ
