@@ -5,7 +5,17 @@
 //-----------------------------------
 Result::Result(int block_break, int time)
 {
+	
 
+
+	if (block_break == 0)
+	{
+
+	}
+	
+
+	//残りブロック＊時間
+	score = block_break * time;
 }
 
 //-----------------------------------

@@ -49,6 +49,7 @@ void Title::Draw() const
 {
     SetFontSize(30);
 
+    DrawString(190, 200, "惚れ掘れダンジョン君！", 0xffffff);
     
     if (flashing_time / 30 == 0)
     {
