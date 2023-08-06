@@ -168,6 +168,8 @@ void Player::Draw(float camera_work) const
         }
     }
 
-
+    if (item_type == ITEM_TYPE::BLOCK)DrawString(0, 30, "ÉuÉçÉbÉN", 0xffffff);
+    else if(item_type == ITEM_TYPE::BOM)DrawString(0, 30, "îöíe", 0xffffff);
+    else DrawString(0, 30, "Ç¬ÇÈÇÕÇµ", 0xffffff);
     //DrawFormatString(0, 30, 0xff0000, "ç∂ %f", ((location.x - radius.x))/ STAGE_BLOCK_SIZE_X) - 1;
 }

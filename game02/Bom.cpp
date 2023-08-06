@@ -25,6 +25,7 @@ Bom::Bom(DATA location, DATA speed)
     bom_size = 1;
     bom_size_add = 0.1;
     bom_size_change_time = BOM_SIZE_CHANGE_TIME * 2;
+    old_hit = FALSE;
 }
 
 void Bom::Update(Stage* stage)

@@ -20,6 +20,7 @@ private:
     bool throw_flg;
     int count;
     int number_image[6];
+    bool old_hit;
 
 public:
 
@@ -28,5 +29,8 @@ public:
     void Update(class Stage* stage);
     void Draw(float camera_work) const;
     bool HitExplosion(BoxCollider* bc)const;
-    bool CanDelete() { return can_delete; }
+    bool GetCanDelete() { return can_delete; }
+    void SetCanDelete(bool flg) { can_delete = flg; }
+    bool HitDamage() { return !old_hit; }
+    void SetOldHit(bool flg) { old_hit = flg; }
 };
