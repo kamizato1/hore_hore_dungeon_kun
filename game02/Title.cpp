@@ -49,6 +49,7 @@ void Title::Draw() const
 {
     SetFontSize(30);
 
+    DrawString(190, 200, "惚れ掘れダンジョン君！", 0xffffff);
     
     if (flashing_time / 30 == 0)
     {
@@ -62,6 +63,7 @@ void Title::Draw() const
 //-----------------------------------
 AbstractScene* Title::ChangeScene()
 {
+
     if (can_scene_change)
     {
         return new GameMain(); //次の遷移

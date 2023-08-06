@@ -5,13 +5,20 @@ class Result :
 {
 private:
 
+    //スコア
+    int score;
 
+    //画像
+    int image;
+
+    //遷移するのか
+    bool transition;
 
 public:
 
     
     //コンストラクタ
-    Result(int block_break,int time);//壊したブロックの数、時間、持っているブロックの数,宝の種類と種類
+    Result(int block_break,int time ,int item_block);//壊したブロックの数、時間、持っているブロックの数,宝の種類と種類
 
     //デストラクタ
     ~Result();
