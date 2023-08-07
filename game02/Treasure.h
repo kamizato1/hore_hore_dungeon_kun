@@ -17,7 +17,7 @@ private:
     
 public:
 
-    Treasure(int x, int y, TREASURE_TYPE type, int image);
+    Treasure(DATA location, int type);
     void Update(class Stage* stage);
     void Draw(float camera_work) const;
     bool HitDamage(bool hit_type, Stage* stage);

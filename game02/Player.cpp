@@ -90,8 +90,10 @@ void Player::Cursor()
     if (throw_speed.y != 0)cursor_sign_y = -(throw_speed.y / fabsf(throw_speed.y));
 
     DATA cursor_radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
-    cursor_location.x = (floor(location.x / BLOCK_SIZE_X) * BLOCK_SIZE_X) + cursor_radius.x;
-    cursor_location.y = (floor(location.y / BLOCK_SIZE_Y) * BLOCK_SIZE_Y) + cursor_radius.y;
+    int x = location.x / BLOCK_SIZE_X;
+    int y = location.y / BLOCK_SIZE_Y;
+    cursor_location.x = (x * BLOCK_SIZE_X) + cursor_radius.x;
+    cursor_location.y = (y * BLOCK_SIZE_Y) + cursor_radius.y;
     
     while (HitBox(this, cursor_location, cursor_radius))
     {

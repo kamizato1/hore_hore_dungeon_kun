@@ -25,7 +25,7 @@ private:
 
 public:
 
-    StageBlock(int x, int y, BLOCK_TYPE type, int image, int caveat_image);
+    StageBlock(DATA location, int type);
 
     //•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é
     void Update();
@@ -33,6 +33,6 @@ public:
     void Draw(float camera_work) const;
 
     BLOCK_TYPE GetBlockType() { return type; }
-    void SetBlockType(BLOCK_TYPE type, int image);
+    void SetBlockType(int type);
     void SetHitEcplosion(bool flg) { hit_explosion = flg; }
 };

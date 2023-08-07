@@ -3,19 +3,15 @@
 
 Stage::Stage()
 {
-	int treasure_image[3];
-
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
 	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
 	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, effect_image[0]);
 	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, effect_image[1]);
 	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, effect_image[2]);
 	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, effect_image[3]);
-	LoadDivGraph("images/block01.png", 7, 7, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, block_image);
-	LoadDivGraph("images/treasure1.png", 3, 3, 1, 36, 36, treasure_image);
 	LoadDivGraph("images/explosion.png", 9, 9, 1, 320, 320, explosion_image);
 	pickaxe_image = LoadGraph("images/pickaxe.png");
-	caveat_image = LoadGraph("images/warning.png");
+	
 
 	FILE* fp_s;//ステージ１ファイル読み込み
 	FILE* fp_t;//アイテム１ファイル読み込み
@@ -30,8 +26,12 @@ Stage::Stage()
 			fscanf_s(fp_s, "%d", &block_type);
 			fscanf_s(fp_t, "%d", &treasure_type);
 
-			if (block_type != -1)stageblock.emplace_back(j, i, static_cast<BLOCK_TYPE>(block_type), block_image[block_type], caveat_image);
-			if (treasure_type != -1)treasure.emplace_back(j, i, static_cast<TREASURE_TYPE>(treasure_type), treasure_image[treasure_type]);
+			DATA location;
+			location.x = (j * BLOCK_SIZE_X) + (BLOCK_SIZE_X / 2);
+			location.y = (i * BLOCK_SIZE_Y) + (BLOCK_SIZE_Y / 2);
+
+			if (block_type != -1)stageblock.emplace_back(location, block_type);
+			if (treasure_type != -1)treasure.emplace_back(location, treasure_type);
 		}
 	}
 	fclose(fp_s);
@@ -246,7 +246,7 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 				else
 				{
 					effect.emplace_back(stageblock[block_num].GetLocation(), effect_image[0], BREAK_BLOCK_IMAGE_NUM);
-					stageblock[block_num].SetBlockType(static_cast<BLOCK_TYPE>(block_type), block_image[block_type]);
+					stageblock[block_num].SetBlockType(block_type);
 					
 				}
 			}
@@ -256,7 +256,7 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 	{
 		if (!exist_block)
 		{
-			stageblock.emplace_back(x, y, BLOCK_TYPE::GROUND_BLOCK, block_image[4], caveat_image);
+			stageblock.emplace_back(location, 4);
 			if (HitTreasure(&stageblock[stageblock.size() - 1], FALSE) != TREASURE_TYPE::NONE)
 			{
 				stageblock.erase(stageblock.end() - 1);
@@ -269,7 +269,7 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 	{
 		if (!exist_block)
 		{
-			stageblock.emplace_back(x, y, BLOCK_TYPE::GROUND_BLOCK, block_image[4], caveat_image);
+			stageblock.emplace_back(location, 4);
 			TREASURE_TYPE hit_item = HitTreasure(&stageblock[stageblock.size() - 1], FALSE);
 			stageblock.erase(stageblock.end() - 1);
 			if (hit_item == TREASURE_TYPE::NONE)

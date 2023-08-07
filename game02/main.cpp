@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     SetFontSize(20);		// •¶šƒTƒCƒY‚ğİ’è
 
-    SceneManager* sceneMng = new SceneManager(new GameMain());
+    SceneManager* sceneMng = new SceneManager(new Title());
     Key* key = new Key();
 
     while (ProcessMessage() == 0)
