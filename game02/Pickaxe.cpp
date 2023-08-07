@@ -6,18 +6,19 @@
 #define PICKAXE_SIZE_X 15
 #define PICKAXE_SIZE_Y 15
 
-Pickaxe::Pickaxe(DATA location, DATA speed)
+Pickaxe::Pickaxe(DATA location, DATA speed, int image, int se)
 {
     this->location = location;
     old_location = location;
     this->speed = speed;
     radius = { PICKAXE_SIZE_X / 2, PICKAXE_SIZE_Y / 2};
-    image = LoadGraph("images/pickaxe.png");
+    this->image = image;
+    this->se = se;
     can_delete = FALSE;
     angle = 0;
     angle_direction = 10;
     if (speed.x > 0)angle_direction = -10;
-    hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
+    
 }
 
 void Pickaxe::Update(Stage* stage)
@@ -30,7 +31,7 @@ void Pickaxe::Update(Stage* stage)
     if (stage->HitPickaxe(this) && speed.y < 0)
     {
         can_delete = TRUE;
-        PlaySoundMem(hit_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
+        PlaySoundMem(se, DX_PLAYTYPE_BACK, TRUE);
     }
     else
     {
@@ -41,7 +42,7 @@ void Pickaxe::Update(Stage* stage)
             speed.x = 0;
             speed.y = 0;
             angle_direction = -(angle_direction / 2);
-            PlaySoundMem(hit_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
+            PlaySoundMem(se, DX_PLAYTYPE_BACK, TRUE);
         }
         angle += angle_direction;
         if (angle > 360)angle = 0;

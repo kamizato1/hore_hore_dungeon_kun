@@ -1,14 +1,15 @@
 #include"DxLib.h"
 #include"StageBlock.h"
 
-StageBlock::StageBlock(int x, int y, BLOCK_TYPE type, int image, int caveat_image)
+StageBlock::StageBlock(DATA location, int type)
 {
     radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2};
-    location.x = (x * BLOCK_SIZE_X) + radius.x;
-    location.y = (y * BLOCK_SIZE_Y) + radius.y;
-    this->type = type;
-    this->image = image;
-    this->caveat_image = caveat_image;
+    this->location = location;
+    this->type = static_cast<BLOCK_TYPE>(type);
+    int image[7];
+    LoadDivGraph("images/block01.png", 7, 7, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
+    this->image = image[type];
+    caveat_image = LoadGraph("images/warning.png");
     hit_explosion = FALSE;
 }
 
@@ -23,8 +24,10 @@ void StageBlock::Draw(float camera_work) const
     if(hit_explosion)DrawRotaGraph(location.x + camera_work, location.y, 1, 0, caveat_image, TRUE);
 }
 
-void StageBlock::SetBlockType(BLOCK_TYPE type, int image)
+void StageBlock::SetBlockType(int type)
 { 
-    this->type = type;
-    this->image = image;
+    this->type = static_cast<BLOCK_TYPE>(type);
+    int image[7];
+    LoadDivGraph("images/block01.png", 7, 7, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
+    this->image = image[type];
 }

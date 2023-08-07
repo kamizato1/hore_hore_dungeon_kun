@@ -1,13 +1,14 @@
 #include"DxLib.h"
 #include"Treasure.h"
 
-Treasure::Treasure(int x, int y, TREASURE_TYPE type, int image)
+Treasure::Treasure(DATA location, int type)
 {
     radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2 };
-    location.x = (x * BLOCK_SIZE_X) + (BLOCK_SIZE_X / 2);
-    location.y = (y * BLOCK_SIZE_Y) + (BLOCK_SIZE_Y / 2);
-    this->type = type;
-    this->image = image;
+    this->location = location;
+    this->type = static_cast<TREASURE_TYPE>(type);
+    int image[3];
+    LoadDivGraph("images/treasure1.png", 3, 3, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
+    this->image = image[type];
     old_hit = FALSE;
     can_delete = FALSE;
 }
