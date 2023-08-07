@@ -3,26 +3,30 @@
 #include"StageBlock.h"
 #include"Treasure.h"
 #include"BoxCollider.h"
-#include"BreakBlock.h"
+#include"Effect.h"
 #include"Bom.h"
 #include"Pickaxe.h"
 #include"define.h"
+
+#define BREAK_BLOCK_IMAGE_NUM 10
+#define EXPLOSION_IMAGE_NUM 9
 
 class Stage
 {
 private:
 
-    int break_block_se;
     std::vector<StageBlock>stageblock;
     std::vector<class Treasure>treasure;
-    std::vector<class BreakBlock>breakblock;
+    std::vector<class Effect>effect;
     std::vector<class Bom>bom;
     class Pickaxe* pickaxe;
-    int block_image[7];
-    int treasure_image[4];
+
+    int block_image[7]; 
+    int effect_image[4][BREAK_BLOCK_IMAGE_NUM];
+    int explosion_image[EXPLOSION_IMAGE_NUM];
     int caveat_image;
-    
-    int break_block_image[2][BREAK_BLOCK_IMAGE_TYPE];
+
+    int break_block_se;
 
 public:
 
@@ -37,6 +41,7 @@ public:
 
     bool HitPickaxe(BoxCollider* bc);
     bool HitStage(BoxCollider* bc);
+    void HitBom(int bom_num);
     TREASURE_TYPE HitTreasure(BoxCollider* bc, bool can_delete);
     bool PutItem(DATA location, ITEM_TYPE item_type);
     void ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type);

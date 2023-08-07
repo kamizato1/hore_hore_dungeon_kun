@@ -17,7 +17,7 @@ Player::Player()
     throw_speed = { 0,0 };
    
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
-    for (int i = 0; i < SPEED_X_RECORD_NUM; i++)speed_x_record[i] = 0;
+    for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)speed_x_record[i] = 0;
 
     cursor_image = LoadGraph("images/cursor.png");
     item_type = ITEM_TYPE::PICKAXE;
@@ -109,7 +109,7 @@ void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
     if (key->GetStickAngle(L).x > 0)now_speed_x = PLAYER_SPEED;
     else if (key->GetStickAngle(L).x < 0)now_speed_x = -PLAYER_SPEED;
 
-    for (int i = 0; i < SPEED_X_RECORD_NUM; i++)
+    for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)
     {
         old_speed_x = speed_x_record[i];
         speed_x_record[i] = now_speed_x;
@@ -117,7 +117,7 @@ void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
         all_speed_x_record_calculation += speed_x_record[i];
     }
 
-    speed.x = (all_speed_x_record_calculation / SPEED_X_RECORD_NUM);
+    speed.x = (all_speed_x_record_calculation / L_STICK_ANGLE_RECORD_NUM);
     location.x += speed.x;
 
     if (stage->HitStage(this))
@@ -168,6 +168,8 @@ void Player::Draw(float camera_work) const
         }
     }
 
-
+    if (item_type == ITEM_TYPE::BLOCK)DrawString(0, 30, "ブロック", 0xffffff);
+    else if(item_type == ITEM_TYPE::BOM)DrawString(0, 30, "爆弾", 0xffffff);
+    else DrawString(0, 30, "つるはし", 0xffffff);
     //DrawFormatString(0, 30, 0xff0000, "左 %f", ((location.x - radius.x))/ STAGE_BLOCK_SIZE_X) - 1;
 }

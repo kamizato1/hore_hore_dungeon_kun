@@ -23,5 +23,5 @@ public:
     void Update(Stage* stage);
     void Draw(float camera_work) const;
 
-    bool CanDelete() { return can_delete; }
+    bool GetCanDelete() { return can_delete; }
 };

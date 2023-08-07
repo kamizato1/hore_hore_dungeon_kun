@@ -50,5 +50,4 @@ enum class TREASURE_TYPE
     KEY,
     BAG,
     BOM,
-    ANGRY_BOM
 };
