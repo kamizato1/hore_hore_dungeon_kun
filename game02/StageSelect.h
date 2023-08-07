@@ -15,6 +15,12 @@ private:
     //現在選択中のステージ番号
     int stage_number;
 
+    //操作受付
+    int operating_time;
+
+    //背景画像
+    int image;
+
     
 
     //次の画面に遷移するのか
