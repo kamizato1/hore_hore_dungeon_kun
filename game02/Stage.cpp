@@ -6,6 +6,7 @@ Stage::Stage()
 	int treasure_image[3];
 
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
+	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
 	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, effect_image[0]);
 	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, effect_image[1]);
 	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, effect_image[2]);
@@ -13,6 +14,7 @@ Stage::Stage()
 	LoadDivGraph("images/block01.png", 7, 7, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, block_image);
 	LoadDivGraph("images/treasure1.png", 3, 3, 1, 36, 36, treasure_image);
 	LoadDivGraph("images/explosion.png", 9, 9, 1, 320, 320, explosion_image);
+	pickaxe_image = LoadGraph("images/pickaxe.png");
 	caveat_image = LoadGraph("images/warning.png");
 
 	FILE* fp_s;//ステージ１ファイル読み込み
@@ -284,7 +286,7 @@ void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 {
 	if (item_type == ITEM_TYPE::PICKAXE)
 	{
-		if (pickaxe == nullptr)pickaxe = new Pickaxe(location, speed);
+		if (pickaxe == nullptr)pickaxe = new Pickaxe(location, speed, pickaxe_image, hit_pickaxe_se);
 	}
 	else if (item_type == ITEM_TYPE::BLOCK)
 	{
