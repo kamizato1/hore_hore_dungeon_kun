@@ -17,7 +17,7 @@ void Effect::Update()
 {
 	if (++image_change_time > IMAGE_CHANGE_TIME)
 	{
-		if (++image_type > image_num)can_delete = TRUE;
+		if (++image_type >= image_num)can_delete = TRUE;
 		image_change_time = 0;
 	}
 }

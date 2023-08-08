@@ -154,7 +154,6 @@
     <ClCompile Include="Bom.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Effect.cpp" />
-    <ClCompile Include="FpsControll.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="StageSelect.cpp" />
@@ -175,7 +174,6 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="define.h" />
-    <ClInclude Include="FpsControll.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="StageSelect.h" />
