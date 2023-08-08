@@ -75,3 +75,9 @@ DATA Key::GetStickAngle(int key)
 
 	return sa;
 }
+
+void Key::Draw()
+{
+	DrawFormatString(0, 55, 0xffffff, "x = %d", r_stick_angle.x);
+	DrawFormatString(0, 80, 0xffffff, "y = %d", r_stick_angle.y);
+}

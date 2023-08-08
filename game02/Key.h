@@ -33,4 +33,6 @@ public:
 	bool KeyDown(int key_type);//âüÇµÇΩèuä‘
 
 	DATA GetStickAngle(int key);
+
+	void Draw();
 };

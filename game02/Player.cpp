@@ -31,7 +31,7 @@ void Player::Update(Key* key, Stage* stage)
     MoveX(key, stage);
     MoveY(key, stage);
     
-    if (stage->HitTreasure(this, TRUE) == TREASURE_TYPE::BOM)
+    if (stage->GetTreasure(this) == TREASURE_TYPE::BOM)
     {
         item_num[static_cast<int>(ITEM_TYPE::BOM)]++;
     }
@@ -41,8 +41,8 @@ void Player::Update(Key* key, Stage* stage)
     DATA all_r_stick_angle_record_calculation = { 0,0 };
     DATA now_r_stick_angle, old_r_stick_angle;
 
-    now_r_stick_angle.x = -(key->GetStickAngle(R).x / 50);
-    now_r_stick_angle.y = -(key->GetStickAngle(R).y / 50);
+    now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);
+    now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);
     
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
     {
@@ -61,7 +61,7 @@ void Player::Update(Key* key, Stage* stage)
 
     if(can_use_item)Cursor();
 
-    if (speed.x == 0)
+    if (key->GetStickAngle(L).x == 0)
     {
         int item_type = static_cast<int>(this->item_type);
         if (key->KeyDown(RIGHT))
@@ -85,9 +85,9 @@ void Player::Update(Key* key, Stage* stage)
 void Player::Cursor()
 {
     int cursor_sign_x = 0;
-    if (throw_speed.x != 0)cursor_sign_x = -(throw_speed.x / fabsf(throw_speed.x));
+    if (throw_speed.x != 0)cursor_sign_x = throw_speed.x / fabsf(throw_speed.x);
     int cursor_sign_y = 0;
-    if (throw_speed.y != 0)cursor_sign_y = -(throw_speed.y / fabsf(throw_speed.y));
+    if (throw_speed.y != 0)cursor_sign_y = throw_speed.y / fabsf(throw_speed.y);
 
     DATA cursor_radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
     int x = location.x / BLOCK_SIZE_X;
@@ -132,7 +132,7 @@ void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
 
 void Player::MoveY(Key* key, Stage* stage)//Ｙ座標の移動
 {
-    if ((speed.y += GRAVITY_POWER) > JUMP_SPEED)speed.y = JUMP_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
+    if ((speed.y += GRAVITY_POWER) > MAX_FALL_SPEED)speed.y = MAX_FALL_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
     location.y += speed.y;//スピードをY座標に足す。
 
     if (stage->HitStage(this))//ステージにぶつかっていたら、
@@ -158,14 +158,15 @@ void Player::Draw(float camera_work) const
     {
         DrawRotaGraph(cursor_location.x + camera_work, cursor_location.y, 1, 0, cursor_image, TRUE);
 
-        float gravity = 0;
+        float throw_speed_y = throw_speed.y;
         DATA throw_location = location;
         int count = 0;
         while (throw_location.y < SCREEN_HEIGHT)
         {
-            throw_location.x -= throw_speed.x;
-            throw_location.y -= (throw_speed.y - gravity);
-            gravity += GRAVITY_POWER;
+            throw_location.x += throw_speed.x;
+            throw_speed_y += GRAVITY_POWER;
+            throw_location.y += throw_speed_y;
+
             if(!(++count % 3))DrawCircle(throw_location.x + camera_work, throw_location.y, 3, 0xffffff, FALSE);
         }
     }

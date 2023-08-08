@@ -25,17 +25,17 @@ void Pickaxe::Update(Stage* stage)
 {
     old_location = location;
 
-    location.y -= speed.y;
-    speed.y -= GRAVITY_POWER;
+    speed.y += GRAVITY_POWER;
+    location.y += speed.y;
 
-    if (stage->HitPickaxe(this) && speed.y < 0)
+    if (stage->HitPickaxe(this) && speed.y > 0)
     {
         can_delete = TRUE;
         PlaySoundMem(se, DX_PLAYTYPE_BACK, TRUE);
     }
     else
     {
-        location.x -= speed.x;
+        location.x += speed.x;
         if (stage->HitPickaxe(this))
         {
             location = old_location;

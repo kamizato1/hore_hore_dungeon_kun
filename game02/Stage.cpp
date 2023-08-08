@@ -60,7 +60,7 @@ void Stage::Update()
 	for (int i = 0; i < bom.size(); i++)
 	{
 		bom[i].Update(this);
-		HitBom(i);
+		HitBlastRange(i);
 	}
 	if (pickaxe != nullptr)
 	{
@@ -75,7 +75,7 @@ void Stage::Update()
 }
 
 
-void Stage::HitBom(int bom_num)
+void Stage::HitBlastRange(int bom_num)
 {
 	if (bom[bom_num].GetCanDelete())
 	{
@@ -153,16 +153,16 @@ bool Stage::HitStage(BoxCollider* bc)
 
 bool Stage::HitPickaxe(BoxCollider* bc)
 {
+	for (int i = 0; i < bom.size(); i++)
+	{
+		if (bom[i].HitBox(bc))
+		{
+			if (bom[i].HitDamage())bom[i].SetCanDelete(TRUE);
+		}
+		else bom[i].SetOldHit(FALSE);
+	}
 	for (int i = 0; i < treasure.size(); i++)
 	{
-		for (int i = 0; i < bom.size(); i++)
-		{
-			if (bom[i].HitBox(bc))
-			{
-				if (bom[i].HitDamage())bom[i].SetCanDelete(TRUE);
-			}
-			else bom[i].SetOldHit(FALSE);
-		}
 		if (treasure[i].HitBox(bc))
 		{
 			if (treasure[i].HitDamage(TRUE, this))
@@ -178,7 +178,6 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 		}
 		else treasure[i].SetOldHit(FALSE);
 	}
-	
 
 	for (int i = 0; i < stageblock.size(); i++)  // 全要素に対するループ
 	{
@@ -199,19 +198,38 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 	return FALSE;
 }
 
-TREASURE_TYPE Stage::HitTreasure(BoxCollider* bc, bool can_delete)
+bool Stage::HitBom(BoxCollider* bc)
+{
+	for (int i = 0; i < bom.size(); i++)
+	{
+		if (bom[i].HitBox(bc))return TRUE;
+	}
+	return FALSE;
+}
+
+TREASURE_TYPE Stage::GetTreasure(BoxCollider* bc)
 {
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		if (treasure[i].HitBox(bc))
 		{
 			TREASURE_TYPE treasure_type = treasure[i].GetTreasureType();
-			if(can_delete)treasure.erase(treasure.begin() + i);
+			treasure.erase(treasure.begin() + i);
 			return treasure_type;
 		}
 	}
 	return TREASURE_TYPE::NONE;
 }
+
+bool Stage::HitTreasure(BoxCollider* bc)
+{
+	for (int i = 0; i < treasure.size(); i++)
+	{
+		if (treasure[i].HitBox(bc))return TRUE;
+	}
+	return FALSE;
+}
+
 
 bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 {
@@ -257,12 +275,8 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 		if (!exist_block)
 		{
 			stageblock.emplace_back(location, 4);
-			if (HitTreasure(&stageblock[stageblock.size() - 1], FALSE) != TREASURE_TYPE::NONE)
-			{
-				stageblock.erase(stageblock.end() - 1);
-				return FALSE;
-			}
-			return TRUE;
+			if (!(HitTreasure(&stageblock[stageblock.size() - 1])) && !(HitBom(&stageblock[stageblock.size() - 1])))return TRUE;
+			else stageblock.erase(stageblock.end() - 1);
 		}
 	}
 	else
@@ -270,15 +284,16 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 		if (!exist_block)
 		{
 			stageblock.emplace_back(location, 4);
-			TREASURE_TYPE hit_item = HitTreasure(&stageblock[stageblock.size() - 1], FALSE);
-			stageblock.erase(stageblock.end() - 1);
-			if (hit_item == TREASURE_TYPE::NONE)
+			if (!(HitTreasure(&stageblock[stageblock.size() - 1])) && !(HitBom(&stageblock[stageblock.size() - 1])))
 			{
-				bom.emplace_back(location, DATA{0,0});
+				stageblock.erase(stageblock.end() - 1);
+				bom.emplace_back(location, DATA{ 0,0 });
 				return TRUE;
 			}
+			else stageblock.erase(stageblock.end() - 1);
 		}
 	}
+	
 	return FALSE;
 }
 

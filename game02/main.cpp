@@ -47,6 +47,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         ClearDrawScreen();		// ‰æ–Ê‚Ì‰Šú‰»
        
         if(sceneMng->GetNowScene() != nullptr)sceneMng->Draw();
+        key->Draw();
 
         ScreenFlip();			// — ‰æ–Ê‚Ì“à—e‚ð•\‰æ–Ê‚É”½‰f
 

@@ -40,8 +40,10 @@ public:
 
     bool HitPickaxe(BoxCollider* bc);
     bool HitStage(BoxCollider* bc);
-    void HitBom(int bom_num);
-    TREASURE_TYPE HitTreasure(BoxCollider* bc, bool can_delete);
+    bool HitTreasure(BoxCollider* bc);
+    bool HitBom(BoxCollider* bc);
+    void HitBlastRange(int bom_num);
+    TREASURE_TYPE GetTreasure(BoxCollider* bc);
     bool PutItem(DATA location, ITEM_TYPE item_type);
     void ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type);
 };
