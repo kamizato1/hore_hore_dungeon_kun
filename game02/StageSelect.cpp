@@ -15,8 +15,10 @@ StageSelect::StageSelect()
 	image = 0;
 	stage_number = 0;
 	operating_time = 0;
-
 	transition = false;
+	cursor_x = 0;
+	cursor_y = 0;
+
 }
 
 //-----------------------------------

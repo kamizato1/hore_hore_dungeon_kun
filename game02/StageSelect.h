@@ -21,6 +21,10 @@ private:
     //背景画像
     int image;
 
+    //カーソルの座標
+    float cursor_x;
+    float cursor_y;
+
     
 
     //次の画面に遷移するのか
