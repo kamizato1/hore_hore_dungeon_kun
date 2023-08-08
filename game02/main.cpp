@@ -38,7 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     SceneManager* sceneMng = new SceneManager(new Title());
     Key* key = new Key();
 
-    while (ProcessMessage() == 0)
+    while ((ProcessMessage() == 0) && (sceneMng->GetNowScene() != nullptr))
     {
         sceneMng->Update(key);
         key->Update();
@@ -46,7 +46,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         
         ClearDrawScreen();		// ‰æ–Ê‚Ì‰Šú‰»
        
-        sceneMng->Draw();
+        if(sceneMng->GetNowScene() != nullptr)sceneMng->Draw();
 
         ScreenFlip();			// — ‰æ–Ê‚Ì“à—e‚ð•\‰æ–Ê‚É”½‰f
 
