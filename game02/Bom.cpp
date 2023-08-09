@@ -44,9 +44,11 @@ void Bom::Update(StageBase* stagebase)
 
     if (throw_flg)
     {
-        location.y -= speed.y;
-        location.x -= speed.x;
-        speed.y -= GRAVITY_POWER;
+        speed.y += GRAVITY_POWER;
+        location.y += speed.y;
+
+        location.x += speed.x;
+        
         angle += angle_direction;
 
         if (stagebase->HitStage(this))can_delete = TRUE;
