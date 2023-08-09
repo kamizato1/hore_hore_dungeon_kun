@@ -13,10 +13,10 @@ Treasure::Treasure(DATA location, int type)
     can_delete = FALSE;
 }
 
-void Treasure::Update(Stage* stage)
+void Treasure::Update(StageBase* stagebase)
 {
-    if (!stage->HitStage(this))location.y += 1;
-    if (stage->HitStage(this))
+    if (!stagebase->HitStage(this))location.y += 1;
+    if (stagebase->HitStage(this))
     {
         int y = location.y / BLOCK_SIZE_Y;
         location.y = (y * BLOCK_SIZE_Y) + (radius.y);
@@ -29,16 +29,16 @@ void Treasure::Draw(float camera_work) const
     DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
 }
 
-bool Treasure::HitDamage(bool hit_type, Stage* stage)
+bool Treasure::HitDamage(bool hit_type, StageBase* stagebase)
 {
     if (hit_type)
     {
-        if ((!stage->HitStage(this)) && (!old_hit))return TRUE;
+        if ((!stagebase->HitStage(this)) && (!old_hit))return TRUE;
         old_hit = TRUE;
     }
     else
     {
-        if (!stage->HitStage(this))return TRUE;
+        if (!stagebase->HitStage(this))return TRUE;
     }
     return FALSE;
 }

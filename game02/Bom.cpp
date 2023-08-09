@@ -28,7 +28,7 @@ Bom::Bom(DATA location, DATA speed)
     old_hit = FALSE;
 }
 
-void Bom::Update(Stage* stage)
+void Bom::Update(StageBase* stagebase)
 {
     if (--bom_size_change_time == 0)
     {
@@ -49,12 +49,12 @@ void Bom::Update(Stage* stage)
         speed.y -= GRAVITY_POWER;
         angle += angle_direction;
 
-        if (stage->HitStage(this))can_delete = TRUE;
+        if (stagebase->HitStage(this))can_delete = TRUE;
     }
     else
     {
-        if (!stage->HitStage(this))location.y += 1;
-        if(stage->HitStage(this))
+        if (!stagebase->HitStage(this))location.y += 1;
+        if(stagebase->HitStage(this))
         {
             int y = location.y / BLOCK_SIZE_Y;
             location.y = (y * BLOCK_SIZE_Y) + (radius.y);

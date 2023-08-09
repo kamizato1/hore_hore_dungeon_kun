@@ -17,6 +17,8 @@
 
 #define GRAVITY_POWER 0.4
 
+#define MAX_FALL_SPEED 10
+
 enum
 {
     A,
