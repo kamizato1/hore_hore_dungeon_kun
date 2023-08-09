@@ -17,18 +17,18 @@ Pickaxe::Pickaxe(DATA location, DATA speed, int image, int se)
     can_delete = FALSE;
     angle = 0;
     angle_direction = 10;
-    if (speed.x > 0)angle_direction = -10;
+    if (speed.x < 0)angle_direction = -10;
     
 }
 
-void Pickaxe::Update(Stage* stage)
+void Pickaxe::Update(StageBase* stagebase)
 {
     old_location = location;
 
     speed.y += GRAVITY_POWER;
     location.y += speed.y;
 
-    if (stage->HitPickaxe(this) && speed.y > 0)
+    if (stagebase->HitPickaxe(this) && speed.y > 0)
     {
         can_delete = TRUE;
         PlaySoundMem(se, DX_PLAYTYPE_BACK, TRUE);
@@ -36,7 +36,7 @@ void Pickaxe::Update(Stage* stage)
     else
     {
         location.x += speed.x;
-        if (stage->HitPickaxe(this))
+        if (stagebase->HitPickaxe(this))
         {
             location = old_location;
             speed.x = 0;

@@ -2,7 +2,7 @@
 
 #include"Key.h"
 #include"Player.h"
-#include"Stage.h"
+#include"StageBase.h"
 #include"AbstractScene.h"
 #include"Ui.h"
 #include"define.h"
@@ -12,7 +12,7 @@ class GameMain : public AbstractScene
 private:
 
     bool stop;
-    Stage* stage;
+    StageBase* stagebase;
     Player* player;
     int back_ground_image[3];
 

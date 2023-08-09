@@ -156,6 +156,9 @@
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="SampleGameMain.cpp" />
+    <ClCompile Include="SampleStage.cpp" />
+    <ClCompile Include="StageBase.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Key.cpp" />
@@ -176,6 +179,9 @@
     <ClInclude Include="define.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="SampleGameMain.h" />
+    <ClInclude Include="SampleStage.h" />
+    <ClInclude Include="StageBase.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="Treasure.h" />
     <ClInclude Include="Key.h" />

@@ -26,12 +26,12 @@ Player::Player()
     for (int i = 0; i < 3; i++)item_num[i] = 0;
 }
 
-void Player::Update(Key* key, Stage* stage)
+void Player::Update(Key* key, StageBase* stagebase)
 {
-    MoveX(key, stage);
-    MoveY(key, stage);
+    MoveX(key, stagebase);
+    MoveY(key, stagebase);
     
-    if (stage->GetTreasure(this) == TREASURE_TYPE::BOM)
+    if (stagebase->GetTreasure(this) == TREASURE_TYPE::BOM)
     {
         item_num[static_cast<int>(ITEM_TYPE::BOM)]++;
     }
@@ -77,8 +77,8 @@ void Player::Update(Key* key, Stage* stage)
 
     if (can_use_item)
     {
-        if (key->KeyDown(L))stage->ThrowItem(location, throw_speed, item_type);
-        else if (key->KeyDown(R))stage->PutItem(cursor_location, item_type);
+        if (key->KeyDown(L))stagebase->ThrowItem(location, throw_speed, item_type);
+        else if (key->KeyDown(R))stagebase->PutItem(cursor_location, item_type);
     }
 }
 
@@ -102,7 +102,7 @@ void Player::Cursor()
     }
 }
 
-void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
+void Player::MoveX(Key* key, StageBase* stagebase)//Ｘ座標の移動
 {
     float all_speed_x_record_calculation = 0;
     float now_speed_x = 0;
@@ -122,24 +122,24 @@ void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
     speed.x = (all_speed_x_record_calculation / L_STICK_ANGLE_RECORD_NUM);
     location.x += speed.x;
 
-    if (stage->HitStage(this))
+    if (stagebase->HitStage(this))
     {
         location.x = floor(location.x);
         float sign = -(speed.x / fabsf(speed.x));
-        while (stage->HitStage(this))location.x += sign;
+        while (stagebase->HitStage(this))location.x += sign;
     }
 }
 
-void Player::MoveY(Key* key, Stage* stage)//Ｙ座標の移動
+void Player::MoveY(Key* key, StageBase* stagebase)//Ｙ座標の移動
 {
     if ((speed.y += GRAVITY_POWER) > MAX_FALL_SPEED)speed.y = MAX_FALL_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
     location.y += speed.y;//スピードをY座標に足す。
 
-    if (stage->HitStage(this))//ステージにぶつかっていたら、
+    if (stagebase->HitStage(this))//ステージにぶつかっていたら、
     {
         location.y = floor(location.y);
         float sign = -(speed.y / fabsf(speed.y));
-        while (stage->HitStage(this))location.y += sign;
+        while (stagebase->HitStage(this))location.y += sign;
 
         speed.y = 0;
 

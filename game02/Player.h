@@ -2,7 +2,7 @@
 
 #include"BoxCollider.h"
 #include"Key.h"
-#include"Stage.h"
+#include"StageBase.h"
 #include"define.h"
 
 #define R_STICK_ANGLE_RECORD_NUM 20
@@ -30,10 +30,10 @@ public:
 
     Player();
 
-    void Update(Key* key, Stage* stage);
+    void Update(Key* key, StageBase* stagebase);
     void Draw(float camera_work) const;
 
-    void MoveX(Key* key, Stage* stage);
-    void MoveY(Key* key, Stage* stage);
+    void MoveX(Key* key, StageBase* stagebase);
+    void MoveY(Key* key, StageBase* stagebase);
     void Cursor();
 };
