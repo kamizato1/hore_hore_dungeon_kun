@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BoxCollider.h"
-#include"Stage.h"
+#include"StageBase.h"
 #include"define.h"
 
 class Pickaxe : public BoxCollider
@@ -9,19 +9,20 @@ class Pickaxe : public BoxCollider
 private:
 
     int image;
+    int se;
     int angle;
     int angle_direction;
     bool can_delete;
     DATA speed;
     DATA old_location;
-    int hit_pickaxe_se;
+   
 
 public:
 
-    Pickaxe(DATA location, DATA speed);
+    Pickaxe(DATA location, DATA speed, int image, int se);
 
-    void Update(Stage* stage);
+    void Update(class StageBase* stagebase);
     void Draw(float camera_work) const;
 
-    bool CanDelete() { return can_delete; }
+    bool GetCanDelete() { return can_delete; }
 };

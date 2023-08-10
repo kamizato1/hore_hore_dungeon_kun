@@ -24,4 +24,6 @@ public:
 	void Draw() const;
 
 	void ChangeScene();
+
+	AbstractScene* GetNowScene() { return mScene; }
 };

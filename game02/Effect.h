@@ -4,7 +4,7 @@
 #define BREAK_BLOCK_IMAGE_TYPE 10
 
 
-class BreakBlock
+class Effect
 {
 private:
 
@@ -12,11 +12,12 @@ private:
 	int image[BREAK_BLOCK_IMAGE_TYPE];
 	int image_change_time;
 	int image_type;
+	int image_num;
 	bool can_delete;
 
 public:
 
-	BreakBlock(DATA location, int *image);
+	Effect(DATA location, int *image, int image_num);
 	//~BreakBlock();
 
 	void Update();

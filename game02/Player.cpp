@@ -12,13 +12,12 @@
 Player::Player()
 {
     location = { 10, 300 };
-    cursor_location = location;
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
     throw_speed = { 0,0 };
    
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
-    for (int i = 0; i < SPEED_X_RECORD_NUM; i++)speed_x_record[i] = 0;
+    for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)speed_x_record[i] = 0;
 
     cursor_image = LoadGraph("images/cursor.png");
     item_type = ITEM_TYPE::PICKAXE;
@@ -27,12 +26,12 @@ Player::Player()
     for (int i = 0; i < 3; i++)item_num[i] = 0;
 }
 
-void Player::Update(Key* key, Stage* stage)
+void Player::Update(Key* key, StageBase* stagebase)
 {
-    MoveX(key, stage);
-    MoveY(key, stage);
+    MoveX(key, stagebase);
+    MoveY(key, stagebase);
     
-    if (stage->HitTreasure(this, TRUE) == TREASURE_TYPE::BOM)
+    if (stagebase->GetTreasure(this) == TREASURE_TYPE::BOM)
     {
         item_num[static_cast<int>(ITEM_TYPE::BOM)]++;
     }
@@ -42,8 +41,8 @@ void Player::Update(Key* key, Stage* stage)
     DATA all_r_stick_angle_record_calculation = { 0,0 };
     DATA now_r_stick_angle, old_r_stick_angle;
 
-    now_r_stick_angle.x = -(key->GetStickAngle(R).x / 50);
-    now_r_stick_angle.y = -(key->GetStickAngle(R).y / 50);
+    now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);
+    now_r_stick_angle.y = (key->GetStickAngle(R).x / 50);
     
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
     {
@@ -60,19 +59,9 @@ void Player::Update(Key* key, Stage* stage)
     if ((throw_speed.x == 0) && (throw_speed.y == 0))can_use_item = FALSE;
     else can_use_item = TRUE;
 
-    int cursor_sign_x = 0;
-    if (throw_speed.x != 0)cursor_sign_x = -(throw_speed.x / fabsf(throw_speed.x));
-    int cursor_sign_y = 0;
-    if (throw_speed.y != 0)cursor_sign_y = -(throw_speed.y / fabsf(throw_speed.y));
+    if(can_use_item)Cursor();
 
-    int cursor_x_num = (location.x / STAGE_BLOCK_SIZE_X) + cursor_sign_x;
-    if (cursor_sign_y == 0)cursor_x_num = (location.x + (radius.x * cursor_sign_x)) / STAGE_BLOCK_SIZE_X + cursor_sign_x;
-    int cursor_y_num = (location.y + (radius.y * cursor_sign_y)) / STAGE_BLOCK_SIZE_Y + cursor_sign_y;
-
-    cursor_location.x = (cursor_x_num * STAGE_BLOCK_SIZE_X) + (STAGE_BLOCK_SIZE_X / 2);
-    cursor_location.y = (cursor_y_num * STAGE_BLOCK_SIZE_Y) + (STAGE_BLOCK_SIZE_Y / 2);
-
-    if (speed.x == 0)
+    if (key->GetStickAngle(L).x == 0)
     {
         int item_type = static_cast<int>(this->item_type);
         if (key->KeyDown(RIGHT))
@@ -88,12 +77,32 @@ void Player::Update(Key* key, Stage* stage)
 
     if (can_use_item)
     {
-        if (key->KeyDown(L))stage->ThrowItem(location, throw_speed, item_type);
-        else if (key->KeyDown(R))stage->PutItem(cursor_location, item_type);
+        if (key->KeyDown(L))stagebase->ThrowItem(location, throw_speed, item_type);
+        else if (key->KeyDown(R))stagebase->PutItem(cursor_location, item_type);
     }
 }
 
-void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
+void Player::Cursor()
+{
+    int cursor_sign_x = 0;
+    if (throw_speed.x != 0)cursor_sign_x = throw_speed.x / fabsf(throw_speed.x);
+    int cursor_sign_y = 0;
+    if (throw_speed.y != 0)cursor_sign_y = throw_speed.y / fabsf(throw_speed.y);
+
+    DATA cursor_radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
+    int x = location.x / BLOCK_SIZE_X;
+    int y = location.y / BLOCK_SIZE_Y;
+    cursor_location.x = (x * BLOCK_SIZE_X) + cursor_radius.x;
+    cursor_location.y = (y * BLOCK_SIZE_Y) + cursor_radius.y;
+    
+    while (HitBox(this, cursor_location, cursor_radius))
+    {
+        cursor_location.x += (BLOCK_SIZE_X * cursor_sign_x);
+        cursor_location.y += (BLOCK_SIZE_Y * cursor_sign_y);
+    }
+}
+
+void Player::MoveX(Key* key, StageBase* stagebase)//Ｘ座標の移動
 {
     float all_speed_x_record_calculation = 0;
     float now_speed_x = 0;
@@ -102,7 +111,7 @@ void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
     if (key->GetStickAngle(L).x > 0)now_speed_x = PLAYER_SPEED;
     else if (key->GetStickAngle(L).x < 0)now_speed_x = -PLAYER_SPEED;
 
-    for (int i = 0; i < SPEED_X_RECORD_NUM; i++)
+    for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)
     {
         old_speed_x = speed_x_record[i];
         speed_x_record[i] = now_speed_x;
@@ -110,27 +119,27 @@ void Player::MoveX(Key* key, Stage* stage)//Ｘ座標の移動
         all_speed_x_record_calculation += speed_x_record[i];
     }
 
-    speed.x = (all_speed_x_record_calculation / SPEED_X_RECORD_NUM);
+    speed.x = (all_speed_x_record_calculation / L_STICK_ANGLE_RECORD_NUM);
     location.x += speed.x;
 
-    if (stage->HitStage(this))
+    if (stagebase->HitStage(this))
     {
         location.x = floor(location.x);
         float sign = -(speed.x / fabsf(speed.x));
-        while (stage->HitStage(this))location.x += sign;
+        while (stagebase->HitStage(this))location.x += sign;
     }
 }
 
-void Player::MoveY(Key* key, Stage* stage)//Ｙ座標の移動
+void Player::MoveY(Key* key, StageBase* stagebase)//Ｙ座標の移動
 {
-    if ((speed.y += GRAVITY_POWER) > JUMP_SPEED)speed.y = JUMP_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
+    if ((speed.y += GRAVITY_POWER) > MAX_FALL_SPEED)speed.y = MAX_FALL_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
     location.y += speed.y;//スピードをY座標に足す。
 
-    if (stage->HitStage(this))//ステージにぶつかっていたら、
+    if (stagebase->HitStage(this))//ステージにぶつかっていたら、
     {
         location.y = floor(location.y);
         float sign = -(speed.y / fabsf(speed.y));
-        while (stage->HitStage(this))location.y += sign;
+        while (stagebase->HitStage(this))location.y += sign;
 
         speed.y = 0;
 
@@ -149,17 +158,21 @@ void Player::Draw(float camera_work) const
     {
         DrawRotaGraph(cursor_location.x + camera_work, cursor_location.y, 1, 0, cursor_image, TRUE);
 
-        float gravity = 0;
+        float throw_speed_y = throw_speed.y;
         DATA throw_location = location;
         int count = 0;
         while (throw_location.y < SCREEN_HEIGHT)
         {
-            throw_location.x -= throw_speed.x;
-            throw_location.y -= (throw_speed.y - gravity);
-            gravity += GRAVITY_POWER;
+            throw_location.x += throw_speed.x;
+            throw_speed_y += GRAVITY_POWER;
+            throw_location.y += throw_speed_y;
+
             if(!(++count % 3))DrawCircle(throw_location.x + camera_work, throw_location.y, 3, 0xffffff, FALSE);
         }
     }
 
-    DrawFormatString(0, 30, 0xffffff, "%d", static_cast<int>(this->item_type));
+    if (item_type == ITEM_TYPE::BLOCK)DrawString(0, 30, "ブロック", 0xffffff);
+    else if(item_type == ITEM_TYPE::BOM)DrawString(0, 30, "爆弾", 0xffffff);
+    else DrawString(0, 30, "つるはし", 0xffffff);
+    //DrawFormatString(0, 30, 0xff0000, "左 %f", ((location.x - radius.x))/ STAGE_BLOCK_SIZE_X) - 1;
 }
