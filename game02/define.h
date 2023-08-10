@@ -48,8 +48,18 @@ enum class ITEM_TYPE
 
 enum class TREASURE_TYPE
 {
-    NONE = -1,
     KEY,
     BAG,
     BOM,
+};
+
+enum class BLOCK_TYPE
+{
+    NONE,//ブロックが置けない
+    BROKEN_BLOCK,//壊れそうなブロック
+    WOUNDED_BLOCK,//傷ついているブロック
+    NORMAL_BLOCK,//ブロック
+    GROUND_BLOCK,//地面のブロック
+    HARD_BLOCK,//かたいブロック
+    VERY_HARD_BLOCK//とても固いブロック
 };

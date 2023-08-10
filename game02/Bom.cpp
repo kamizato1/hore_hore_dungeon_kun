@@ -51,12 +51,12 @@ void Bom::Update(StageBase* stagebase)
         
         angle += angle_direction;
 
-        if (stagebase->HitStage(this))can_delete = TRUE;
+        if (stagebase->HitStage(this).flg)can_delete = TRUE;
     }
     else
     {
-        if (!stagebase->HitStage(this))location.y += 1;
-        if(stagebase->HitStage(this))
+        if (!stagebase->HitStage(this).flg)location.y += 1;
+        if(stagebase->HitStage(this).flg)
         {
             int y = location.y / BLOCK_SIZE_Y;
             location.y = (y * BLOCK_SIZE_Y) + (radius.y);

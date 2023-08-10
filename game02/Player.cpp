@@ -28,12 +28,14 @@ Player::Player()
 
 void Player::Update(Key* key, StageBase* stagebase)
 {
-    MoveX(key, stagebase);
-    MoveY(key, stagebase);
+   MoveX(key, stagebase);
+   MoveY(key, stagebase);
     
-    if (stagebase->GetTreasure(this) == TREASURE_TYPE::BOM)
+    HIT_TREASURE hit_treasure = stagebase->HitTreasure(this);
+    if (hit_treasure.flg)
     {
-        item_num[static_cast<int>(ITEM_TYPE::BOM)]++;
+       stagebase->DeleteTreasure(hit_treasure.num);
+       item_num[static_cast<int>(hit_treasure.treasure_type)]++;
     }
 
     //ここから下↓つるはしを投げるときの処理
@@ -41,8 +43,8 @@ void Player::Update(Key* key, StageBase* stagebase)
     DATA all_r_stick_angle_record_calculation = { 0,0 };
     DATA now_r_stick_angle, old_r_stick_angle;
 
-    now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);
-    now_r_stick_angle.y = (key->GetStickAngle(R).x / 50);
+    now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);
+    now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);
     
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
     {
@@ -122,11 +124,11 @@ void Player::MoveX(Key* key, StageBase* stagebase)//Ｘ座標の移動
     speed.x = (all_speed_x_record_calculation / L_STICK_ANGLE_RECORD_NUM);
     location.x += speed.x;
 
-    if (stagebase->HitStage(this))
+    if (stagebase->HitStage(this).flg)
     {
         location.x = floor(location.x);
         float sign = -(speed.x / fabsf(speed.x));
-        while (stagebase->HitStage(this))location.x += sign;
+        while (stagebase->HitStage(this).flg)location.x += sign;
     }
 }
 
@@ -135,11 +137,11 @@ void Player::MoveY(Key* key, StageBase* stagebase)//Ｙ座標の移動
     if ((speed.y += GRAVITY_POWER) > MAX_FALL_SPEED)speed.y = MAX_FALL_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
     location.y += speed.y;//スピードをY座標に足す。
 
-    if (stagebase->HitStage(this))//ステージにぶつかっていたら、
+    if (stagebase->HitStage(this).flg)//ステージにぶつかっていたら、
     {
         location.y = floor(location.y);
         float sign = -(speed.y / fabsf(speed.y));
-        while (stagebase->HitStage(this))location.y += sign;
+        while (stagebase->HitStage(this).flg)location.y += sign;
 
         speed.y = 0;
 

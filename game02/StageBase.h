@@ -11,6 +11,26 @@
 #define BREAK_BLOCK_IMAGE_NUM 10
 #define EXPLOSION_IMAGE_NUM 9
 
+struct HIT_STAGE
+{
+    bool flg;
+    int num;
+    BLOCK_TYPE block_type;
+};
+
+struct HIT_TREASURE
+{
+    bool flg;
+    int num;
+    TREASURE_TYPE treasure_type;
+};
+
+struct HIT_BOM
+{
+    bool flg;
+    int num;
+};
+
 class StageBase
 {
 protected:
@@ -37,11 +57,17 @@ public:
     virtual void Draw2(float camera_work) const;
 
     bool HitPickaxe(BoxCollider* bc);
-    bool HitStage(BoxCollider* bc);
-    bool HitTreasure(BoxCollider* bc);
-    bool HitBom(BoxCollider* bc);
+
+    HIT_STAGE HitStage(BoxCollider* bc);
+    HIT_STAGE HitStage(DATA location, DATA radius);
+    HIT_TREASURE HitTreasure(BoxCollider* bc);
+    HIT_BOM HitBom(BoxCollider* bc);
+
+    void DeleteTreasure(int num);
+   // void DeleteBlock(int num) { stageblock.erase(stageblock.begin() + num); };
+
     void HitBlastRange(int bom_num);
-    TREASURE_TYPE GetTreasure(BoxCollider* bc);
+    
     bool PutItem(DATA location, ITEM_TYPE item_type);
     void ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type);
 };
