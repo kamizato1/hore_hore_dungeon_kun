@@ -7,8 +7,8 @@ Stage::Stage()
 
 	FILE* fp_s;//ステージ１ファイル読み込み
 	FILE* fp_t;//アイテム１ファイル読み込み
-	fopen_s(&fp_s, "data/stage/stage02.txt", "r");
-	fopen_s(&fp_t, "data/stage/treasure02.txt", "r");
+	fopen_s(&fp_s, "data/stage/stage01.txt", "r");
+	fopen_s(&fp_t, "data/stage/treasure01.txt", "r");
 
 	for (int i = 0; i < STAGE_BLOCK_NUM_Y; i++)
 	{
@@ -19,7 +19,7 @@ Stage::Stage()
 			fscanf_s(fp_t, "%d", &treasure_type);
 
 			DATA location;
-			location.x = (j * BLOCK_SIZE_X) + (BLOCK_SIZE_X / 2);
+			location.x = ((j - 1) * BLOCK_SIZE_X) + (BLOCK_SIZE_X / 2);
 			location.y = (i * BLOCK_SIZE_Y) + (BLOCK_SIZE_Y / 2);
 
 			if (block_type != -1)stageblock.emplace_back(location, block_type);

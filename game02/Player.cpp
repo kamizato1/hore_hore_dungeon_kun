@@ -5,13 +5,13 @@
 #define PLAYER_SIZE_X 30
 #define PLAYER_SIZE_Y 30
 
-#define JUMP_SPEED 10
+#define JUMP_SPEED 8
 #define PLAYER_SPEED 2
 
 
 Player::Player()
 {
-    location = { 10, 300 };
+    location = { 55, 500 };
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
     throw_speed = { 0,0 };
