@@ -3,19 +3,25 @@
 #include"Stage.h"
 #include"SampleStage.h"
 
+#define TIME 100
+
 GameMain::GameMain()
 {
     stagebase = new Stage();
     player = new Player();
+    ui = new Ui();
     back_ground_image[0] = LoadGraph("images/background01.png");
     back_ground_image[1] = LoadGraph("images/background02.png");
     back_ground_image[2] = LoadGraph("images/background03.png");
     stop = FALSE;
+    time = 0;
+
 }
 GameMain::~GameMain()
 {
     delete player;
     delete stagebase;
+    delete ui;
 }
 
 void GameMain::Update(Key* key)
@@ -24,9 +30,14 @@ void GameMain::Update(Key* key)
 
     if (!stop)
     {
+        time++;
         stagebase->Update();
         player->Update(key, stagebase);
     }
+
+    if (TIME - (time / FPS) < 0)time = 0;
+
+    if (player->GetLocation().y > SCREEN_HEIGHT + 15) stop = TRUE;
 }
 
 void GameMain::Draw() const
@@ -43,7 +54,7 @@ void GameMain::Draw() const
     player->Draw(camera_work);
     stagebase->Draw2(camera_work);
 
-    DrawFormatString(0, 0, 0xffffff, "%f", camera_work);
+    ui->Draw(TIME - (time / FPS));
 }
 
 AbstractScene* GameMain::ChangeScene()

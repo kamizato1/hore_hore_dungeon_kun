@@ -10,6 +10,7 @@ void StageBase::Init()
 	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, effect_image[2]);
 	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, effect_image[3]);
 	LoadDivGraph("images/explosion.png", 9, 9, 1, 320, 320, explosion_image);
+	LoadDivGraph("images/smoke.png", 9, 9, 1, 500, 500, smoke_image);
 	pickaxe_image = LoadGraph("images/pickaxe.png");
 }
 
@@ -82,6 +83,7 @@ void StageBase::HitBlastRange(int bom_num)
 	}
 	if (bom[bom_num].GetCanDelete())
 	{
+		effect.emplace_back(bom[bom_num].GetLocation(), smoke_image, EXPLOSION_IMAGE_NUM);
 		effect.emplace_back(bom[bom_num].GetLocation(), explosion_image, EXPLOSION_IMAGE_NUM);
 		bom.erase(bom.begin() + bom_num);
 	}

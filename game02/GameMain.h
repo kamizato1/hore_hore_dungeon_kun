@@ -12,9 +12,14 @@ class GameMain : public AbstractScene
 private:
 
     bool stop;
+
     StageBase* stagebase;
     Player* player;
+    Ui* ui;
+
     int back_ground_image[3];
+    int life;
+    int time;
 
 public:
 
