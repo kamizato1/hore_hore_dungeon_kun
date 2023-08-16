@@ -26,11 +26,6 @@ private:
     ITEM_TYPE item_type;
     int item_num[3];
 
-    //テストイメージ（のちに消去お願い上間）
-    int test_image[16]; //画像
-    int animation; //アニメーション
-    int animation_time; //アニメーション切り替え時間
-    
 public:
 
     Player();
