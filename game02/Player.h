@@ -25,7 +25,7 @@ private:
 
     ITEM_TYPE item_type;
     int item_num[3];
-    
+
 public:
 
     Player();
