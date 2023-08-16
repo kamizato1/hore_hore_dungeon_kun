@@ -9,10 +9,8 @@
 #include"SceneManager.h"
 #include"define.h"
 
-//テスト(デバック)
+//テスト
 #include"Result.h"
-#include"Help.h"
-
 
 /***********************************************
  * プログラムの開始
@@ -37,7 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     SetFontSize(20);		// 文字サイズを設定
 
-    SceneManager* sceneMng = new SceneManager(new GameMain());
+    SceneManager* sceneMng = new SceneManager(new Title());
     Key* key = new Key();
 
     while ((ProcessMessage() == 0) && (sceneMng->GetNowScene() != nullptr))
