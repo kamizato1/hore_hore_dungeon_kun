@@ -10,6 +10,8 @@ Title::Title()
     flashing_time = 0;
     push_time = 0;
     can_scene_change = FALSE;
+    image = LoadGraph("images/home.png");
+    imgae1 = LoadGraph("images/start.png");
 }
 
 //-----------------------------------
@@ -55,6 +57,13 @@ void Title::Draw() const
     {
         DrawString(190, 300, "Bボタンを押そう！", 0xffffff);
     }
+
+
+    DrawGraph(0, 0, image, false);
+    DrawGraph(715, 250, imgae1, true);
+
+    //カーソル位置
+    DrawTriangle(745, 280, 700, 240, 700, 320, GetColor(250, 0, 0), TRUE);
 }
 
 
