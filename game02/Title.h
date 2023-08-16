@@ -8,9 +8,15 @@ class Title : public AbstractScene
 {
 private:
 
+    //テスト
+    int image;
+    int imgae1;
+    //テスト
+
     int flashing_time; //文字点滅時間
     int push_time; // ゲームメインに行けるようになるまでの時間
     bool can_scene_change; //次のシーンに行けるか
+
 
 public:
 
