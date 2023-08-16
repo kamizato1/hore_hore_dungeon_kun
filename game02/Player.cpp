@@ -26,10 +26,30 @@ Player::Player()
 
     for (int i = 0; i < 3; i++)item_num[i] = 0; 
     
+    //のちに消去お願い上間
+    LoadDivGraph("images/test1.png", 16, 16, 1, 30, 30, test_image);
+   // LoadDivGraph("images/test2.png", 4, 4, 1, 36, 30, test_image);  ////画像の大きさが違うから↑のやつは見えにくいからサイズ変更なしバージョン（ピッケル投げるどうさ）
+    animation = 0;
+    animation_time = 0;
+    //ここまで
 }
 
 void Player::Update(Key* key, StageBase* stagebase)
 {
+
+    //アニメーションテスト
+    if (key->KeyDown(B))
+    {
+        if (++animation_time % 1 == 0)
+        {
+            if (++animation > 15)
+            {
+                animation = 0;
+            }
+        }
+    }
+
+    //ここまで
     
    MoveX(key, stagebase);
    MoveY(key, stagebase);
@@ -157,8 +177,14 @@ void Player::MoveY(Key* key, StageBase* stagebase)//Ｙ座標の移動
 
 void Player::Draw(float camera_work) const
 {
-    DrawBox(location.x - radius.x + camera_work, location.y - radius.y, location.x + radius.x + camera_work, location.y + radius.y, 0xffffff, TRUE);
+   // DrawBox(location.x - radius.x + camera_work, location.y - radius.y, location.x + radius.x + camera_work, location.y + radius.y, 0xffffff, TRUE);
     
+
+    //テスト(のちに消去)
+    DrawRotaGraph(location.x - radius.x + camera_work,  location.y, 1, 0, test_image[animation], TRUE);
+
+    
+
     if (can_use_item)
     {
         DrawRotaGraph(cursor_location.x + camera_work, cursor_location.y, 1, 0, cursor_image, TRUE);
