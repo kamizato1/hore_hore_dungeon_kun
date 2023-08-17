@@ -19,6 +19,7 @@ Player::Player()
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
     for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)speed_x_record[i] = 0;
 
+    image = LoadGraph("images/003.png");
     cursor_image = LoadGraph("images/cursor.png");
    
     item_type = ITEM_TYPE::PICKAXE;
@@ -156,9 +157,10 @@ void Player::MoveY(Key* key, StageBase* stagebase)//‚xÀ•W‚ÌˆÚ“®
 
 void Player::Draw(float camera_work) const
 {
+   // DrawBox(location.x - radius.x + camera_work, location.y - radius.y, location.x + radius.x + camera_work, location.y + radius.y, 0xffffff, TRUE);
+    
+    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
 
-    DrawBox(location.x - radius.x + camera_work, location.y - radius.y, location.x + radius.x + camera_work, location.y + radius.y, 0xffffff, TRUE);
-   
     if (can_use_item)
     {
         DrawRotaGraph(cursor_location.x + camera_work, cursor_location.y, 1, 0, cursor_image, TRUE);
