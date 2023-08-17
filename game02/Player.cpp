@@ -21,16 +21,14 @@ Player::Player()
 
     image = LoadGraph("images/003.png");
     cursor_image = LoadGraph("images/cursor.png");
-   
     item_type = ITEM_TYPE::PICKAXE;
     can_use_item = FALSE;
 
-    for (int i = 0; i < 3; i++)item_num[i] = 0; 
+    for (int i = 0; i < 3; i++)item_num[i] = 0;
 }
 
 void Player::Update(Key* key, StageBase* stagebase)
 {
-    
    MoveX(key, stagebase);
    MoveY(key, stagebase);
     
