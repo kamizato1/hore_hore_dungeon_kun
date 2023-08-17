@@ -43,15 +43,11 @@ protected:
 
     int effect_image[4][BREAK_BLOCK_IMAGE_NUM];
     int explosion_image[EXPLOSION_IMAGE_NUM];
-    int smoke_image[EXPLOSION_IMAGE_NUM];
     int pickaxe_image;
     int hit_pickaxe_se;
     int break_block_se;
 
     void Init();
-
-    
-
 
 public:
 
