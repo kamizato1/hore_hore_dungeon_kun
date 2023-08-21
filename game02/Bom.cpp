@@ -20,7 +20,7 @@ Bom::Bom(DATA location, DATA speed)
     can_delete = FALSE;
     angle = 0;
     angle_direction = 3;
-    if (speed.x > 0)angle_direction = -3;
+    if (speed.x < 0)angle_direction = -3;
     count = FPS * BOM_COUNT;
     bom_size = 1;
     bom_size_add = 0.1;
