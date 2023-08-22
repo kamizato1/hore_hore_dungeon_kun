@@ -1,38 +1,35 @@
-#include"DxLib.h"
-#include"Title.h"
-#include"GameMain.h"
+#include "Pause.h"
 
-#define  INPUT_ACCEPTANCE_TIME 60
+#define INPUT_ACCEPTANCE_TIME 60
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Title::Title()
+Pause::Pause()
 {
 	input_time = 0;
 	cursor_y = 0;
 	select_menu = static_cast<int>(MENU::GAME_START);
-	can_scene_change = FALSE;
+	next_scene = false;
+
 }
 
 //-----------------------------------
 // デストラクタ
 //-----------------------------------
-Title::~Title()
+Pause::~Pause()
 {
 
 }
 
-
 //-----------------------------------
 // 更新
 //-----------------------------------
-void Title::Update(Key* key)
+void Pause::Update(Key* key)
 {
-
 	if (key->KeyDown(B))
 	{
-		can_scene_change = TRUE;
+		next_scene = true;
 	}
 
 	if (++input_time > INPUT_ACCEPTANCE_TIME)
@@ -46,33 +43,20 @@ void Title::Update(Key* key)
 			select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
 		}
 	}
-
 }
-
 
 //-----------------------------------
 // 描画
 //-----------------------------------
-void Title::Draw() const
+void Pause::Draw() const
 {
-	SetFontSize(30);
 
-	DrawString(190, 200, "惚れ掘れダンジョン君！", 0xffffff);
-
-	DrawString(190, 300, "Bボタンを押そう！", 0xffffff);
 }
 
-
 //-----------------------------------
-// 遷移
+// 値を参照させるため
 //-----------------------------------
-AbstractScene* Title::ChangeScene()
+bool Pause::GetNextScene()
 {
-
-	if (can_scene_change)
-	{
-		return new GameMain(); //次の遷移
-	}
-
-	return this;
+	return next_scene;
 }
