@@ -5,7 +5,7 @@
 
 
 
-class StageBlock : public BoxCollider
+class Block : public BoxCollider
 {
 private:
 
@@ -16,7 +16,7 @@ private:
 
 public:
 
-    StageBlock(DATA location, int type);
+    Block(DATA location, int type);
 
     //•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é
     void Update();

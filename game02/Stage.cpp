@@ -22,7 +22,7 @@ Stage::Stage()
 			location.x = ((j - 1) * BLOCK_SIZE_X) + (BLOCK_SIZE_X / 2);
 			location.y = (i * BLOCK_SIZE_Y) + (BLOCK_SIZE_Y / 2);
 
-			if (block_type != -1)stageblock.emplace_back(location, block_type);
+			if (block_type != -1)block.emplace_back(location, block_type);
 			if (treasure_type != -1)treasure.emplace_back(location, treasure_type);
 		}
 	}
@@ -34,7 +34,7 @@ Stage::Stage()
 
 Stage::~Stage()
 {
-	stageblock.clear();
+	block.clear();
 	treasure.clear();
 	effect.clear();
 	bom.clear();
@@ -61,7 +61,7 @@ void Stage::Update()
 		treasure[i].Update(this);  // 全要素に対するループ（宝物のアップデート）
 		if (treasure[i].GetCanDelete())treasure.erase(treasure.begin() + i);
 	}
-	for (int i = 0; i < stageblock.size(); i++)stageblock[i].SetHitEcplosion(FALSE);
+	for (int i = 0; i < block.size(); i++)block[i].SetHitEcplosion(FALSE);
 	for (int i = 0; i < bom.size(); i++)
 	{
 		bom[i].Update(this);
@@ -101,11 +101,11 @@ void Stage::HitBlastRange(int bom_num)
 		}
 	}
 
-	for (int i = 0; i < stageblock.size(); i++)
+	for (int i = 0; i < block.size(); i++)
 	{
-		if (bom[bom_num].HitExplosion(&stageblock[i]))
+		if (bom[bom_num].HitExplosion(&block[i]))
 		{
-			BLOCK_TYPE block_type = stageblock[i].GetBlockType();
+			BLOCK_TYPE block_type = block[i].GetBlockType();
 			if ((block_type != BLOCK_TYPE::VERY_HARD_BLOCK) && (block_type != BLOCK_TYPE::NONE))
 			{
 				if (bom[bom_num].GetCanDelete())
@@ -113,11 +113,11 @@ void Stage::HitBlastRange(int bom_num)
 					int effect_image_type = 1;
 					if (block_type == BLOCK_TYPE::HARD_BLOCK)effect_image_type = 2;
 					else if (block_type == BLOCK_TYPE::GROUND_BLOCK)effect_image_type = 3;
-					effect.emplace_back(stageblock[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
-					stageblock.erase(stageblock.begin() + i);
+					effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
+					block.erase(block.begin() + i);
 					i--;
 				}
-				else stageblock[i].SetHitEcplosion(TRUE);
+				else block[i].SetHitEcplosion(TRUE);
 			}
 		}
 	}
@@ -134,7 +134,7 @@ void Stage::HitBlastRange(int bom_num)
 void Stage::Draw1(float camera_work) const
 {
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
-	for (int i = 0; i < stageblock.size(); i++)stageblock[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
+	for (int i = 0; i < block.size(); i++)block[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
 }
 
 void Stage::Draw2(float camera_work) const
@@ -148,13 +148,13 @@ HIT_STAGE Stage::HitStage(BoxCollider* bc)
 {
 	HIT_STAGE hit_stage = {FALSE, 0, BLOCK_TYPE::NONE};
 
-	for (int i = 0; i < stageblock.size(); i++)  // 全要素に対するループ
+	for (int i = 0; i < block.size(); i++)  // 全要素に対するループ
 	{
-		if (stageblock[i].HitBox(bc))
+		if (block[i].HitBox(bc))
 		{
-			if (stageblock[i].GetBlockType() != BLOCK_TYPE::NONE)
+			if (block[i].GetBlockType() != BLOCK_TYPE::NONE)
 			{
-				hit_stage = { TRUE, i, stageblock[i].GetBlockType() };
+				hit_stage = { TRUE, i, block[i].GetBlockType() };
 				break;
 			}
 		}
@@ -165,11 +165,11 @@ HIT_STAGE Stage::HitStage(BoxCollider* bc)
 HIT_STAGE Stage::HitStage(DATA location, DATA radius)
 {
 	HIT_STAGE hit_stage = { FALSE, 0, BLOCK_TYPE::NONE };
-	for (int i = 0; i < stageblock.size(); i++)  // 全要素に対するループ
+	for (int i = 0; i < block.size(); i++)  // 全要素に対するループ
 	{
-		if (stageblock[i].HitBox(&stageblock[i], location, radius))
+		if (block[i].HitBox(&block[i], location, radius))
 		{
-			hit_stage = { TRUE, i, stageblock[i].GetBlockType() };
+			hit_stage = { TRUE, i, block[i].GetBlockType() };
 			break;
 		}
 	}
@@ -237,17 +237,17 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 		else treasure[i].SetOldHit(FALSE);
 	}
 
-	for (int i = 0; i < stageblock.size(); i++)  // 全要素に対するループ
+	for (int i = 0; i < block.size(); i++)  // 全要素に対するループ
 	{
-		if (stageblock[i].HitBox(bc))
+		if (block[i].HitBox(bc))
 		{
-			int block_type = static_cast<int>(stageblock[i].GetBlockType());
+			int block_type = static_cast<int>(block[i].GetBlockType());
 			if ((block_type >= 1) && (block_type <= 4))//ブロックが土だったら
 			{
 				int effect_image_type = 1;
 				if (block_type == 4)effect_image_type = 3;
-				effect.emplace_back(stageblock[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
-				stageblock.erase(stageblock.begin() + i);
+				effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
+				block.erase(block.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 			}
 			else if (block_type >= 5)return TRUE;//かたいブロックに当たったのでflgをTRUEにする
@@ -271,13 +271,13 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 			{
 				if (--block_type == 0)
 				{
-					effect.emplace_back(stageblock[hit_stage.num].GetLocation(), effect_image[1], BREAK_BLOCK_IMAGE_NUM);
-					stageblock.erase(stageblock.begin() + hit_stage.num);
+					effect.emplace_back(block[hit_stage.num].GetLocation(), effect_image[1], BREAK_BLOCK_IMAGE_NUM);
+					block.erase(block.begin() + hit_stage.num);
 				}
 				else
 				{
-					effect.emplace_back(stageblock[hit_stage.num].GetLocation(), effect_image[0], BREAK_BLOCK_IMAGE_NUM);
-					stageblock[hit_stage.num].SetBlockType(block_type);
+					effect.emplace_back(block[hit_stage.num].GetLocation(), effect_image[0], BREAK_BLOCK_IMAGE_NUM);
+					block[hit_stage.num].SetBlockType(block_type);
 
 				}
 			}
@@ -287,23 +287,23 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 	{
 		if (!hit_stage.flg)
 		{
-			stageblock.emplace_back(location, 4);
-			if (!(HitTreasure(&stageblock[stageblock.size() - 1]).flg) && !(HitBom(&stageblock[stageblock.size() - 1]).flg))return TRUE;
-			else stageblock.erase(stageblock.end() - 1);
+			block.emplace_back(location, 4);
+			if (!(HitTreasure(&block[block.size() - 1]).flg) && !(HitBom(&block[block.size() - 1]).flg))return TRUE;
+			else block.erase(block.end() - 1);
 		}
 	}
 	else
 	{
 		if (!hit_stage.flg)
 		{
-			stageblock.emplace_back(location, 4);
-			if (!(HitTreasure(&stageblock[stageblock.size() - 1]).flg) && !(HitBom(&stageblock[stageblock.size() - 1]).flg))
+			block.emplace_back(location, 4);
+			if (!(HitTreasure(&block[block.size() - 1]).flg) && !(HitBom(&block[block.size() - 1]).flg))
 			{
-				stageblock.erase(stageblock.end() - 1);
+				block.erase(block.end() - 1);
 				bom.emplace_back(location, DATA{ 0,0 });
 				return TRUE;
 			}
-			else stageblock.erase(stageblock.end() - 1);
+			else block.erase(block.end() - 1);
 		}
 	}
 

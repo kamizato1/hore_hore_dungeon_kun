@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include"BoxCollider.h"
-#include"StageBlock.h"
+#include"Block.h"
 #include"Treasure.h"
 #include"Effect.h"
 #include"Bom.h"
@@ -35,7 +35,7 @@ class Stage
 {
 protected:
 
-    std::vector<StageBlock>stageblock;
+    std::vector<Block>block;
     std::vector<class Treasure>treasure;
     std::vector<class Effect>effect;
     std::vector<class Bom>bom;
@@ -72,7 +72,6 @@ public:
     HIT_BOM HitBom(BoxCollider* bc);
 
     void DeleteTreasure(int num);
-   // void DeleteBlock(int num) { stageblock.erase(stageblock.begin() + num); };
 
     void HitBlastRange(int bom_num);
     

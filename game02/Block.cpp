@@ -1,7 +1,7 @@
 #include"DxLib.h"
-#include"StageBlock.h"
+#include"Block.h"
 
-StageBlock::StageBlock(DATA location, int type)
+Block::Block(DATA location, int type)
 {
     radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2};
     this->location = location;
@@ -13,18 +13,18 @@ StageBlock::StageBlock(DATA location, int type)
     hit_explosion = FALSE;
 }
 
-void StageBlock::Update()
+void Block::Update()
 {
 
 }
 
-void StageBlock::Draw(float camera_work) const
+void Block::Draw(float camera_work) const
 {
     DrawRotaGraphF(location.x + camera_work, location.y, 1, 0, image, TRUE);
     if(hit_explosion)DrawRotaGraphF(location.x + camera_work, location.y, 1, 0, caveat_image, TRUE);
 }
 
-void StageBlock::SetBlockType(int type)
+void Block::SetBlockType(int type)
 { 
     this->type = static_cast<BLOCK_TYPE>(type);
     int image[7];

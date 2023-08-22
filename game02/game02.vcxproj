@@ -166,7 +166,7 @@
     <ClCompile Include="Pickaxe.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="StageBlock.cpp" />
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Ui.cpp" />
   </ItemGroup>
@@ -187,7 +187,7 @@
     <ClInclude Include="Pickaxe.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="StageBlock.h" />
+    <ClInclude Include="Block.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Ui.h" />
   </ItemGroup>
