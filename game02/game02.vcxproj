@@ -155,6 +155,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SampleGameMain.cpp" />
     <ClCompile Include="SampleStage.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="GameMain.h" />
+    <ClInclude Include="Pause.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SampleGameMain.h" />
     <ClInclude Include="SampleStage.h" />
