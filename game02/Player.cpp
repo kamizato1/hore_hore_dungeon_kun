@@ -28,7 +28,7 @@ Player::Player()
     for (int i = 0; i < 3; i++)item_num[i] = 0; 
 }
 
-void Player::Update(Key* key, StageBase* stagebase)
+void Player::Update(Key* key, Stage* stagebase)
 {
     
    MoveX(key, stagebase);
@@ -107,7 +107,7 @@ void Player::Cursor()
     }
 }
 
-void Player::MoveX(Key* key, StageBase* stagebase)//Ｘ座標の移動
+void Player::MoveX(Key* key, Stage* stagebase)//Ｘ座標の移動
 {
     float all_speed_x_record_calculation = 0;
     float now_speed_x = 0;
@@ -135,7 +135,7 @@ void Player::MoveX(Key* key, StageBase* stagebase)//Ｘ座標の移動
     }
 }
 
-void Player::MoveY(Key* key, StageBase* stagebase)//Ｙ座標の移動
+void Player::MoveY(Key* key, Stage* stagebase)//Ｙ座標の移動
 {
     if ((speed.y += GRAVITY_POWER) > MAX_FALL_SPEED )speed.y = MAX_FALL_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
     location.y += speed.y;//スピードをY座標に足す。

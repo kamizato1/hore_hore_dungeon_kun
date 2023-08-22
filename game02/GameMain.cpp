@@ -1,7 +1,6 @@
 #include"DxLib.h"
 #include"GameMain.h"
 #include"Stage.h"
-#include"SampleStage.h"
 
 #define TIME 100
 #define MAX_SWAY_WIDTH 3

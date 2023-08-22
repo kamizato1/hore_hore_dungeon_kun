@@ -28,7 +28,7 @@ Bom::Bom(DATA location, DATA speed)
     old_hit = FALSE;
 }
 
-void Bom::Update(StageBase* stagebase)
+void Bom::Update(Stage* stagebase)
 {
     if (--bom_size_change_time == 0)
     {

@@ -2,7 +2,7 @@
 
 #include"Key.h"
 #include"Player.h"
-#include"StageBase.h"
+#include"Stage.h"
 #include"AbstractScene.h"
 #include"Ui.h"
 #include"define.h"
@@ -13,7 +13,7 @@ private:
 
     bool stop;
 
-    StageBase* stage;
+    Stage* stage;
     Player* player;
     Ui* ui;
 

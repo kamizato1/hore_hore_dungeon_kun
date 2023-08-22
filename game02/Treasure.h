@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BoxCollider.h"
-#include"StageBase.h"
+#include"Stage.h"
 #include"define.h"
 
 
@@ -18,9 +18,9 @@ private:
 public:
 
     Treasure(DATA location, int type);
-    void Update(class StageBase* stagebase);
+    void Update(class Stage* stage);
     void Draw(float camera_work) const;
-    bool HitDamage(bool hit_type, StageBase* stagebase);
+    bool HitDamage(bool hit_type, Stage* stage);
     bool GetCanDelete() { return can_delete; }
     void SetOldHit(bool flg) { old_hit = flg; }
     TREASURE_TYPE GetTreasureType() { return type; }

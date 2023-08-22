@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BoxCollider.h"
-#include"StageBase.h"
+#include"Stage.h"
 #include"define.h"
 
 class Bom : public BoxCollider
@@ -26,7 +26,7 @@ public:
 
     Bom(DATA location, DATA speed);
 
-    void Update(class StageBase* stagebase);
+    void Update(class Stage* stagebase);
     void Draw(float camera_work) const;
     bool HitExplosion(BoxCollider* bc)const;
     bool GetCanDelete() { return can_delete; }

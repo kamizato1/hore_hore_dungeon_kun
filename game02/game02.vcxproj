@@ -158,7 +158,7 @@
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SampleGameMain.cpp" />
     <ClCompile Include="SampleStage.cpp" />
-    <ClCompile Include="StageBase.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Key.cpp" />
@@ -166,7 +166,6 @@
     <ClCompile Include="Pickaxe.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageBlock.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Ui.cpp" />
@@ -181,14 +180,13 @@
     <ClInclude Include="Result.h" />
     <ClInclude Include="SampleGameMain.h" />
     <ClInclude Include="SampleStage.h" />
-    <ClInclude Include="StageBase.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="Treasure.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Pickaxe.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Stage.h" />
     <ClInclude Include="StageBlock.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Ui.h" />

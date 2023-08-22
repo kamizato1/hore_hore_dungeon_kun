@@ -21,7 +21,7 @@ Pickaxe::Pickaxe(DATA location, DATA speed, int image, int se)
     
 }
 
-void Pickaxe::Update(StageBase* stagebase)
+void Pickaxe::Update(Stage* stagebase)
 {
     old_location = location;
 
