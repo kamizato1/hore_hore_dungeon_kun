@@ -218,6 +218,7 @@ bool StageBase::HitPickaxe(BoxCollider* bc)
 
 bool StageBase::PutItem(DATA location, ITEM_TYPE item_type)
 {
+	if (location.y > SCREEN_HEIGHT)return FALSE;
 	DATA radius = { 1,1 };
 	HIT_STAGE hit_stage = HitStage(location, radius);
 	int block_type = static_cast<int>(hit_stage.block_type);

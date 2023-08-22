@@ -15,8 +15,6 @@ class Key //キーの更新処理
 {
 private:
 
-	int a;
-
 	KEY now_key[KEY_NUM];
 	KEY old_key[KEY_NUM];
 

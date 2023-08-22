@@ -19,7 +19,7 @@ Player::Player()
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
     for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)speed_x_record[i] = 0;
 
-    image = LoadGraph("images/003.png");
+    image = LoadGraph("images/004.png");
     cursor_image = LoadGraph("images/cursor.png");
    
     item_type = ITEM_TYPE::PICKAXE;
@@ -137,7 +137,7 @@ void Player::MoveX(Key* key, StageBase* stagebase)//Ｘ座標の移動
 
 void Player::MoveY(Key* key, StageBase* stagebase)//Ｙ座標の移動
 {
-    if ((speed.y += GRAVITY_POWER) > MAX_FALL_SPEED)speed.y = MAX_FALL_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
+    if ((speed.y += GRAVITY_POWER) > MAX_FALL_SPEED )speed.y = MAX_FALL_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
     location.y += speed.y;//スピードをY座標に足す。
 
     if (stagebase->HitStage(this).flg)//ステージにぶつかっていたら、
@@ -181,5 +181,4 @@ void Player::Draw(float camera_work) const
     if (item_type == ITEM_TYPE::BLOCK)DrawString(0, 30, "ブロック", 0xffffff);
     else if(item_type == ITEM_TYPE::BOM)DrawString(0, 30, "爆弾", 0xffffff);
     else DrawString(0, 30, "つるはし", 0xffffff);
-    //DrawFormatString(0, 30, 0xff0000, "左 %f", ((location.x - radius.x))/ STAGE_BLOCK_SIZE_X) - 1;
 }
