@@ -55,7 +55,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         dNextTime += 1 / FPS * 1000;
         if (dNextTime > GetNowCount()) WaitTimer(static_cast<int>(dNextTime) - GetNowCount());
         else  dNextTime = GetNowCount(); //ï‚ê≥
-       
     }
 
     //è¡ãé

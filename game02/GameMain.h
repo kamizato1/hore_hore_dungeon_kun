@@ -13,18 +13,17 @@ private:
 
     bool stop;
 
-    StageBase* stagebase;
+    StageBase* stage;
     Player* player;
     Ui* ui;
 
     int back_ground_image[3];
-    int life;
-    int time;
+    int life, time;
+    float sway_width, sway_size;
 
 public:
 
     GameMain();
-    ////デストラクタ
     ~GameMain();
 
     //描画以外の更新を実装する
@@ -32,5 +31,7 @@ public:
     //描画に関することを実装する
     void Draw() const override;
     AbstractScene* ChangeScene() override;
+
+    float Sway();
 
 };

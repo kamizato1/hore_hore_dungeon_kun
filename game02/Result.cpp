@@ -6,8 +6,8 @@
 //-----------------------------------
 Result::Result(int block_break, int time, int item_block)
 {
-	map_image = LoadGraph("images/map.png");
-	score_image = LoadGraph("images/score.png");
+	map_image = LoadGraph("images/scoremap.png");
+	score_image = LoadGraph("images/score1.png");
 	back_ground_image[0] = LoadGraph("images/background03.png");
 	back_ground_image[1] = LoadGraph("images/background02.png");
 	back_ground_image[2] = LoadGraph("images/background01.png");
@@ -31,7 +31,7 @@ Result::Result(int block_break, int time, int item_block)
 	score = block * time;
 
 	//壊したブロックの数*(調整中)
-	score = 0;
+	score = 18000;
 	//score += 20 * block_break;
 
 //-----------------------------------
@@ -66,14 +66,14 @@ void Result::Update(Key* key)
 
 void Result::MoveScore()
 {
-	if (score_image_size > 1)
+	if (score_image_size > 0.8)
 	{
-		score_image_size -= 0.7;
+		score_image_size -= 0.3;
 		score_image_angle += 0.5;
 	}
 	else
 	{
-		score_image_size = 1;
+		score_image_size = 0.8;
 		score_image_angle = 0;
 		end_move_score = TRUE;
 	}
@@ -100,13 +100,13 @@ void Result::Draw() const
 	while (digit > 0)
 	{
 		int image_type = (score / digit);
-		DrawRotaGraph(470 + (count * 70), 260, 0.4, 0, number_image[image_type], TRUE);
+		DrawRotaGraph(470 + (count * 70), 250, 0.4, 0, number_image[image_type], TRUE);
 		score -= (image_type * digit);
 		digit = (digit / 10);
 		count++;
 	}
 
-	DrawRotaGraph(640, 150, score_image_size, score_image_angle, score_image, TRUE);
+	DrawRotaGraph(640, 140, score_image_size, score_image_angle, score_image, TRUE);
 
 	//スコア正式決定後、それぞれのスコアの得点を表示
 
