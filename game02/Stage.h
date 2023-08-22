@@ -77,4 +77,5 @@ public:
     
     bool PutItem(DATA location, ITEM_TYPE item_type);
     void ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type);
+    void Sway();
 };

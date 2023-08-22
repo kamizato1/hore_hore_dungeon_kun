@@ -1,10 +1,12 @@
 #pragma once
 
+#include <vector>
 #include"Key.h"
 #include"Player.h"
 #include"Stage.h"
 #include"AbstractScene.h"
 #include"Ui.h"
+#include"FallingBlock.h"
 #include"define.h"
 
 class GameMain : public AbstractScene
@@ -12,14 +14,19 @@ class GameMain : public AbstractScene
 private:
 
     bool stop;
+    bool sway_flg;
 
     Stage* stage;
     Player* player;
     Ui* ui;
 
+    std::vector<FallingBlock>fallingblock;
+
     int back_ground_image[3];
-    int life, time;
+    int falling_block_image;
+    int life, time, remaining_time;
     float sway_width, sway_size;
+    float max_sway_width;
 
 public:
 
@@ -32,6 +39,6 @@ public:
     void Draw() const override;
     AbstractScene* ChangeScene() override;
 
-    float Sway();
+    void Sway();
 
 };

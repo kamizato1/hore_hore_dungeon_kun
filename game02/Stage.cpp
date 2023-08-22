@@ -249,6 +249,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 				effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
 				block.erase(block.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
+				i--;
 			}
 			else if (block_type >= 5)return TRUE;//かたいブロックに当たったのでflgをTRUEにする
 		}
@@ -323,5 +324,32 @@ void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 	else
 	{
 		bom.emplace_back(location, speed);
+	}
+}
+
+void Stage::Sway()
+{
+	for (int i = 0; i < block.size(); i++)  // 全要素に対するループ
+	{
+		if (GetRand(1000) == 0)
+		{
+			int block_type = static_cast<int>(block[i].GetBlockType());
+			int effect_image_type = 0;
+			if ((block_type >= 1) && (block_type <= 3))//ブロックが土だったら
+			{
+				if (block_type == 1)
+				{
+					effect_image_type = 1;
+					effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
+					block.erase(block.begin() + i);
+					i--;
+				}
+				else
+				{
+					effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
+					block[i].SetBlockType(block_type - 1);
+				}
+			}
+		}
 	}
 }

@@ -3,7 +3,8 @@
 #include"Stage.h"
 
 #define TIME 100
-#define MAX_SWAY_WIDTH 3
+#define MAX_SWAY_WIDTH 5
+#define SWAY_SIZE 0.5
 
 GameMain::GameMain()
 {
@@ -15,15 +16,21 @@ GameMain::GameMain()
     back_ground_image[2] = LoadGraph("images/background03.png");
     stop = FALSE;
     time = 0;
+    remaining_time = TIME - (time / FPS);
+
+    falling_block_image = LoadGraph("images/fallingblock.png");
 
     sway_width = 0;
-    sway_size = 0.8;
+    max_sway_width = MAX_SWAY_WIDTH;
+    sway_size = SWAY_SIZE;
+    sway_flg = FALSE;
 }
 GameMain::~GameMain()
 {
     delete player;
     delete stage;
     delete ui;
+    fallingblock.clear();
 }
 
 void GameMain::Update(Key* key)
@@ -33,14 +40,26 @@ void GameMain::Update(Key* key)
     if (!stop)
     {
         time++;
+        remaining_time = TIME - (time / FPS);
         stage->Update();
         player->Update(key, stage);
+
+        Sway();
+
+        for (int i = 0; i < fallingblock.size(); i++)
+        {
+            fallingblock[i].Update();
+            if (fallingblock[i].CanDelete())fallingblock.erase(fallingblock.begin() + i);
+        }
+
+        if ((remaining_time == 80) || (remaining_time == 50))
+        {
+            if (!sway_flg)sway_flg = TRUE;
+        }
     }
 
-    if (TIME - (time / FPS) < 0)time = 0;
-
-    if (player->GetLocation().y > SCREEN_HEIGHT + 15) stop = TRUE;
-    Sway();
+    if (remaining_time < 0)time = 0;
+    if (player->GetLocation().y > SCREEN_HEIGHT + 50) stop = TRUE;
 }
 
 void GameMain::Draw() const
@@ -52,21 +71,57 @@ void GameMain::Draw() const
     SetDrawBright(150, 150, 150);
     DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
     DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
+    for (int i = 0; i < fallingblock.size(); i++)
+    {
+        if (fallingblock[i].GetSize() < 0.7)fallingblock[i].Draw(camera_work);
+    }
     DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
     SetDrawBright(255, 255, 255);
     stage->Draw1(camera_work);
     player->Draw(camera_work);
     stage->Draw2(camera_work);
+    for (int i = 0; i < fallingblock.size(); i++)
+    {
+        if (fallingblock[i].GetSize() >= 0.7)fallingblock[i].Draw(camera_work);
+    }
 
-    ui->Draw(TIME - (time / FPS));
+    ui->Draw(remaining_time);
+
+    int num = fallingblock.size();
+    DrawFormatString(0, 100, 0xffffff, "%d", num);
 }
 
-float GameMain::Sway()
+void GameMain::Sway()
 {
-    sway_width += sway_size;
-    if ((sway_width > MAX_SWAY_WIDTH) || (sway_width < -MAX_SWAY_WIDTH))sway_size = -sway_size;
+    if (sway_flg)
+    {
+        sway_width += sway_size;
 
-    return sway_width;
+        if (((sway_width >  max_sway_width) && (sway_size > 0)) ||
+            ((sway_width < -max_sway_width) && (sway_size < 0)))
+        {
+            sway_size = -sway_size;
+
+            if ((max_sway_width -= 0.1) < 0)
+            {
+                sway_flg = FALSE;
+                max_sway_width = MAX_SWAY_WIDTH;
+                sway_size = SWAY_SIZE;
+                sway_width = 0;
+            }
+        }
+        
+        if (GetRand(10) == 0)
+        {
+            DATA location;
+            location.x = GetRand(SCREEN_WIDTH);
+            location.y = -GetRand(50);
+            float speed = GetRand(15) + 1;
+            fallingblock.emplace_back(location, falling_block_image, speed, (speed / 10));
+        }
+
+        stage->Sway();
+    }
 }
 
 AbstractScene* GameMain::ChangeScene()
