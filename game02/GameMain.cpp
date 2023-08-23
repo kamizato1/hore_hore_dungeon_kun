@@ -17,14 +17,14 @@ GameMain::GameMain()
     stop = FALSE;
     time = 0;
     remaining_time = TIME - (time / FPS);
-
     falling_block_image = LoadGraph("images/fallingblock.png");
-
     sway_width = 0;
     max_sway_width = MAX_SWAY_WIDTH;
     sway_size = SWAY_SIZE;
     sway_flg = FALSE;
+    screen_brightness = 255;
 }
+
 GameMain::~GameMain()
 {
     delete player;
@@ -39,7 +39,7 @@ void GameMain::Update(Key* key)
 
     if (!stop)
     {
-        time++;
+        if(!die)time++;
         remaining_time = TIME - (time / FPS);
         stage->Update();
         player->Update(key, stage);
@@ -59,7 +59,12 @@ void GameMain::Update(Key* key)
     }
 
     if (remaining_time < 0)time = 0;
-    if (player->GetLocation().y > SCREEN_HEIGHT + 50) stop = TRUE;
+
+    if (player->GetPlayerDie()) 
+    {
+        die = TRUE;
+        if (--screen_brightness < 0)screen_brightness = 0;;
+    }
 }
 
 void GameMain::Draw() const
@@ -68,7 +73,9 @@ void GameMain::Draw() const
     if (player->GetLocation().x >= 350)camera_work = -player->GetLocation().x + 350;
     camera_work += sway_width;
 
-    SetDrawBright(150, 150, 150);
+    if (die)SetDrawBright(screen_brightness, screen_brightness, screen_brightness);
+
+    //SetDrawBright(150, 150, 150);
     DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
     DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
     for (int i = 0; i < fallingblock.size(); i++)
@@ -76,7 +83,8 @@ void GameMain::Draw() const
         if (fallingblock[i].GetSize() < 0.7)fallingblock[i].Draw(camera_work);
     }
     DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
-    SetDrawBright(255, 255, 255);
+    
+
     stage->Draw1(camera_work);
     player->Draw(camera_work);
     stage->Draw2(camera_work);
@@ -87,6 +95,9 @@ void GameMain::Draw() const
 
     ui->Draw(remaining_time);
 
+    SetDrawBright(255, 255, 255);
+
+    
     int num = fallingblock.size();
     DrawFormatString(0, 100, 0xffffff, "%d", num);
 }

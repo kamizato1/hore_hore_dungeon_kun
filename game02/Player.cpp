@@ -15,6 +15,8 @@ Player::Player()
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
     throw_speed = { 0,0 };
+
+    die = FALSE;
    
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
     for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)speed_x_record[i] = 0;
@@ -30,61 +32,64 @@ Player::Player()
 
 void Player::Update(Key* key, Stage* stagebase)
 {
-    
-   MoveX(key, stagebase);
-   MoveY(key, stagebase);
-    
-    HIT_TREASURE hit_treasure = stagebase->HitTreasure(this);
-    if (hit_treasure.flg)
-    {
-       stagebase->DeleteTreasure(hit_treasure.num);
-       item_num[static_cast<int>(hit_treasure.treasure_type)]++;
-    }
+   if (location.y > SCREEN_HEIGHT + 50)die = TRUE;
+   else
+   {
+       MoveX(key, stagebase);
+       MoveY(key, stagebase);
 
-    //‚±‚±‚©‚ç‰º«‚Â‚é‚Í‚µ‚ð“Š‚°‚é‚Æ‚«‚Ìˆ—
+       HIT_TREASURE hit_treasure = stagebase->HitTreasure(this);
+       if (hit_treasure.flg)
+       {
+           stagebase->DeleteTreasure(hit_treasure.num);
+           item_num[static_cast<int>(hit_treasure.treasure_type)]++;
+       }
 
-    DATA all_r_stick_angle_record_calculation = { 0,0 };
-    DATA now_r_stick_angle, old_r_stick_angle;
+       //‚±‚±‚©‚ç‰º«‚Â‚é‚Í‚µ‚ð“Š‚°‚é‚Æ‚«‚Ìˆ—
 
-    now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);
-    now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);
-    
-    for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
-    {
-        old_r_stick_angle = r_stick_angle_record[i];
-        r_stick_angle_record[i] = now_r_stick_angle;
-        now_r_stick_angle = old_r_stick_angle;
-        all_r_stick_angle_record_calculation.x += r_stick_angle_record[i].x;
-        all_r_stick_angle_record_calculation.y += r_stick_angle_record[i].y;
-    }
+       DATA all_r_stick_angle_record_calculation = { 0,0 };
+       DATA now_r_stick_angle, old_r_stick_angle;
 
-    throw_speed.x = (all_r_stick_angle_record_calculation.x / R_STICK_ANGLE_RECORD_NUM);
-    throw_speed.y = (all_r_stick_angle_record_calculation.y / R_STICK_ANGLE_RECORD_NUM);
+       now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);
+       now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);
 
-    if ((throw_speed.x == 0) && (throw_speed.y == 0))can_use_item = FALSE;
-    else can_use_item = TRUE;
+       for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
+       {
+           old_r_stick_angle = r_stick_angle_record[i];
+           r_stick_angle_record[i] = now_r_stick_angle;
+           now_r_stick_angle = old_r_stick_angle;
+           all_r_stick_angle_record_calculation.x += r_stick_angle_record[i].x;
+           all_r_stick_angle_record_calculation.y += r_stick_angle_record[i].y;
+       }
 
-    if(can_use_item)Cursor();
+       throw_speed.x = (all_r_stick_angle_record_calculation.x / R_STICK_ANGLE_RECORD_NUM);
+       throw_speed.y = (all_r_stick_angle_record_calculation.y / R_STICK_ANGLE_RECORD_NUM);
 
-    if (key->GetStickAngle(L).x == 0)
-    {
-        int item_type = static_cast<int>(this->item_type);
-        if (key->KeyDown(RIGHT))
-        {
-            if (++item_type >= ITEM_TYPE_NUM)item_type = 0;
-        }
-        else if (key->KeyDown(LEFT))
-        {
-            if(--item_type < 0)item_type = ITEM_TYPE_NUM - 1;
-        }
-        this->item_type = static_cast<ITEM_TYPE>(item_type);
-    }
+       if ((throw_speed.x == 0) && (throw_speed.y == 0))can_use_item = FALSE;
+       else can_use_item = TRUE;
 
-    if (can_use_item)
-    {
-        if (key->KeyDown(L))stagebase->ThrowItem(location, throw_speed, item_type);
-        else if (key->KeyDown(R))stagebase->PutItem(cursor_location, item_type);
-    }
+       if (can_use_item)Cursor();
+
+       if (key->GetStickAngle(L).x == 0)
+       {
+           int item_type = static_cast<int>(this->item_type);
+           if (key->KeyDown(RIGHT))
+           {
+               if (++item_type >= ITEM_TYPE_NUM)item_type = 0;
+           }
+           else if (key->KeyDown(LEFT))
+           {
+               if (--item_type < 0)item_type = ITEM_TYPE_NUM - 1;
+           }
+           this->item_type = static_cast<ITEM_TYPE>(item_type);
+       }
+
+       if (can_use_item)
+       {
+           if (key->KeyDown(L))stagebase->ThrowItem(location, throw_speed, item_type);
+           else if (key->KeyDown(R))stagebase->PutItem(cursor_location, item_type);
+       }
+   }
 }
 
 void Player::Cursor()

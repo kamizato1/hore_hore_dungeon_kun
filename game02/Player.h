@@ -22,7 +22,7 @@ private:
     DATA cursor_location;
     int cursor_image;
     bool can_use_item;
-
+    bool die;
     ITEM_TYPE item_type;
     int item_num[3];
 
@@ -36,4 +36,5 @@ public:
     void MoveX(Key* key, Stage* stagebase);
     void MoveY(Key* key, Stage* stagebase);
     void Cursor();
+    bool GetPlayerDie() { return die; }
 };
