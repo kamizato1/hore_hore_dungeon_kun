@@ -34,8 +34,15 @@ public:
 
     //描画に関することを実装する
     void Draw() const;
+    
+    //値変更
+    void SetNextScene();
 
     //値参照
+    int GetSelectMenu();
+   
+    //値参照
     bool GetNextScene();
+
 };
 

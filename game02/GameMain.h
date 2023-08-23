@@ -5,6 +5,7 @@
 #include"Player.h"
 #include"Stage.h"
 #include"AbstractScene.h"
+#include"Pause.h"
 #include"Ui.h"
 #include"FallingBlock.h"
 #include"define.h"
@@ -19,6 +20,7 @@ private:
     Stage* stage;
     Player* player;
     Ui* ui;
+    Pause* pause;
 
     std::vector<FallingBlock>fallingblock;
 
