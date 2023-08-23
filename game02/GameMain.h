@@ -16,6 +16,7 @@ private:
 
     bool stop;
     bool sway_flg;
+    bool die;
 
     Stage* stage;
     Player* player;
@@ -29,6 +30,7 @@ private:
     int life, time, remaining_time;
     float sway_width, sway_size;
     float max_sway_width;
+    int screen_brightness;
 
 public:
 
