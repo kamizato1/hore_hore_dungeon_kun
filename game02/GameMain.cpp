@@ -2,7 +2,7 @@
 #include"GameMain.h"
 #include"Stage.h"
 
-#define TIME 100
+#define TIME 60
 #define MAX_SWAY_WIDTH 5
 #define SWAY_SIZE 0.5
 
@@ -35,12 +35,19 @@ GameMain::~GameMain()
 
 void GameMain::Update(Key* key)
 {
-    if (key->KeyDown(START))stop = !stop;
+    if ((player->GetPlayerDie()) || (remaining_time == 0))
+    {
+        die = TRUE;
+        if (--screen_brightness < 0)screen_brightness = 0;
+    }
+
+    if ((key->KeyDown(START)) && (!die))stop = !stop;
 
     if (!stop)
     {
         if(!die)time++;
         remaining_time = TIME - (time / FPS);
+        //if (remaining_time == 0)player->SetPlayerDie(TRUE);
         stage->Update();
         player->Update(key, stage);
 
@@ -52,19 +59,13 @@ void GameMain::Update(Key* key)
             if (fallingblock[i].CanDelete())fallingblock.erase(fallingblock.begin() + i);
         }
 
-        if ((remaining_time == 80) || (remaining_time == 50))
+        if ((remaining_time == 80) || (remaining_time == 50) || (remaining_time == 0))
         {
             if (!sway_flg)sway_flg = TRUE;
         }
     }
 
-    if (remaining_time < 0)time = 0;
-
-    if (player->GetPlayerDie()) 
-    {
-        die = TRUE;
-        if (--screen_brightness < 0)screen_brightness = 0;;
-    }
+    //if (remaining_time < 1)time = 0;
 }
 
 void GameMain::Draw() const

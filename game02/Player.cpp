@@ -26,14 +26,16 @@ Player::Player()
    
     item_type = ITEM_TYPE::PICKAXE;
     can_use_item = FALSE;
-
+    image_size = 1;
+    //image_size_add = 0.01;
     for (int i = 0; i < 3; i++)item_num[i] = 0; 
 }
 
 void Player::Update(Key* key, Stage* stagebase)
 {
    if (location.y > SCREEN_HEIGHT + 50)die = TRUE;
-   else
+
+   if(!die)
    {
        MoveX(key, stagebase);
        MoveY(key, stagebase);
