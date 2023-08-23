@@ -75,7 +75,6 @@ void GameMain::Draw() const
 
     if (die)SetDrawBright(screen_brightness, screen_brightness, screen_brightness);
 
-    //SetDrawBright(150, 150, 150);
     DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
     DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
     for (int i = 0; i < fallingblock.size(); i++)
@@ -84,7 +83,6 @@ void GameMain::Draw() const
     }
     DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
     
-
     stage->Draw1(camera_work);
     player->Draw(camera_work);
     stage->Draw2(camera_work);
@@ -96,10 +94,6 @@ void GameMain::Draw() const
     ui->Draw(remaining_time);
 
     SetDrawBright(255, 255, 255);
-
-    
-    int num = fallingblock.size();
-    DrawFormatString(0, 100, 0xffffff, "%d", num);
 }
 
 void GameMain::Sway()
