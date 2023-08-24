@@ -13,19 +13,12 @@ GameMain::GameMain()
     player = new Player();
     ui = new Ui();
     pause = new Pause();
-
     back_ground_image[0] = LoadGraph("images/background01.png");
     back_ground_image[1] = LoadGraph("images/background02.png");
     back_ground_image[2] = LoadGraph("images/background03.png");
-    stop = FALSE;
-    time = 0;
-    remaining_time = TIME - (time / FPS);
     falling_block_image = LoadGraph("images/fallingblock.png");
-    sway_width = 0;
-    max_sway_width = MAX_SWAY_WIDTH;
-    sway_size = SWAY_SIZE;
-    sway_flg = FALSE;
-    screen_brightness = 255;
+    life = 3;
+    Init();
 }
 
 GameMain::~GameMain()
@@ -37,21 +30,36 @@ GameMain::~GameMain()
     fallingblock.clear();
 }
 
+void GameMain::Init()
+{
+    die = FALSE;
+    stop = FALSE;
+    time = 0;
+    remaining_time = TIME - (time / FPS);
+    sway_width = 0;
+    max_sway_width = MAX_SWAY_WIDTH;
+    sway_size = SWAY_SIZE;
+    sway_flg = FALSE;
+    screen_brightness = 255;
+}
+
 void GameMain::Update(Key* key)
 {
     if ((player->GetPlayerDie()) || (remaining_time == 0))
     {
         die = TRUE;
-        if (--screen_brightness < 0)screen_brightness = 0;
+        if (--screen_brightness < 0)
+        {
+            screen_brightness = 0;
+            ReStart();
+        }
     }
-
     if ((key->KeyDown(START)) && (!die))stop = !stop;
 
     if (!stop)
     {
         if(!die)time++;
         remaining_time = TIME - (time / FPS);
-        //if (remaining_time == 0)player->SetPlayerDie(TRUE);
         stage->Update();
         player->Update(key, stage);
 
@@ -94,9 +102,16 @@ void GameMain::Draw() const
         if (fallingblock[i].GetSize() >= 0.7)fallingblock[i].Draw(camera_work);
     }
 
-    ui->Draw(remaining_time);
+    ui->Draw(remaining_time, life);
 
     SetDrawBright(255, 255, 255);
+}
+
+void GameMain::ReStart()
+{
+    life--;
+    Init();
+    player->Init();
 }
 
 void GameMain::Sway()

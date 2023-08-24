@@ -32,6 +32,9 @@ private:
     float max_sway_width;
     int screen_brightness;
 
+    void ReStart();
+    void Init();
+
 public:
 
     GameMain();

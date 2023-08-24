@@ -130,7 +130,6 @@ void Stage::HitBlastRange(int bom_num)
 	else if (bom[bom_num].GetLocation().y > SCREEN_HEIGHT + 200)bom.erase(bom.begin() + bom_num);
 }
 
-
 void Stage::Draw1(float camera_work) const
 {
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)

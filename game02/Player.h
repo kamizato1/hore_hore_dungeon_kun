@@ -13,7 +13,7 @@ class Player : public BoxCollider
 {
 private:
 
-    int image, life;
+    int image;
     bool can_throw, die;
     DATA speed;
     DATA throw_speed;

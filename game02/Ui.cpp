@@ -5,15 +5,13 @@ Ui::Ui()
 {
 	life_image = LoadGraph("images/life.png");
 	LoadDivGraph("images/number02.png", 10, 10, 1, 20, 40, number_image);
-
-	life = 3;
 }
 
 void Ui::Update()
 {
 }
 
-void Ui::Draw(int time) const
+void Ui::Draw(int time, int life) const
 {
 	DrawRotaGraph(45, 30, 1,0,life_image, TRUE);
 	DrawRotaGraph(90, 40, 1, 0, number_image[life], TRUE);

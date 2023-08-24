@@ -9,28 +9,24 @@
 
 Player::Player()
 {
-    
     image = LoadGraph("images/004.png");
     for (int i = 0; i < 3; i++)item_num[i] = 999;
     Init();
-    cursor = new class Cursor(location);
 }
 
 void Player::Init()
 {
+
     location = { 55, 500 };
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
     throw_speed = { 0,0 };
-
     item_type = ITEM_TYPE::PICKAXE;
-
     can_throw = FALSE;
-
     die = FALSE;
-
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
     for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)speed_x_record[i] = 0;
+    cursor = new class Cursor(location);
 }
 
 void Player::Update(Key* key, Stage* stage)

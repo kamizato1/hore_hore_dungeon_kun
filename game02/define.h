@@ -17,7 +17,7 @@
 
 #define GRAVITY_POWER 0.3
 
-#define MAX_FALL_SPEED 7
+#define MAX_FALL_SPEED 5
 
 
 enum
