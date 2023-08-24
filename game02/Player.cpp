@@ -9,10 +9,11 @@
 
 Player::Player()
 {
+    
     image = LoadGraph("images/004.png");
-    cursor_image = LoadGraph("images/cursor.png");
     for (int i = 0; i < 3; i++)item_num[i] = 0;
     Init();
+    cursor = new class Cursor(location);
 }
 
 void Player::Init()
@@ -24,7 +25,7 @@ void Player::Init()
 
     item_type = ITEM_TYPE::PICKAXE;
 
-    can_use_item = FALSE;
+    can_throw = FALSE;
 
     die = FALSE;
 
@@ -42,6 +43,7 @@ void Player::Update(Key* key, Stage* stage)
        MoveY(key, stage);
 
        HIT_TREASURE hit_treasure = stage->HitTreasure(this);
+
        if (hit_treasure.flg)
        {
            stage->DeleteTreasure(hit_treasure.num);
@@ -53,8 +55,8 @@ void Player::Update(Key* key, Stage* stage)
        DATA all_r_stick_angle_record_calculation = { 0,0 };
        DATA now_r_stick_angle, old_r_stick_angle;
 
-       now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);
-       now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);
+       now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);
+       now_r_stick_angle.y = (key->GetStickAngle(R).x / 50);
 
        for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
        {
@@ -68,10 +70,10 @@ void Player::Update(Key* key, Stage* stage)
        throw_speed.x = (all_r_stick_angle_record_calculation.x / R_STICK_ANGLE_RECORD_NUM);
        throw_speed.y = (all_r_stick_angle_record_calculation.y / R_STICK_ANGLE_RECORD_NUM);
 
-       if ((throw_speed.x == 0) && (throw_speed.y == 0))can_use_item = FALSE;
-       else can_use_item = TRUE;
+       if ((throw_speed.x == 0) && (throw_speed.y == 0))can_throw = FALSE;
+       else can_throw = TRUE;
 
-       if (can_use_item)Cursor();
+       cursor->Update(this, throw_speed);
 
        if (key->GetStickAngle(L).x == 0)
        {
@@ -87,53 +89,42 @@ void Player::Update(Key* key, Stage* stage)
            this->item_type = static_cast<ITEM_TYPE>(item_type);
        }
 
-       if (can_use_item)
+       if (key->KeyDown(L))
        {
            int item_type = static_cast<int>(this->item_type);
-         /*  if ((item_num[item_type] > 0) || item_type == 0)
-           {
-               if (key->KeyDown(L))
-               {
-                   stage->ThrowItem(location, throw_speed, this->item_type);
-                   item_num[item_type]--;
-               }
-               else if (key->KeyDown(R))
-               {
-                   if (stage->PutItem(cursor_location, this->item_type))item_num[item_type]--;
-               }
-           }*/
-           if (key->KeyDown(L))
+           if ((can_throw) && ((item_num[item_type] > 0) || (item_type == 0)))
            {
                stage->ThrowItem(location, throw_speed, this->item_type);
                item_num[item_type]--;
            }
-           else if (key->KeyDown(R))
-           {
-               if (stage->PutItem(cursor_location, this->item_type))item_num[item_type]--;
-           }
        }
+       else if (key->KeyDown(R))
+       {
+           //if (stage->PutItem(cursor_location, this->item_type))item_num[item_type]--;
+       }
+
    }
 }
 
-void Player::Cursor()
-{
-    int cursor_sign_x = 0;
-    if (throw_speed.x != 0)cursor_sign_x = throw_speed.x / fabsf(throw_speed.x);
-    int cursor_sign_y = 0;
-    if (throw_speed.y != 0)cursor_sign_y = throw_speed.y / fabsf(throw_speed.y);
-
-    DATA cursor_radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
-    int x = location.x / BLOCK_SIZE_X;
-    int y = location.y / BLOCK_SIZE_Y;
-    cursor_location.x = (x * BLOCK_SIZE_X) + cursor_radius.x;
-    cursor_location.y = (y * BLOCK_SIZE_Y) + cursor_radius.y;
-    
-    while (HitBox(this, cursor_location, cursor_radius))
-    {
-        cursor_location.x += (BLOCK_SIZE_X * cursor_sign_x);
-        cursor_location.y += (BLOCK_SIZE_Y * cursor_sign_y);
-    }
-}
+//void Player::Cursor()
+//{
+//    int cursor_sign_x = 0;
+//    if (throw_speed.x != 0)cursor_sign_x = throw_speed.x / fabsf(throw_speed.x);
+//    int cursor_sign_y = 0;
+//    if (throw_speed.y != 0)cursor_sign_y = throw_speed.y / fabsf(throw_speed.y);
+//
+//    DATA cursor_radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
+//    int x = location.x / BLOCK_SIZE_X;
+//    int y = location.y / BLOCK_SIZE_Y;
+//    cursor_location.x = (x * BLOCK_SIZE_X) + cursor_radius.x;
+//    cursor_location.y = (y * BLOCK_SIZE_Y) + cursor_radius.y;
+//    
+//    while (HitBox(this, cursor_location, cursor_radius))
+//    {
+//        cursor_location.x += (BLOCK_SIZE_X * cursor_sign_x);
+//        cursor_location.y += (BLOCK_SIZE_Y * cursor_sign_y);
+//    }
+//}
 
 void Player::MoveX(Key* key, Stage* stagebase)//Ｘ座標の移動
 {
@@ -187,9 +178,9 @@ void Player::Draw(float camera_work) const
 {
    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
 
-    if (can_use_item)
+    if (can_throw)
     {
-        DrawRotaGraph(cursor_location.x + camera_work, cursor_location.y, 1, 0, cursor_image, TRUE);
+       // DrawRotaGraph(cursor_location.x + camera_work, cursor_location.y, 1, 0, cursor_image, TRUE);
 
         float throw_speed_y = throw_speed.y;
         DATA throw_location = location;
@@ -203,6 +194,8 @@ void Player::Draw(float camera_work) const
             if(!(++count % 3))DrawCircle(throw_location.x + camera_work, throw_location.y, 3, 0xffffff, FALSE);
         }
     }
+
+    cursor->Draw(camera_work);
 
     if (item_type == ITEM_TYPE::BLOCK)DrawString(0, 60, "ブロック", 0xffffff);
     else if(item_type == ITEM_TYPE::BOM)DrawString(0, 60, "爆弾", 0xffffff);
