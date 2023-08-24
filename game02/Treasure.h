@@ -20,8 +20,9 @@ public:
     Treasure(DATA location, int type);
     void Update(class Stage* stage);
     void Draw(float camera_work) const;
-    bool HitDamage(bool hit_type, Stage* stage);
+    
     bool GetCanDelete() { return can_delete; }
     void SetOldHit(bool flg) { old_hit = flg; }
+    bool GetOldHit(Stage* stage, bool hit_type);
     TREASURE_TYPE GetTreasureType() { return type; }
 };

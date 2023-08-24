@@ -29,16 +29,18 @@ void Treasure::Draw(float camera_work) const
     DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
 }
 
-bool Treasure::HitDamage(bool hit_type, Stage* stage)
+bool Treasure::GetOldHit(Stage* stage, bool hit_type)
 {
-    if (hit_type)
+    bool flg = FALSE;
+
+    if (hit_type)//”š’e‚Ìê‡
     {
-        if ((!stage->HitStage(this).flg) && (!old_hit))return TRUE;
-        old_hit = TRUE;
+        if (stage->HitStage(this).flg)flg = TRUE;
     }
-    else
+    else//ƒsƒbƒPƒ‹‚Ìê‡
     {
-        if (!stage->HitStage(this).flg)return TRUE;
+        if (stage->HitStage(this).flg)old_hit = TRUE, flg = TRUE;
+        else if (old_hit)flg = TRUE;
     }
-    return FALSE;
+    return flg;
 }

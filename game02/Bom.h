@@ -31,6 +31,7 @@ public:
     bool HitExplosion(BoxCollider* bc)const;
     bool GetCanDelete() { return can_delete; }
     void SetCanDelete(bool flg) { can_delete = flg; }
-    bool HitDamage() { return !old_hit; }
+
     void SetOldHit(bool flg) { old_hit = flg; }
+    bool GetOldHit() { return old_hit; }
 };

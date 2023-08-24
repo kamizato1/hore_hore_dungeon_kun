@@ -67,7 +67,6 @@ public:
     bool HitPickaxe(BoxCollider* bc);
 
     HIT_STAGE HitStage(BoxCollider* bc);
-    HIT_STAGE HitStage(DATA location, DATA radius);
     HIT_TREASURE HitTreasure(BoxCollider* bc);
     HIT_BOM HitBom(BoxCollider* bc);
 
