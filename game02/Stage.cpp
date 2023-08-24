@@ -257,11 +257,10 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 	return FALSE;
 }
 
-bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
+bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 {
-	if (location.y > SCREEN_HEIGHT)return FALSE;
-	DATA radius = { 1,1 };
-	HIT_STAGE hit_stage = HitStage(location, radius);
+	if (bc->GetLocation().y > SCREEN_HEIGHT)return FALSE;
+	HIT_STAGE hit_stage = HitStage(bc);
 	int block_type = static_cast<int>(hit_stage.block_type);
 
 	if (item_type == ITEM_TYPE::PICKAXE)
@@ -288,7 +287,7 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 	{
 		if (!hit_stage.flg)
 		{
-			block.emplace_back(location, 4);
+			block.emplace_back(bc->GetLocation(), 4);
 			if (!(HitTreasure(&block[block.size() - 1]).flg) && !(HitBom(&block[block.size() - 1]).flg))return TRUE;
 			else block.erase(block.end() - 1);
 		}
@@ -297,11 +296,11 @@ bool Stage::PutItem(DATA location, ITEM_TYPE item_type)
 	{
 		if (!hit_stage.flg)
 		{
-			block.emplace_back(location, 4);
+			block.emplace_back(bc->GetLocation(), 4);
 			if (!(HitTreasure(&block[block.size() - 1]).flg) && !(HitBom(&block[block.size() - 1]).flg))
 			{
 				block.erase(block.end() - 1);
-				bom.emplace_back(location, DATA{ 0,0 });
+				bom.emplace_back(bc->GetLocation(), DATA{ 0,0 });
 				return TRUE;
 			}
 			else block.erase(block.end() - 1);

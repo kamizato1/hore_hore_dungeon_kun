@@ -75,7 +75,7 @@ public:
 
     void HitBlastRange(int bom_num);
     
-    bool PutItem(DATA location, ITEM_TYPE item_type);
+    bool PutItem(BoxCollider* bc, ITEM_TYPE item_type);
     void ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type);
     void Sway();
 };

@@ -11,7 +11,7 @@ Player::Player()
 {
     
     image = LoadGraph("images/004.png");
-    for (int i = 0; i < 3; i++)item_num[i] = 0;
+    for (int i = 0; i < 3; i++)item_num[i] = 999;
     Init();
     cursor = new class Cursor(location);
 }
@@ -100,31 +100,15 @@ void Player::Update(Key* key, Stage* stage)
        }
        else if (key->KeyDown(R))
        {
-           //if (stage->PutItem(cursor_location, this->item_type))item_num[item_type]--;
+           int item_type = static_cast<int>(this->item_type);
+           if (((item_num[item_type] > 0) || (item_type == 0)))
+           {
+               if (stage->PutItem(cursor, this->item_type))item_num[item_type]--;
+           }
        }
 
    }
 }
-
-//void Player::Cursor()
-//{
-//    int cursor_sign_x = 0;
-//    if (throw_speed.x != 0)cursor_sign_x = throw_speed.x / fabsf(throw_speed.x);
-//    int cursor_sign_y = 0;
-//    if (throw_speed.y != 0)cursor_sign_y = throw_speed.y / fabsf(throw_speed.y);
-//
-//    DATA cursor_radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
-//    int x = location.x / BLOCK_SIZE_X;
-//    int y = location.y / BLOCK_SIZE_Y;
-//    cursor_location.x = (x * BLOCK_SIZE_X) + cursor_radius.x;
-//    cursor_location.y = (y * BLOCK_SIZE_Y) + cursor_radius.y;
-//    
-//    while (HitBox(this, cursor_location, cursor_radius))
-//    {
-//        cursor_location.x += (BLOCK_SIZE_X * cursor_sign_x);
-//        cursor_location.y += (BLOCK_SIZE_Y * cursor_sign_y);
-//    }
-//}
 
 void Player::MoveX(Key* key, Stage* stagebase)//Ｘ座標の移動
 {
@@ -178,10 +162,10 @@ void Player::Draw(float camera_work) const
 {
    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
 
+   cursor->Draw(camera_work);
+
     if (can_throw)
     {
-       // DrawRotaGraph(cursor_location.x + camera_work, cursor_location.y, 1, 0, cursor_image, TRUE);
-
         float throw_speed_y = throw_speed.y;
         DATA throw_location = location;
         int count = 0;
@@ -190,15 +174,12 @@ void Player::Draw(float camera_work) const
             throw_location.x += throw_speed.x;
             throw_speed_y += GRAVITY_POWER;
             throw_location.y += throw_speed_y;
-
             if(!(++count % 3))DrawCircle(throw_location.x + camera_work, throw_location.y, 3, 0xffffff, FALSE);
         }
     }
 
-    cursor->Draw(camera_work);
-
     if (item_type == ITEM_TYPE::BLOCK)DrawString(0, 60, "ブロック", 0xffffff);
     else if(item_type == ITEM_TYPE::BOM)DrawString(0, 60, "爆弾", 0xffffff);
     else DrawString(0, 60, "つるはし", 0xffffff);
-    //DrawFormatString(100, 60, 0xffffff, "%d", item_num[static_cast<int>(item_type)]);
+    DrawFormatString(100, 60, 0xffffff, "%d", item_num[static_cast<int>(item_type)]);
 }
