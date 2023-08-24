@@ -1,5 +1,6 @@
 #include"DxLib.h"
 #include"GameMain.h"
+#include"Title.h"
 #include"Stage.h"
 
 #define TIME 200
@@ -11,6 +12,8 @@ GameMain::GameMain()
     stage = new Stage();
     player = new Player();
     ui = new Ui();
+    pause = new Pause();
+
     back_ground_image[0] = LoadGraph("images/background01.png");
     back_ground_image[1] = LoadGraph("images/background02.png");
     back_ground_image[2] = LoadGraph("images/background03.png");
@@ -30,6 +33,7 @@ GameMain::~GameMain()
     delete player;
     delete stage;
     delete ui;
+    delete pause;
     fallingblock.clear();
 }
 
@@ -130,6 +134,28 @@ void GameMain::Sway()
 
 AbstractScene* GameMain::ChangeScene()
 {
+
+    if (stop)
+    {
+        if (pause->GetNextScene())
+        {
+            switch (pause->GetSelectMenu())
+            {
+            case 0:
+                stop = false;
+                pause->SetNextScene();
+                break;
+            case 1:
+                return new Title();
+                break;
+            case 2:
+                return nullptr;
+            default:
+                break;
+            }
+       }
+    }
+
     return this;
 }
 

@@ -1,6 +1,7 @@
 #include "Pause.h"
+#include "DxLib.h"
 
-#define INPUT_ACCEPTANCE_TIME 60
+#define INPUT_ACCEPTANCE_TIME 30
 
 //-----------------------------------
 // コンストラクタ
@@ -42,6 +43,22 @@ void Pause::Update(Key* key)
 		{
 			select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
 		}
+		input_time = 0;
+	}
+
+	switch (select_menu)
+	{
+	case 0:
+		cursor_y = 200;
+		break;
+	case 1:
+		cursor_y = 300;
+		break;
+	case 2:
+		cursor_y = 400;
+		break;
+	default:
+		break;
 	}
 }
 
@@ -51,6 +68,32 @@ void Pause::Update(Key* key)
 void Pause::Draw() const
 {
 
+	DrawString(190, 200, "GAMESTATE！", 0xffffff);
+
+	DrawString(190, 300, "TITLE", 0xffffff);
+
+	DrawString(190, 400, "GAMEEND", 0xffffff);
+
+	DrawString(175, cursor_y, "■", 0xffffff);
+
+	DrawFormatString(0, 500, 0xffffff, "%d", select_menu);
+
+}
+
+//-----------------------------------
+// 値変更
+//-----------------------------------
+void Pause::SetNextScene()
+{
+	next_scene = false;
+}
+
+//-----------------------------------
+// 値参照
+//-----------------------------------
+int Pause::GetSelectMenu()
+{
+	return select_menu;
 }
 
 //-----------------------------------

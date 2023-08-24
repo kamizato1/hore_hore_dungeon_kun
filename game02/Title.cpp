@@ -37,11 +37,11 @@ void Title::Update(Key* key)
 
 	if (++input_time > INPUT_ACCEPTANCE_TIME)
 	{
-		if (key->GetStickAngle(L).y > 0)
+		if (key->GetStickAngle(L).y < 0)
 		{
 			select_menu = (select_menu - 1 + static_cast<int>(MENU::MENU_SIZE)) % static_cast<int>(MENU::MENU_SIZE);
 		}
-		else if (key->GetStickAngle(L).y < 0)
+		else if (key->GetStickAngle(L).y > 0)
 		{
 			select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
 		}
