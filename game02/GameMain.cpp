@@ -2,7 +2,7 @@
 #include"GameMain.h"
 #include"Stage.h"
 
-#define TIME 60
+#define TIME 200
 #define MAX_SWAY_WIDTH 5
 #define SWAY_SIZE 0.5
 
@@ -59,13 +59,11 @@ void GameMain::Update(Key* key)
             if (fallingblock[i].CanDelete())fallingblock.erase(fallingblock.begin() + i);
         }
 
-        if ((remaining_time == 80) || (remaining_time == 50) || (remaining_time == 0))
+        if ((remaining_time == 150) || (remaining_time == 100) || (remaining_time == 50) || (remaining_time == 0))
         {
             if (!sway_flg)sway_flg = TRUE;
         }
     }
-
-    //if (remaining_time < 1)time = 0;
 }
 
 void GameMain::Draw() const

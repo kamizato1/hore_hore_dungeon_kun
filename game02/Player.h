@@ -13,13 +13,11 @@ class Player : public BoxCollider
 private:
 
     int image;
-    float image_size;
-    float image_size_add;
     DATA speed;
     DATA throw_speed;
     DATA r_stick_angle_record[R_STICK_ANGLE_RECORD_NUM];
     float speed_x_record[L_STICK_ANGLE_RECORD_NUM];
-
+    int life;
     DATA cursor_location;
     int cursor_image;
     bool can_use_item;
@@ -39,4 +37,5 @@ public:
     void Cursor();
     bool GetPlayerDie() { return die; }
     void SetPlayerDie(bool flg) { die = flg; }
+    void Init();
 };

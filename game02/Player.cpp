@@ -4,46 +4,47 @@
 
 #define PLAYER_SIZE_X 30
 #define PLAYER_SIZE_Y 30
-
 #define JUMP_SPEED 8
 #define PLAYER_SPEED 2
 
-
 Player::Player()
+{
+    image = LoadGraph("images/004.png");
+    cursor_image = LoadGraph("images/cursor.png");
+    for (int i = 0; i < 3; i++)item_num[i] = 0;
+    Init();
+}
+
+void Player::Init()
 {
     location = { 55, 500 };
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
     throw_speed = { 0,0 };
 
+    item_type = ITEM_TYPE::PICKAXE;
+
+    can_use_item = FALSE;
+
     die = FALSE;
-   
+
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
     for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)speed_x_record[i] = 0;
-
-    image = LoadGraph("images/004.png");
-    cursor_image = LoadGraph("images/cursor.png");
-   
-    item_type = ITEM_TYPE::PICKAXE;
-    can_use_item = FALSE;
-    image_size = 1;
-    //image_size_add = 0.01;
-    for (int i = 0; i < 3; i++)item_num[i] = 0; 
 }
 
-void Player::Update(Key* key, Stage* stagebase)
+void Player::Update(Key* key, Stage* stage)
 {
    if (location.y > SCREEN_HEIGHT + 50)die = TRUE;
 
    if(!die)
    {
-       MoveX(key, stagebase);
-       MoveY(key, stagebase);
+       MoveX(key, stage);
+       MoveY(key, stage);
 
-       HIT_TREASURE hit_treasure = stagebase->HitTreasure(this);
+       HIT_TREASURE hit_treasure = stage->HitTreasure(this);
        if (hit_treasure.flg)
        {
-           stagebase->DeleteTreasure(hit_treasure.num);
+           stage->DeleteTreasure(hit_treasure.num);
            item_num[static_cast<int>(hit_treasure.treasure_type)]++;
        }
 
@@ -88,8 +89,28 @@ void Player::Update(Key* key, Stage* stagebase)
 
        if (can_use_item)
        {
-           if (key->KeyDown(L))stagebase->ThrowItem(location, throw_speed, item_type);
-           else if (key->KeyDown(R))stagebase->PutItem(cursor_location, item_type);
+           int item_type = static_cast<int>(this->item_type);
+         /*  if ((item_num[item_type] > 0) || item_type == 0)
+           {
+               if (key->KeyDown(L))
+               {
+                   stage->ThrowItem(location, throw_speed, this->item_type);
+                   item_num[item_type]--;
+               }
+               else if (key->KeyDown(R))
+               {
+                   if (stage->PutItem(cursor_location, this->item_type))item_num[item_type]--;
+               }
+           }*/
+           if (key->KeyDown(L))
+           {
+               stage->ThrowItem(location, throw_speed, this->item_type);
+               item_num[item_type]--;
+           }
+           else if (key->KeyDown(R))
+           {
+               if (stage->PutItem(cursor_location, this->item_type))item_num[item_type]--;
+           }
        }
    }
 }
@@ -164,9 +185,7 @@ void Player::MoveY(Key* key, Stage* stagebase)//Ｙ座標の移動
 
 void Player::Draw(float camera_work) const
 {
-   // DrawBox(location.x - radius.x + camera_work, location.y - radius.y, location.x + radius.x + camera_work, location.y + radius.y, 0xffffff, TRUE);
-    
-    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
+   DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
 
     if (can_use_item)
     {
@@ -185,7 +204,8 @@ void Player::Draw(float camera_work) const
         }
     }
 
-    if (item_type == ITEM_TYPE::BLOCK)DrawString(0, 30, "ブロック", 0xffffff);
-    else if(item_type == ITEM_TYPE::BOM)DrawString(0, 30, "爆弾", 0xffffff);
-    else DrawString(0, 30, "つるはし", 0xffffff);
+    if (item_type == ITEM_TYPE::BLOCK)DrawString(0, 60, "ブロック", 0xffffff);
+    else if(item_type == ITEM_TYPE::BOM)DrawString(0, 60, "爆弾", 0xffffff);
+    else DrawString(0, 60, "つるはし", 0xffffff);
+    //DrawFormatString(100, 60, 0xffffff, "%d", item_num[static_cast<int>(item_type)]);
 }
