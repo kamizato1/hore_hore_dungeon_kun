@@ -51,7 +51,7 @@ void Stage::Init()
 	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, effect_image[3]);
 	LoadDivGraph("images/explosion.png", 9, 9, 1, 320, 320, explosion_image);
 	LoadDivGraph("images/smoke.png", 9, 9, 1, 500, 500, smoke_image);
-	pickaxe_image = LoadGraph("images/pickaxe.png");
+	pickaxe_image = LoadGraph("images/tsuruhashi.png");
 }
 
 void Stage::Update()
