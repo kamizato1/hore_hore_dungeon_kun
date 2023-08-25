@@ -37,11 +37,11 @@ void Pause::Update(Key* key)
 	{
 		if (key->GetStickAngle(L).y > 0)
 		{
-			select_menu = (select_menu - 1 + static_cast<int>(MENU::MENU_SIZE)) % static_cast<int>(MENU::MENU_SIZE);
+			select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
 		}
 		else if (key->GetStickAngle(L).y < 0)
 		{
-			select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
+			select_menu = (select_menu - 1 + static_cast<int>(MENU::MENU_SIZE)) % static_cast<int>(MENU::MENU_SIZE);
 		}
 		input_time = 0;
 	}

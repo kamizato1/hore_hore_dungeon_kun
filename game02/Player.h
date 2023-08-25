@@ -23,6 +23,15 @@ private:
     int item_num[3];
     Cursor* cursor;
 
+    //テスト
+    
+    int image_test[4]; //プレイヤーアニメーション画像
+    int anime; //アニメーション
+    int anime_time; //アニメーション切り替え時間
+
+    //ここまで
+
+
 public:
 
     Player();
