@@ -12,6 +12,12 @@ Player::Player()
     image = LoadGraph("images/004.png");
     for (int i = 0; i < 3; i++)item_num[i] = 999;
     Init();
+
+    //テスト(アニメーション)
+    LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, image_test);
+    anime = 0;
+    anime_time = 0;
+    //ここまで
 }
 
 void Player::Init()
@@ -132,6 +138,7 @@ void Player::MoveX(Key* key, Stage* stagebase)//Ｘ座標の移動
         float sign = -(speed.x / fabsf(speed.x));
         while (stagebase->HitStage(this).flg)location.x += sign;
     }
+
 }
 
 void Player::MoveY(Key* key, Stage* stagebase)//Ｙ座標の移動

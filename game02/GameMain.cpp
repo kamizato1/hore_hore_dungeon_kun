@@ -76,6 +76,10 @@ void GameMain::Update(Key* key)
             if (!sway_flg)sway_flg = TRUE;
         }
     }
+    else
+    {
+        pause->Update(key);
+    }
 }
 
 void GameMain::Draw() const
@@ -105,6 +109,11 @@ void GameMain::Draw() const
     ui->Draw(remaining_time, life);
 
     SetDrawBright(255, 255, 255);
+
+    if (stop)
+    {
+        pause->Draw();
+    }
 }
 
 void GameMain::ReStart()
