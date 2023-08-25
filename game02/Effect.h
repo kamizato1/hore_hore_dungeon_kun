@@ -1,7 +1,7 @@
 #pragma once
 #include"define.h"
 
-#define BREAK_BLOCK_IMAGE_TYPE 10
+#define EFFECT_IMAGE_NUM 10
 
 
 class Effect
@@ -9,15 +9,14 @@ class Effect
 private:
 
 	DATA location;
-	int image[BREAK_BLOCK_IMAGE_TYPE];
+	int image[EFFECT_IMAGE_NUM];
 	int image_change_time;
 	int image_type;
-	int image_num;
 	bool can_delete;
 
 public:
 
-	Effect(DATA location, int *image, int image_num);
+	Effect(DATA location, int *image);
 	//~BreakBlock();
 
 	void Update();

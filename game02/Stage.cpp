@@ -45,12 +45,12 @@ void Stage::Init()
 {
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
 	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
-	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, effect_image[0]);
-	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, effect_image[1]);
-	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, effect_image[2]);
-	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, effect_image[3]);
-	LoadDivGraph("images/explosion.png", 9, 9, 1, 320, 320, explosion_image);
-	LoadDivGraph("images/smoke.png", 9, 9, 1, 500, 500, smoke_image);
+	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, break_block_image[0]);
+	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, break_block_image[1]);
+	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, break_block_image[2]);
+	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, break_block_image[3]);
+	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
+	LoadDivGraph("images/smoke.png", 10, 10, 1, 500, 500, smoke_image);
 	pickaxe_image = LoadGraph("images/tsuruhashi.png");
 }
 
@@ -113,7 +113,7 @@ void Stage::HitBlastRange(int bom_num)
 					int effect_image_type = 1;
 					if (block_type == BLOCK_TYPE::HARD_BLOCK)effect_image_type = 2;
 					else if (block_type == BLOCK_TYPE::GROUND_BLOCK)effect_image_type = 3;
-					effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
+					effect.emplace_back(block[i].GetLocation(), break_block_image[effect_image_type]);
 					block.erase(block.begin() + i);
 					i--;
 				}
@@ -123,8 +123,8 @@ void Stage::HitBlastRange(int bom_num)
 	}
 	if (bom[bom_num].GetCanDelete())
 	{
-		effect.emplace_back(bom[bom_num].GetLocation(), smoke_image, EXPLOSION_IMAGE_NUM);
-		effect.emplace_back(bom[bom_num].GetLocation(), explosion_image, EXPLOSION_IMAGE_NUM);
+		effect.emplace_back(bom[bom_num].GetLocation(), smoke_image);
+		effect.emplace_back(bom[bom_num].GetLocation(), explosion_image);
 		bom.erase(bom.begin() + bom_num);
 	}
 	else if (bom[bom_num].GetLocation().y > SCREEN_HEIGHT + 200)bom.erase(bom.begin() + bom_num);
@@ -141,6 +141,7 @@ void Stage::Draw2(float camera_work) const
 	for (int i = 0; i < effect.size(); i++)effect[i].Draw(camera_work);
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
+	DrawFormatString(0, 300, 0xffffff, "%d", effect.size());
 }
 
 HIT_STAGE Stage::HitStage(BoxCollider* bc)
@@ -227,7 +228,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 			{
 				int effect_image_type = 1;
 				if (block_type == 4)effect_image_type = 3;
-				effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
+				effect.emplace_back(block[i].GetLocation(), break_block_image[effect_image_type]);
 				block.erase(block.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 				i--;
@@ -252,12 +253,12 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			{
 				if (--block_type == 0)
 				{
-					effect.emplace_back(block[hit_stage.num].GetLocation(), effect_image[1], BREAK_BLOCK_IMAGE_NUM);
+					effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[1]);
 					block.erase(block.begin() + hit_stage.num);
 				}
 				else
 				{
-					effect.emplace_back(block[hit_stage.num].GetLocation(), effect_image[0], BREAK_BLOCK_IMAGE_NUM);
+					effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[0]);
 					block[hit_stage.num].SetBlockType(block_type);
 
 				}
@@ -322,13 +323,13 @@ void Stage::Sway()
 				if (block_type == 1)
 				{
 					effect_image_type = 1;
-					effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
+					effect.emplace_back(block[i].GetLocation(), break_block_image[effect_image_type]);
 					block.erase(block.begin() + i);
 					i--;
 				}
 				else
 				{
-					effect.emplace_back(block[i].GetLocation(), effect_image[effect_image_type], BREAK_BLOCK_IMAGE_NUM);
+					effect.emplace_back(block[i].GetLocation(), break_block_image[effect_image_type]);
 					block[i].SetBlockType(block_type - 1);
 				}
 			}
