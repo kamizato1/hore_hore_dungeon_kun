@@ -110,6 +110,15 @@ void Player::Update(Key* key, Stage* stage)
        }
 
    }
+
+   //アニメーション切り替え
+   if (++anime_time % 10 == 0)
+   {
+       if (++anime == 4)
+       {
+           anime = 0;
+       }
+   }
 }
 
 void Player::MoveX(Key* key, Stage* stagebase)//Ｘ座標の移動
@@ -163,7 +172,7 @@ void Player::MoveY(Key* key, Stage* stagebase)//Ｙ座標の移動
 
 void Player::Draw(float camera_work) const
 {
-   DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
+   DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image_test[anime], TRUE);
 
    cursor->Draw(camera_work);
 
