@@ -8,8 +8,7 @@
 #include"Pickaxe.h"
 #include"define.h"
 
-#define BREAK_BLOCK_IMAGE_NUM 10
-#define EXPLOSION_IMAGE_NUM 9
+#define EFFECT_IMAGE_NUM 10
 
 struct HIT_STAGE
 {
@@ -41,9 +40,9 @@ protected:
     std::vector<class Bom>bom;
     class Pickaxe* pickaxe;
 
-    int effect_image[4][BREAK_BLOCK_IMAGE_NUM];
-    int explosion_image[EXPLOSION_IMAGE_NUM];
-    int smoke_image[EXPLOSION_IMAGE_NUM];
+    int break_block_image[4][EFFECT_IMAGE_NUM];
+    int explosion_image[EFFECT_IMAGE_NUM];
+    int smoke_image[EFFECT_IMAGE_NUM];
     int pickaxe_image;
     int hit_pickaxe_se;
     int break_block_se;

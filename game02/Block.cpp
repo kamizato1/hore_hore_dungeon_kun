@@ -28,6 +28,6 @@ void Block::SetBlockType(int type)
 { 
     this->type = static_cast<BLOCK_TYPE>(type);
     int image[7];
-    LoadDivGraph("images/block01.png", 7, 7, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
+    LoadDivGraph("images/block02.png", 7, 7, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
     this->image = image[type];
 }

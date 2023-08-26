@@ -9,6 +9,7 @@
 #include"SceneManager.h"
 #include"define.h"
 
+
 //ƒeƒXƒg
 #include"Result.h"
 
