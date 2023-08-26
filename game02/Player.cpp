@@ -9,14 +9,13 @@
 
 Player::Player()
 {
-    image = LoadGraph("images/004.png");
     for (int i = 0; i < 3; i++)item_num[i] = 999;
     Init();
 
     //テスト(アニメーション)
-    LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, image_test);
-    anime = 0;
-    anime_time = 0;
+    LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, image);
+    image_type = 0;
+    image_change_time = 0;
     //ここまで
 }
 
@@ -33,6 +32,7 @@ void Player::Init()
     for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)r_stick_angle_record[i] = { 0,0 };
     for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)speed_x_record[i] = 0;
     cursor = new class Cursor(location);
+    direction_left = FALSE;
 }
 
 void Player::Update(Key* key, Stage* stage)
@@ -130,6 +130,7 @@ void Player::MoveX(Key* key, Stage* stagebase)//Ｘ座標の移動
     }
 
     speed.x = (all_speed_x_record_calculation / L_STICK_ANGLE_RECORD_NUM);
+
     location.x += speed.x;
 
     if (stagebase->HitStage(this).flg)
@@ -137,6 +138,16 @@ void Player::MoveX(Key* key, Stage* stagebase)//Ｘ座標の移動
         location.x = floor(location.x);
         float sign = -(speed.x / fabsf(speed.x));
         while (stagebase->HitStage(this).flg)location.x += sign;
+    }
+    else if (speed.x != 0)
+    {
+        if (++image_change_time > 10)
+        {
+            if (++image_type > 3)image_type = 0;
+            image_change_time = 0;
+        }
+        if (speed.x > 0)direction_left = FALSE;
+        else direction_left = TRUE;
     }
 
 }
@@ -163,7 +174,7 @@ void Player::MoveY(Key* key, Stage* stagebase)//Ｙ座標の移動
 
 void Player::Draw(float camera_work) const
 {
-   DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
+   DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image[image_type], TRUE, direction_left);
 
    cursor->Draw(camera_work);
 

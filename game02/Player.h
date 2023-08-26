@@ -13,7 +13,7 @@ class Player : public BoxCollider
 {
 private:
 
-    int image;
+    int image[4];
     bool can_throw, die;
     DATA speed;
     DATA throw_speed;
@@ -25,9 +25,9 @@ private:
 
     //テスト
     
-    int image_test[4]; //プレイヤーアニメーション画像
-    int anime; //アニメーション
-    int anime_time; //アニメーション切り替え時間
+    int image_type; //アニメーション
+    int image_change_time; //アニメーション切り替え時間
+    bool direction_left;
 
     //ここまで
 

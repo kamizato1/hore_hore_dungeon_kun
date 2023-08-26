@@ -86,6 +86,7 @@ void GameMain::Draw() const
 {
     float camera_work = 0;
     if (player->GetLocation().x >= 350)camera_work = -player->GetLocation().x + 350;
+    if (camera_work <= -(BLOCK_SIZE_X * 100) + SCREEN_WIDTH)camera_work = -(BLOCK_SIZE_X * 100) + SCREEN_WIDTH;
     camera_work += sway_width;
 
     if (die)SetDrawBright(screen_brightness, screen_brightness, screen_brightness);
@@ -114,6 +115,8 @@ void GameMain::Draw() const
     {
         pause->Draw();
     }
+
+    DrawFormatString(0, 500, 0xffffff, "%f", camera_work);
 }
 
 void GameMain::ReStart()
