@@ -37,6 +37,4 @@ void Cursor::Update(BoxCollider* bc, DATA r_stick_angle)
 void Cursor::Draw(float camera_work) const
 {
     DrawRotaGraphF(location.x + camera_work, location.y, 1, 0, image, TRUE);
-    DrawFormatString(0, 200, 0xffffff, "%d", cursor_sign_x);
-    DrawFormatString(0, 225, 0xffffff, "%d", cursor_sign_y);
 }

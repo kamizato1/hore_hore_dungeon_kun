@@ -1,6 +1,8 @@
 #include"DxLib.h"
 #include"Stage.h"
 
+#define BLOCK_CHANGE_TIME 10
+
 Stage::Stage()
 {
 	Init();
@@ -30,6 +32,8 @@ Stage::Stage()
 	fclose(fp_t);
 
 	pickaxe = nullptr;
+	block_change_time = 0;
+	image_type = 0;
 }
 
 Stage::~Stage()
@@ -38,6 +42,7 @@ Stage::~Stage()
 	treasure.clear();
 	effect.clear();
 	bom.clear();
+	fallingblock.clear();
 	delete pickaxe;
 }
 
@@ -52,16 +57,55 @@ void Stage::Init()
 	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
 	LoadDivGraph("images/smoke.png", 10, 10, 1, 500, 500, smoke_image);
 	pickaxe_image = LoadGraph("images/tsuruhashi.png");
+	back_ground_image[0] = LoadGraph("images/background01.png");
+	back_ground_image[1] = LoadGraph("images/background02.png");
+	back_ground_image[2] = LoadGraph("images/background03.png");
+	back_ground_image[3] = LoadGraph("images/background04.png");
+	falling_block_image = LoadGraph("images/fallingblock.png");
+	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
+	int image[28];
+	LoadDivGraph("images/changeblock.png", 28, 4, 7, 36, 36, image);
+	for (int i = 0; i < 7; i++)
+	{
+		for (int j = 0; j < 4; j++)change_block_image[i][j] = image[(i + 1) * (j + 1)];
+	}
+	for (int i = 0; i < KIRA_KIRA_NUM; i++)
+	{
+		kira_kira[i].location.y = 250 + GetRand(250);
+		kira_kira[i].location.x = GetRand(SCREEN_WIDTH + 500 );
+		kira_kira[i].size =  (GetRand(4) + 1) / 5;
+	}
 }
 
 void Stage::Update()
 {
+	for (int i = 0; i < fallingblock.size(); i++)
+	{
+		fallingblock[i].Update();
+		if (fallingblock[i].CanDelete())fallingblock.erase(fallingblock.begin() + i);
+	}
+	if (++block_change_time > BLOCK_CHANGE_TIME)
+	{
+		if (++image_type > 3)image_type = 0;
+		block_change_time = 0;
+	}
+
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		treasure[i].Update(this);  // 全要素に対するループ（宝物のアップデート）
 		if (treasure[i].GetCanDelete())treasure.erase(treasure.begin() + i);
 	}
-	for (int i = 0; i < block.size(); i++)block[i].SetHitEcplosion(FALSE);
+	for (int i = 0; i < block.size(); i++)
+	{
+		block[i].SetHitEcplosion(FALSE);
+		if (block_change_time == 0)
+		{
+			if (block[i].GetBlockType() == BLOCK_TYPE::JEWEL_BLOCK)
+			{
+				block[i].SetBlockImage(change_block_image[5][image_type]);
+			}
+		}
+	}
 	for (int i = 0; i < bom.size(); i++)
 	{
 		bom[i].Update(this);
@@ -132,6 +176,14 @@ void Stage::HitBlastRange(int bom_num)
 
 void Stage::Draw1(float camera_work) const
 {
+	SetDrawBright(150, 150, 150);
+	DrawGraph(0, 0, back_ground_image[3], TRUE);
+	for (int i = 0; i < KIRA_KIRA_NUM; i++)DrawRotaGraph(kira_kira[i].location.x + (camera_work / 10), kira_kira[i].location.y, kira_kira[i].size, 0, kira_kira_image[image_type], TRUE);
+	DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
+	DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
+	DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
+	SetDrawBright(255, 255, 255);
+	
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
 	for (int i = 0; i < block.size(); i++)block[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
 }
@@ -141,7 +193,11 @@ void Stage::Draw2(float camera_work) const
 	for (int i = 0; i < effect.size(); i++)effect[i].Draw(camera_work);
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
-	DrawFormatString(0, 300, 0xffffff, "%d", effect.size());
+	//DrawFormatString(0, 300, 0xffffff, "%d", effect.size());
+	for (int i = 0; i < fallingblock.size(); i++)
+	{
+		/*if (fallingblock[i].GetSize() < 0.7)*/fallingblock[i].Draw(camera_work);
+	}
 }
 
 HIT_STAGE Stage::HitStage(BoxCollider* bc)
@@ -224,7 +280,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 		if (block[i].HitBox(bc))
 		{
 			int block_type = static_cast<int>(block[i].GetBlockType());
-			if ((block_type >= 1) && (block_type <= 4))//ブロックが土だったら
+			if ((block_type > 0) && (block_type <= 5))//壊せるブロックなら
 			{
 				int effect_image_type = 1;
 				if (block_type == 4)effect_image_type = 3;
@@ -239,9 +295,12 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 	return FALSE;
 }
 
-bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
+bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 {
 	if (bc->GetLocation().y > SCREEN_HEIGHT)return FALSE;
+	if ((item_num == 0) && (item_type != ITEM_TYPE::PICKAXE))return FALSE;
+	if ((pickaxe != nullptr) && (item_type == ITEM_TYPE::PICKAXE))return FALSE;
+
 	HIT_STAGE hit_stage = HitStage(bc);
 	int block_type = static_cast<int>(hit_stage.block_type);
 
@@ -264,54 +323,65 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 				}
 			}
 		}
+		return TRUE;
 	}
 	else if (item_type == ITEM_TYPE::BLOCK)
 	{
-		if (!hit_stage.flg)
+		if ((!hit_stage.flg)/* && (hit_stage.block_type != BLOCK_TYPE::NONE)*/)
 		{
-			block.emplace_back(bc->GetLocation(), 4);
-			if (!(HitTreasure(&block[block.size() - 1]).flg) && !(HitBom(&block[block.size() - 1]).flg))return TRUE;
-			else block.erase(block.end() - 1);
+			if ((!HitTreasure(bc).flg) && (!HitBom(bc).flg))
+			{
+				block.emplace_back(bc->GetLocation(), 5);
+				return TRUE;
+			}
 		}
 	}
 	else
 	{
-		if (!hit_stage.flg)
+		if ((!hit_stage.flg)/* && (hit_stage.block_type != BLOCK_TYPE::NONE)*/)
 		{
-			block.emplace_back(bc->GetLocation(), 4);
-			if (!(HitTreasure(&block[block.size() - 1]).flg) && !(HitBom(&block[block.size() - 1]).flg))
+			if ((!HitTreasure(bc).flg) && (!HitBom(bc).flg))
 			{
-				block.erase(block.end() - 1);
 				bom.emplace_back(bc->GetLocation(), DATA{ 0,0 });
 				return TRUE;
 			}
-			else block.erase(block.end() - 1);
 		}
 	}
 
 	return FALSE;
 }
 
-void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
+bool Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type, int item_num)
 {
 	if (item_type == ITEM_TYPE::PICKAXE)
 	{
 		if (pickaxe == nullptr)pickaxe = new Pickaxe(location, speed, pickaxe_image, hit_pickaxe_se);
 		for (int i = 0; i < bom.size(); i++)bom[i].SetOldHit(FALSE);
 		for (int i = 0; i < treasure.size(); i++)treasure[i].SetOldHit(FALSE);
+		
 	}
-	else if (item_type == ITEM_TYPE::BLOCK)
+	else if (item_type == ITEM_TYPE::BOM)
 	{
+		if (item_num != 0)
+		{
+			bom.emplace_back(location, speed);
+			return TRUE;
+		}
+	}
 
-	}
-	else
-	{
-		bom.emplace_back(location, speed);
-	}
+	return FALSE;
+}
+
+bool Stage::GetPickaxeFlg()
+{
+	if (pickaxe == nullptr)return TRUE;
+	else return FALSE;
 }
 
 void Stage::Sway()
 {
+	if (GetRand(10) == 0) fallingblock.emplace_back(falling_block_image);
+
 	for (int i = 0; i < block.size(); i++)  // 全要素に対するループ
 	{
 		if (GetRand(1000) == 0)

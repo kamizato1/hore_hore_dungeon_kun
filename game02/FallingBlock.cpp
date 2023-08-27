@@ -1,13 +1,14 @@
 #include"DxLib.h"
 #include"FallingBlock.h"
 
-FallingBlock::FallingBlock(DATA location, int image, float speed, float image_size)
+FallingBlock::FallingBlock(int image)
 {
-	this->location = location;
+	location.x = GetRand(SCREEN_WIDTH);
+	location.y = -GetRand(50);
+	speed = GetRand(15) + 1;
+	image_size = (speed / 10);
 	can_delete = FALSE;
 	this->image = image;
-	this->speed = speed;
-	this->image_size = image_size;
 	image_angle = GetRand(100);
 }
 

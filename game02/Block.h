@@ -26,4 +26,5 @@ public:
     BLOCK_TYPE GetBlockType() { return type; }
     void SetBlockType(int type);
     void SetHitEcplosion(bool flg) { hit_explosion = flg; }
+    void SetBlockImage(int image) { this->image = image; }
 };

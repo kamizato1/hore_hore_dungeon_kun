@@ -61,6 +61,7 @@ enum class BLOCK_TYPE
     WOUNDED_BLOCK,//傷ついているブロック
     NORMAL_BLOCK,//ブロック
     GROUND_BLOCK,//地面のブロック
+    JEWEL_BLOCK,//宝石
     HARD_BLOCK,//かたいブロック
     VERY_HARD_BLOCK//とても固いブロック
 };
