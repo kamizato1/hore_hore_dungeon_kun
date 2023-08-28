@@ -158,6 +158,7 @@
     <ClCompile Include="FallingBlock.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="Opening.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SampleGameMain.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="FallingBlock.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="Opening.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SampleGameMain.h" />
