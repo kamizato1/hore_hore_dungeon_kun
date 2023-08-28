@@ -15,7 +15,7 @@ private:
 
 public:
 
-	FallingBlock(DATA location, int image, float speed, float image_size);
+	FallingBlock(int image);
 	
 	void Update();
 	void Draw(float camera_work) const;

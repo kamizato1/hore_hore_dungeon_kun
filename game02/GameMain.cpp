@@ -13,10 +13,7 @@ GameMain::GameMain()
     player = new Player();
     ui = new Ui();
     pause = new Pause();
-    back_ground_image[0] = LoadGraph("images/background01.png");
-    back_ground_image[1] = LoadGraph("images/background02.png");
-    back_ground_image[2] = LoadGraph("images/background03.png");
-    falling_block_image = LoadGraph("images/fallingblock.png");
+    
     life = 3;
     Init();
 }
@@ -27,7 +24,7 @@ GameMain::~GameMain()
     delete stage;
     delete ui;
     delete pause;
-    fallingblock.clear();
+    
 }
 
 void GameMain::Init()
@@ -65,12 +62,6 @@ void GameMain::Update(Key* key)
 
         Sway();
 
-        for (int i = 0; i < fallingblock.size(); i++)
-        {
-            fallingblock[i].Update();
-            if (fallingblock[i].CanDelete())fallingblock.erase(fallingblock.begin() + i);
-        }
-
         if ((remaining_time == 150) || (remaining_time == 100) || (remaining_time == 50) || (remaining_time == 0))
         {
             if (!sway_flg)sway_flg = TRUE;
@@ -86,26 +77,15 @@ void GameMain::Draw() const
 {
     float camera_work = 0;
     if (player->GetLocation().x >= 350)camera_work = -player->GetLocation().x + 350;
+    if (camera_work <= -(BLOCK_SIZE_X * 100) + SCREEN_WIDTH)camera_work = -(BLOCK_SIZE_X * 100) + SCREEN_WIDTH;
     camera_work += sway_width;
 
     if (die)SetDrawBright(screen_brightness, screen_brightness, screen_brightness);
 
-    DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
-    DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
-    for (int i = 0; i < fallingblock.size(); i++)
-    {
-        if (fallingblock[i].GetSize() < 0.7)fallingblock[i].Draw(camera_work);
-    }
-    DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
-    
     stage->Draw1(camera_work);
     player->Draw(camera_work);
     stage->Draw2(camera_work);
-    for (int i = 0; i < fallingblock.size(); i++)
-    {
-        if (fallingblock[i].GetSize() >= 0.7)fallingblock[i].Draw(camera_work);
-    }
-
+   
     ui->Draw(remaining_time, life);
 
     SetDrawBright(255, 255, 255);
@@ -142,23 +122,12 @@ void GameMain::Sway()
                 sway_width = 0;
             }
         }
-        
-        if (GetRand(10) == 0)
-        {
-            DATA location;
-            location.x = GetRand(SCREEN_WIDTH);
-            location.y = -GetRand(50);
-            float speed = GetRand(15) + 1;
-            fallingblock.emplace_back(location, falling_block_image, speed, (speed / 10));
-        }
-
         stage->Sway();
     }
 }
 
 AbstractScene* GameMain::ChangeScene()
 {
-
     if (stop)
     {
         if (pause->GetNextScene())
