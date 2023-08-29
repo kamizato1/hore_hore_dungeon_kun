@@ -7,6 +7,7 @@
 #include"Title.h"
 #include"GameMain.h"
 #include"SceneManager.h"
+#include"GameOver.h"
 #include"define.h"
 
 

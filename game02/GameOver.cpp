@@ -8,6 +8,7 @@
 
 GameOver::GameOver()
 {
+	back_ground_image = LoadGraph("images/gameoverimage.png");
 	LoadDivGraph("images/gameoverfont1.png", 8, 8, 1, 100, 100, font_image);
 	for (int i = 0; i < FONT_NUM; i++)
 	{
@@ -31,6 +32,7 @@ void GameOver::Update(Key* key)
 
 void GameOver::Draw()const
 {
+	DrawGraph(0, 0, back_ground_image, TRUE);
 	for (int i = 0; i < FONT_NUM; i++)
 	{
 		DrawRotaGraph(font_location[i].x, font_location[i].y, 1, ((M_PI / 180) * font_angle[i]), font_image[i], TRUE);

@@ -3,6 +3,7 @@
 #include"BoxCollider.h"
 #include"Block.h"
 #include"Treasure.h"
+#include"Flag.h"
 #include"Effect.h"
 #include"Bom.h"
 #include"Pickaxe.h"
@@ -48,6 +49,7 @@ protected:
     std::vector<class Effect>effect;
     std::vector<class Bom>bom;
     class Pickaxe* pickaxe;
+    Flag* flag;
 
     int back_ground_image[4];
     int falling_block_image;

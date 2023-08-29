@@ -63,8 +63,8 @@ void Player::Update(Key* key, Stage* stage)
        DATA all_r_stick_angle_record_calculation = { 0,0 };
        DATA now_r_stick_angle, old_r_stick_angle;
 
-       now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);
-       now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);
+       now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);
+       now_r_stick_angle.y = (key->GetStickAngle(R).x / 50);
 
        for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
        {

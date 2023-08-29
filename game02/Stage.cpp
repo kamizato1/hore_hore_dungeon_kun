@@ -25,7 +25,8 @@ Stage::Stage()
 			location.y = (i * BLOCK_SIZE_Y) + (BLOCK_SIZE_Y / 2);
 
 			if (block_type != -1)block.emplace_back(location, block_type);
-			if (treasure_type != -1)treasure.emplace_back(location, treasure_type);
+			if (treasure_type == 10)flag = new Flag(location);
+			else if (treasure_type != -1)treasure.emplace_back(location, treasure_type);
 		}
 	}
 	fclose(fp_s);
@@ -187,16 +188,14 @@ void Stage::HitBlastRange(int bom_num)
 
 void Stage::Draw1(float camera_work) const
 {
-	//SetDrawBright(150, 150, 150);
 	DrawGraph(0, 0, back_ground_image[3], TRUE);
 	for (int i = 0; i < KIRA_KIRA_NUM; i++)DrawRotaGraph(kira_kira[i].location.x, kira_kira[i].location.y, kira_kira[i].size, 0, kira_kira_image[image_type], TRUE);
 	DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
 	DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
 	DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
-	//SetDrawBright(255, 255, 255);
-	
-	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
-	for (int i = 0; i < block.size(); i++)block[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
+	flag->Draw(camera_work);
+	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work);
+	for (int i = 0; i < block.size(); i++)block[i].Draw(camera_work);
 }
 
 void Stage::Draw2(float camera_work) const
@@ -204,11 +203,7 @@ void Stage::Draw2(float camera_work) const
 	for (int i = 0; i < effect.size(); i++)effect[i].Draw(camera_work);
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
-	//DrawFormatString(0, 300, 0xffffff, "%d", effect.size());
-	for (int i = 0; i < fallingblock.size(); i++)
-	{
-		/*if (fallingblock[i].GetSize() < 0.7)*/fallingblock[i].Draw(camera_work);
-	}
+	for (int i = 0; i < fallingblock.size(); i++)fallingblock[i].Draw(camera_work);
 }
 
 HIT_STAGE Stage::HitStage(BoxCollider* bc)
