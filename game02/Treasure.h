@@ -23,6 +23,6 @@ public:
     
     bool GetCanDelete() { return can_delete; }
     void SetOldHit(bool flg) { old_hit = flg; }
-    bool GetOldHit(Stage* stage, bool hit_type);
+    bool GetOldHit(Stage* stage);
     TREASURE_TYPE GetTreasureType() { return type; }
 };

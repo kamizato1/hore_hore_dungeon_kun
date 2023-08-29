@@ -87,24 +87,24 @@ void Stage::Init()
 
 void Stage::Update()
 {
+	if (--image_change_time < 0)
+	{
+		if (++image_type > 3)image_type = 0;
+		image_change_time = IMAGE_CHANGE_TIME;
+	}
 	for (int i = 0; i < fallingblock.size(); i++)
 	{
 		fallingblock[i].Update();
 		if (fallingblock[i].CanDelete())fallingblock.erase(fallingblock.begin() + i);
 	}
-	if (--image_change_time < 0)
+	for (int i = 0; i < effect.size(); i++)
 	{
-		if (++image_type > 3)
-		{
-			image_type = 0;
-			image_change_time = IMAGE_CHANGE_TIME;
-		}
-		else image_change_time = IMAGE_CHANGE_TIME;
+		effect[i].Update();
+		if (effect[i].CanDelete())effect.erase(effect.begin() + i);
 	}
-
 	for (int i = 0; i < treasure.size(); i++)
 	{
-		treasure[i].Update(this);  // 全要素に対するループ（宝物のアップデート）
+		treasure[i].Update(this);
 		if (treasure[i].GetCanDelete())treasure.erase(treasure.begin() + i);
 	}
 	for (int i = 0; i < block.size(); i++)
@@ -129,24 +129,16 @@ void Stage::Update()
 		pickaxe->Update(this);
 		if (pickaxe->GetCanDelete())pickaxe = nullptr;
 	}
-	for (int i = 0; i < effect.size(); i++)
-	{
-		effect[i].Update();
-		if (effect[i].CanDelete())effect.erase(effect.begin() + i);
-	}
 }
 
 void Stage::HitBlastRange(int bom_num)
 {
 	if (bom[bom_num].GetCanDelete())
 	{
-		for (int i = 0; i < bom.size(); i++)
-		{
-			if (bom[bom_num].HitExplosion(&bom[i]))bom[i].SetCanDelete(TRUE);
-		}
+		for (int i = 0; i < bom.size(); i++)if (bom[bom_num].HitExplosion(&bom[i]))bom[i].SetCanDelete(TRUE);
 		for (int i = 0; i < treasure.size(); i++)
 		{
-			if ((bom[bom_num].HitExplosion(&treasure[i])) && (!treasure[i].GetOldHit(this, TRUE)))
+			if ((bom[bom_num].HitExplosion(&treasure[i])) && (!HitBlock(&treasure[i]).flg))
 			{
 				if (treasure[i].GetTreasureType() == TREASURE_TYPE::BOM)
 				{
@@ -206,7 +198,7 @@ void Stage::Draw2(float camera_work) const
 	for (int i = 0; i < fallingblock.size(); i++)fallingblock[i].Draw(camera_work);
 }
 
-HIT_STAGE Stage::HitStage(BoxCollider* bc)
+HIT_STAGE Stage::HitBlock(BoxCollider* bc)
 {
 	HIT_STAGE hit_stage = {FALSE, 0, BLOCK_TYPE::NONE};
 
@@ -259,16 +251,12 @@ void Stage::DeleteTreasure(int num)
 
 bool Stage::HitPickaxe(BoxCollider* bc)
 {
-	for (int i = 0; i < bom.size(); i++)
-	{
-		if ((bom[i].HitBox(bc)) && (!bom[i].GetOldHit()))bom[i].SetCanDelete(TRUE);
-	}
-
+	for (int i = 0; i < bom.size(); i++)if ((bom[i].HitBox(bc)) && (!bom[i].GetOldHit()))bom[i].SetCanDelete(TRUE);
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		if (treasure[i].HitBox(bc))
 		{
-			if (!treasure[i].GetOldHit(this, FALSE))
+			if (!treasure[i].GetOldHit(this))
 			{
 				if (treasure[i].GetTreasureType() == TREASURE_TYPE::BOM)
 				{
@@ -307,7 +295,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 	if ((item_num == 0) && (item_type != ITEM_TYPE::PICKAXE))return FALSE;
 	if ((pickaxe != nullptr) && (item_type == ITEM_TYPE::PICKAXE))return FALSE;
 
-	HIT_STAGE hit_stage = HitStage(bc);
+	HIT_STAGE hit_stage = HitBlock(bc);
 	int block_type = static_cast<int>(hit_stage.block_type);
 
 	if (item_type == ITEM_TYPE::PICKAXE)

@@ -74,13 +74,12 @@ public:
     ~Stage();
 
     virtual void Update();
-
     virtual void Draw1(float camera_work) const;
     virtual void Draw2(float camera_work) const;
 
     bool HitPickaxe(BoxCollider* bc);
 
-    HIT_STAGE HitStage(BoxCollider* bc);
+    HIT_STAGE HitBlock(BoxCollider* bc);
     HIT_TREASURE HitTreasure(BoxCollider* bc);
     HIT_BOM HitBom(BoxCollider* bc);
 
