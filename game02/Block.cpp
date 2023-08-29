@@ -24,7 +24,7 @@ void Block::Draw(float camera_work) const
 void Block::SetBlockType(int type)
 { 
     int image[8];
-    LoadDivGraph("images/block03.png", 8, 8, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
+    LoadDivGraph("images/block.png", 8, 8, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
     this->image = image[type];
     this->type = static_cast<BLOCK_TYPE>(type);
 }

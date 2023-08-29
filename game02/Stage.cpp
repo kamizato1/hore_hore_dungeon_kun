@@ -1,7 +1,7 @@
 #include"DxLib.h"
 #include"Stage.h"
 
-#define BLOCK_CHANGE_TIME 10
+#define IMAGE_CHANGE_TIME 7
 
 Stage::Stage()
 {
@@ -32,7 +32,7 @@ Stage::Stage()
 	fclose(fp_t);
 
 	pickaxe = nullptr;
-	block_change_time = 0;
+	image_change_time = IMAGE_CHANGE_TIME;
 	image_type = 0;
 }
 
@@ -50,10 +50,6 @@ void Stage::Init()
 {
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
 	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
-	LoadDivGraph("images/kakera_small.png", 10, 10, 1, 216, 216, break_block_image[0]);
-	LoadDivGraph("images/kakera_big.png", 10, 10, 1, 216, 216, break_block_image[1]);
-	LoadDivGraph("images/kakera_iwa.png", 10, 10, 1, 216, 216, break_block_image[2]);
-	LoadDivGraph("images/kakera_yuka.png", 10, 10, 1, 216, 216, break_block_image[3]);
 	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
 	LoadDivGraph("images/smoke.png", 10, 10, 1, 500, 500, smoke_image);
 	pickaxe_image = LoadGraph("images/tsuruhashi.png");
@@ -63,16 +59,27 @@ void Stage::Init()
 	back_ground_image[3] = LoadGraph("images/background04.png");
 	falling_block_image = LoadGraph("images/fallingblock.png");
 	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
+
 	int image[28];
-	LoadDivGraph("images/changeblock.png", 28, 4, 7, 36, 36, image);
+	int count = 0;
+	LoadDivGraph("images/changeblock.png", 28, 4, 8, 36, 36, image);
 	for (int i = 0; i < 7; i++)
 	{
-		for (int j = 0; j < 4; j++)change_block_image[i][j] = image[(i + 1) * (j + 1)];
+		for (int j = 0; j < 4; j++)change_block_image[i][j] = image[count++];
 	}
+
+	int break_block_image[80];
+	count = 0;
+	LoadDivGraph("images/breakblock.png", 80, 10, 8, 216, 216, break_block_image);
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)this->break_block_image[i][j] = break_block_image[count++];
+	}
+
 	for (int i = 0; i < KIRA_KIRA_NUM; i++)
 	{
 		kira_kira[i].location.y = 250 + GetRand(250);
-		kira_kira[i].location.x = GetRand(SCREEN_WIDTH + 500 );
+		kira_kira[i].location.x = GetRand(SCREEN_WIDTH);
 		kira_kira[i].size =  (GetRand(4) + 1) / 5;
 	}
 }
@@ -84,10 +91,14 @@ void Stage::Update()
 		fallingblock[i].Update();
 		if (fallingblock[i].CanDelete())fallingblock.erase(fallingblock.begin() + i);
 	}
-	if (++block_change_time > BLOCK_CHANGE_TIME)
+	if (--image_change_time < 0)
 	{
-		if (++image_type > 3)image_type = 0;
-		block_change_time = 0;
+		if (++image_type > 3)
+		{
+			image_type = 0;
+			image_change_time = IMAGE_CHANGE_TIME;
+		}
+		else image_change_time = IMAGE_CHANGE_TIME;
 	}
 
 	for (int i = 0; i < treasure.size(); i++)
@@ -98,11 +109,12 @@ void Stage::Update()
 	for (int i = 0; i < block.size(); i++)
 	{
 		block[i].SetHitEcplosion(FALSE);
-		if (block_change_time == 0)
+		if (image_change_time == 0)
 		{
-			if (block[i].GetBlockType() == BLOCK_TYPE::JEWEL_BLOCK)
+			int block_type = static_cast<int>(block[i].GetBlockType());
+			if ((block_type == 1) || (block_type == 2) || (block_type == 3) || (block_type == 5))
 			{
-				block[i].SetBlockImage(change_block_image[5][image_type]);
+				block[i].SetBlockImage(change_block_image[block_type][image_type]);
 			}
 		}
 	}
@@ -149,15 +161,14 @@ void Stage::HitBlastRange(int bom_num)
 	{
 		if (bom[bom_num].HitExplosion(&block[i]))
 		{
-			BLOCK_TYPE block_type = block[i].GetBlockType();
-			if ((block_type != BLOCK_TYPE::VERY_HARD_BLOCK) && (block_type != BLOCK_TYPE::NONE))
+			int block_type = static_cast<int>(block[i].GetBlockType());
+			if ((block_type != 7) && (block_type != 0))
 			{
 				if (bom[bom_num].GetCanDelete())
 				{
-					int effect_image_type = 1;
-					if (block_type == BLOCK_TYPE::HARD_BLOCK)effect_image_type = 2;
-					else if (block_type == BLOCK_TYPE::GROUND_BLOCK)effect_image_type = 3;
-					effect.emplace_back(block[i].GetLocation(), break_block_image[effect_image_type]);
+					int image_type = block_type;
+					if (block_type < 4)image_type = 1;
+					effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
 					block.erase(block.begin() + i);
 					i--;
 				}
@@ -176,13 +187,13 @@ void Stage::HitBlastRange(int bom_num)
 
 void Stage::Draw1(float camera_work) const
 {
-	SetDrawBright(150, 150, 150);
+	//SetDrawBright(150, 150, 150);
 	DrawGraph(0, 0, back_ground_image[3], TRUE);
-	for (int i = 0; i < KIRA_KIRA_NUM; i++)DrawRotaGraph(kira_kira[i].location.x + (camera_work / 10), kira_kira[i].location.y, kira_kira[i].size, 0, kira_kira_image[image_type], TRUE);
+	for (int i = 0; i < KIRA_KIRA_NUM; i++)DrawRotaGraph(kira_kira[i].location.x, kira_kira[i].location.y, kira_kira[i].size, 0, kira_kira_image[image_type], TRUE);
 	DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
 	DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
 	DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
-	SetDrawBright(255, 255, 255);
+	//SetDrawBright(255, 255, 255);
 	
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work); // 全要素に対するループ(宝物の表示)
 	for (int i = 0; i < block.size(); i++)block[i].Draw(camera_work);  // 全要素に対するループ（ブロックの表示）
@@ -282,9 +293,9 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 			int block_type = static_cast<int>(block[i].GetBlockType());
 			if ((block_type > 0) && (block_type <= 5))//壊せるブロックなら
 			{
-				int effect_image_type = 1;
-				if (block_type == 4)effect_image_type = 3;
-				effect.emplace_back(block[i].GetLocation(), break_block_image[effect_image_type]);
+				int image_type = block_type;
+				if (block_type < 4)image_type = 1;
+				effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
 				block.erase(block.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 				i--;
@@ -310,17 +321,20 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 		{
 			if ((block_type > 0) && (block_type < 4))//ブロックが土だったら
 			{
-				if (--block_type == 0)
-				{
-					effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[1]);
-					block.erase(block.begin() + hit_stage.num);
-				}
-				else
-				{
-					effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[0]);
-					block[hit_stage.num].SetBlockType(block_type);
-
-				}
+				effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[block_type]);
+				if (--block_type == 0)block.erase(block.begin() + hit_stage.num);
+				else block[hit_stage.num].SetBlockType(block_type);
+			}
+		}
+		else
+		{
+			HIT_BOM hit_bom = HitBom(bc);
+			if (hit_bom.flg)bom[hit_bom.num].SetCanDelete(TRUE);
+			HIT_TREASURE hit_treasure = HitTreasure(bc);
+			if (hit_treasure.flg)
+			{
+				if (hit_treasure.treasure_type == TREASURE_TYPE::BOM)bom.emplace_back(treasure[hit_treasure.num].GetLocation(), DATA{ 0,0 });
+				treasure.erase(treasure.begin() + hit_treasure.num);
 			}
 		}
 		return TRUE;
@@ -347,7 +361,6 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 			}
 		}
 	}
-
 	return FALSE;
 }
 
@@ -358,7 +371,6 @@ bool Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type, int item_n
 		if (pickaxe == nullptr)pickaxe = new Pickaxe(location, speed, pickaxe_image, hit_pickaxe_se);
 		for (int i = 0; i < bom.size(); i++)bom[i].SetOldHit(FALSE);
 		for (int i = 0; i < treasure.size(); i++)treasure[i].SetOldHit(FALSE);
-		
 	}
 	else if (item_type == ITEM_TYPE::BOM)
 	{
@@ -368,7 +380,6 @@ bool Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type, int item_n
 			return TRUE;
 		}
 	}
-
 	return FALSE;
 }
 
@@ -387,21 +398,15 @@ void Stage::Sway()
 		if (GetRand(1000) == 0)
 		{
 			int block_type = static_cast<int>(block[i].GetBlockType());
-			int effect_image_type = 0;
-			if ((block_type >= 1) && (block_type <= 3))//ブロックが土だったら
+			if ((block_type > 0) && (block_type <= 3))//ブロックが土だったら
 			{
+				effect.emplace_back(block[i].GetLocation(), break_block_image[block_type]);
 				if (block_type == 1)
 				{
-					effect_image_type = 1;
-					effect.emplace_back(block[i].GetLocation(), break_block_image[effect_image_type]);
 					block.erase(block.begin() + i);
 					i--;
 				}
-				else
-				{
-					effect.emplace_back(block[i].GetLocation(), break_block_image[effect_image_type]);
-					block[i].SetBlockType(block_type - 1);
-				}
+				else block[i].SetBlockType(block_type - 1);
 			}
 		}
 	}

@@ -12,8 +12,13 @@ Bom::Bom(DATA location, DATA speed)
     this->location = location;
     this->speed = speed;
     throw_flg = TRUE;
-    if ((speed.x == 0) && (speed.y == 0))throw_flg = FALSE;
-    radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
+    radius = { 1,1 };
+    if ((speed.x == 0) && (speed.y == 0))
+    {
+        throw_flg = FALSE;
+        radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
+    }
+    
     image = LoadGraph("images/angrybom.png");
     blast_range_image = LoadGraph("images/wakuwaku.png");
     LoadDivGraph("images/bomnumber.png", 6, 6, 1, 14, 23, number_image);

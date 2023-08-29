@@ -51,14 +51,14 @@ protected:
 
     int back_ground_image[4];
     int falling_block_image;
-    int break_block_image[4][EFFECT_IMAGE_NUM];
+    int break_block_image[8][EFFECT_IMAGE_NUM];
     int explosion_image[EFFECT_IMAGE_NUM];
     int smoke_image[EFFECT_IMAGE_NUM];
-    int change_block_image[7][4];
+    int change_block_image[8][4];
     int pickaxe_image;
     int hit_pickaxe_se;
     int break_block_se;
-    int block_change_time;
+    int image_change_time;
     int image_type;
 
     void Init();
