@@ -26,6 +26,7 @@ private:
     int item_type;
     int item_num[3];
     Cursor* cursor;
+    bool clear;
 
     //ƒeƒXƒg
     
@@ -48,4 +49,5 @@ public:
     bool GetPlayerDie() { return die; }
     void SetPlayerDie(bool flg) { die = flg; }
     void Init();
+    void SetClear(bool flg) { clear = flg; }
 };

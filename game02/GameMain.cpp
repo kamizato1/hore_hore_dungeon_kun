@@ -13,7 +13,6 @@ GameMain::GameMain()
     player = new Player();
     ui = new Ui();
     pause = new Pause();
-    
     life = 3;
     Init();
 }
@@ -23,14 +22,14 @@ GameMain::~GameMain()
     delete player;
     delete stage;
     delete ui;
-    delete pause;
-    
+    delete pause; 
 }
 
 void GameMain::Init()
 {
     die = FALSE;
     stop = FALSE;
+    clear = FALSE;
     time = 0;
     remaining_time = TIME - (time / FPS);
     sway_width = 0;
@@ -51,20 +50,32 @@ void GameMain::Update(Key* key)
             ReStart();
         }
     }
-    if ((key->KeyDown(START)) && (!die))stop = !stop;
+
+    if (!clear)
+    {
+        bool flg = stage->HitFlag(player);
+        clear = flg;
+        player->SetClear(flg);
+    }
+
+    if ((key->KeyDown(START)) && (!die) && (!clear))stop = !stop;
 
     if (!stop)
     {
-        if(!die)time++;
-        remaining_time = TIME - (time / FPS);
         stage->Update();
         player->Update(key, stage);
 
-        Sway();
-
-        if ((remaining_time == 150) || (remaining_time == 100) || (remaining_time == 50) || (remaining_time == 0))
+        if (!clear)
         {
-            if (!sway_flg)sway_flg = TRUE;
+            if (!die)time++;
+            remaining_time = TIME - (time / FPS);
+
+            Sway();
+
+            if ((remaining_time == 150) || (remaining_time == 100) || (remaining_time == 50) || (remaining_time == 0))
+            {
+                if (!sway_flg)sway_flg = TRUE;
+            }
         }
     }
     else
@@ -90,10 +101,7 @@ void GameMain::Draw() const
 
     SetDrawBright(255, 255, 255);
 
-    if (stop)
-    {
-        pause->Draw();
-    }
+    if (stop) pause->Draw();
 }
 
 void GameMain::ReStart()

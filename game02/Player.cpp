@@ -39,6 +39,7 @@ void Player::Init()
     image_change_time = 0;
     item_set_time = 0;
     pickaxe_flg = TRUE;
+    clear = FALSE;
 }
 
 void Player::Update(Key* key, Stage* stage)
@@ -63,8 +64,8 @@ void Player::Update(Key* key, Stage* stage)
        DATA all_r_stick_angle_record_calculation = { 0,0 };
        DATA now_r_stick_angle, old_r_stick_angle;
 
-       now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);
-       now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);
+       now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);
+       now_r_stick_angle.y = (key->GetStickAngle(R).x / 50);
 
        for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
        {
@@ -135,6 +136,7 @@ void Player::MoveX(Key* key, Stage* stagebase)//‚wÀ•W‚ÌˆÚ“®
 
     if (key->GetStickAngle(L).x > 0)now_speed_x = PLAYER_SPEED;
     else if (key->GetStickAngle(L).x < 0)now_speed_x = -PLAYER_SPEED;
+    if (clear)now_speed_x = PLAYER_SPEED;
 
     for (int i = 0; i < L_STICK_ANGLE_RECORD_NUM; i++)
     {
@@ -143,11 +145,8 @@ void Player::MoveX(Key* key, Stage* stagebase)//‚wÀ•W‚ÌˆÚ“®
         now_speed_x = old_speed_x;
         all_speed_x_record_calculation += speed_x_record[i];
     }
-
     speed.x = (all_speed_x_record_calculation / L_STICK_ANGLE_RECORD_NUM);
-
     location.x += speed.x;
-
     if (stagebase->HitBlock(this).flg)
     {
         location.x = floor(location.x);
@@ -191,8 +190,7 @@ void Player::Draw(float camera_work) const
 {
     if (can_throw)
     {
-        int image_type = 0;
-        if((item_type == 1) || (item_num[item_type] == 0) || (item_type == 0 && !pickaxe_flg))image_type = 1;
+        //if((!item_type == 1) && (!item_num[item_type] == 0) && (item_type == 0 && !pickaxe_flg))
         float throw_speed_y = throw_speed.y;
         DATA throw_location = location;
         int count = 0;
@@ -203,8 +201,7 @@ void Player::Draw(float camera_work) const
             throw_location.y += throw_speed_y;
                 if (!(++count % 5))
                 {
-                    DrawRotaGraph(throw_location.x + camera_work, throw_location.y, 1, 0, answer_image[image_type], TRUE);
-                    //DrawCircle(throw_location.x + camera_work, throw_location.y, 3, 0xffffff, FALSE);
+                    DrawRotaGraph(throw_location.x + camera_work, throw_location.y, 1, 0, answer_image[0], TRUE);
                 }
         }
     }

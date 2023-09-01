@@ -62,6 +62,7 @@ protected:
     int break_block_se;
     int image_change_time;
     int image_type;
+    bool clear;
 
     void Init();
     KIRA_KIRA kira_kira[KIRA_KIRA_NUM];
@@ -82,6 +83,7 @@ public:
     HIT_STAGE HitBlock(BoxCollider* bc);
     HIT_TREASURE HitTreasure(BoxCollider* bc);
     HIT_BOM HitBom(BoxCollider* bc);
+    bool HitFlag(BoxCollider* bc);
 
     void DeleteTreasure(int num);
 

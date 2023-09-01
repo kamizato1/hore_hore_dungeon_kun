@@ -71,11 +71,12 @@ void Bom::Update(Stage* stagebase)
     }
 }
 
-bool Bom::HitExplosion(BoxCollider* bc)const
-{
-    bool flg = FALSE;
-    DATA radius = { EXPLOSION_SIZE / 2, EXPLOSION_SIZE / 2};
-    if (HitBox(bc, location, radius))flg = TRUE;
+bool Bom::HitExplosion(BoxCollider* bc)
+{  
+    radius = { EXPLOSION_SIZE / 2, EXPLOSION_SIZE / 2};
+    bool flg = HitBox(bc);
+    if(throw_flg)radius = { 1,1 };
+    else radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
     return flg;
 }
 

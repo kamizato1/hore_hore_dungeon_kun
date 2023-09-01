@@ -3,15 +3,14 @@
 
 Flag::Flag(DATA location)
 {
-    radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2 };
+    radius = { 10 ,10 };
     this->location = location;
     can_delete = FALSE;
     image = LoadGraph("images/flag.png");
 }
 
-void Flag::Update(BoxCollider* bc)
+void Flag::Update()
 {
-    if (HitBox(bc))can_delete = TRUE;
 }
 
 void Flag::Draw(float camera_work) const

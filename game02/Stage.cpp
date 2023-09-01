@@ -35,6 +35,7 @@ Stage::Stage()
 	pickaxe = nullptr;
 	image_change_time = IMAGE_CHANGE_TIME;
 	image_type = 0;
+	clear = FALSE;
 }
 
 Stage::~Stage()
@@ -71,7 +72,7 @@ void Stage::Init()
 
 	int break_block_image[80];
 	count = 0;
-	LoadDivGraph("images/breakblock.png", 80, 10, 8, 216, 216, break_block_image);
+	LoadDivGraph("images/breakblock3.png", 80, 10, 8, 250, 250, break_block_image);
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)this->break_block_image[i][j] = break_block_image[count++];
@@ -185,7 +186,7 @@ void Stage::Draw1(float camera_work) const
 	DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
 	DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
 	DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
-	flag->Draw(camera_work);
+	if(flag != nullptr)flag->Draw(camera_work);
 	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work);
 	for (int i = 0; i < block.size(); i++)block[i].Draw(camera_work);
 }
@@ -242,6 +243,18 @@ HIT_TREASURE Stage::HitTreasure(BoxCollider* bc)
 		}
 	}
 	return hit_treasure;
+}
+
+bool Stage::HitFlag(BoxCollider* bc)
+{
+	bool flg = FALSE;
+	if (flag != nullptr)
+	{
+		flg = (flag->HitBox(bc));
+		clear = flg;
+		if(flg)flag = nullptr;
+	}
+	return flg;
 }
 
 void Stage::DeleteTreasure(int num)

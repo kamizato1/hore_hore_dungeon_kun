@@ -1,8 +1,8 @@
+#include"DxLib.h"
 #include "StageSelect.h"
 
-
 //操作受付時間
-#define TIME 60
+#define TIME 30
 
 //スティックの感度
 #define SENSITIVITY 1000
@@ -12,7 +12,7 @@
 //-----------------------------------
 StageSelect::StageSelect()
 {
-	image = 0;
+	image = LoadGraph("images/stageselect.png");
 	stage_number = 0;
 	operating_time = 0;
 	transition = false;
@@ -35,31 +35,20 @@ StageSelect::~StageSelect()
 void StageSelect::Update(Key* key)
 {
 	//スティックを動かしたら
-	if (key->GetStickAngle(L).x > 0 || key->GetStickAngle(L).x < 0)
-	{
-		++operating_time;
-	}
+	if (key->GetStickAngle(L).x == 0)operating_time = TIME;
+	else operating_time++;
 
 	//操作受け
-	if (operating_time > TIME)
+	if (operating_time >= TIME)
 	{
-		if (key->GetStickAngle(L).x > SENSITIVITY)
+		if (key->GetStickAngle(L).x > 0)
 		{
-
-			if (++stage_number > 3)
-			{
-				stage_number = 0;
-			}
-
+			if (++stage_number > 3)stage_number = 0;
 			operating_time = 0;
 		}
-		else if(key->GetStickAngle(L).x < -SENSITIVITY)
+		else if(key->GetStickAngle(L).x < 0)
 		{
-			if (--stage_number < 0)
-			{
-				stage_number = 3;
-			}
-
+			if (--stage_number < 0)stage_number = 3;
 			operating_time = 0;
 		}
 	}
@@ -70,7 +59,8 @@ void StageSelect::Update(Key* key)
 //-----------------------------------
 void StageSelect::Draw() const
 {
-	//DrawGraph(0, 0, image, false);
+	DrawRotaGraph(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1, 0, image, TRUE);
+	DrawFormatString(0, 0, 0xffffff, "%d", stage_number);
 }
 
 //-----------------------------------

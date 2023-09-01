@@ -28,7 +28,7 @@ public:
 
     void Update(class Stage* stagebase);
     void Draw(float camera_work) const;
-    bool HitExplosion(BoxCollider* bc)const;
+    bool HitExplosion(BoxCollider* bc);
     bool GetCanDelete() { return can_delete; }
     void SetCanDelete(bool flg) { can_delete = flg; }
 

@@ -10,6 +10,7 @@ private:
     int image;
     int cursor_sign_x;
     int cursor_sign_y;
+    bool hit_player;
 
 public:
 

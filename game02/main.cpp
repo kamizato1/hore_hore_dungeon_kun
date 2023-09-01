@@ -8,6 +8,7 @@
 #include"GameMain.h"
 #include"SceneManager.h"
 #include"GameOver.h"
+#include"StageSelect.h"
 #include"define.h"
 
 
@@ -35,7 +36,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     
     SetDrawScreen(DX_SCREEN_BACK);	// •`‰ææ‰æ–Ê‚ğ— ‚É‚·‚é
-
     SetFontSize(20);		// •¶šƒTƒCƒY‚ğİ’è
 
     SceneManager* sceneMng = new SceneManager(new GameMain());

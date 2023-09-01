@@ -14,7 +14,7 @@ private:
 public:
 
     Flag(DATA location);
-    void Update(BoxCollider* bc);
+    void Update();
     void Draw(float camera_work) const;
     bool GetCanDelete() { return can_delete; }
 };

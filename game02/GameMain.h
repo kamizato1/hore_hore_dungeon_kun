@@ -14,7 +14,7 @@ private:
 
     bool stop;
     bool sway_flg;
-    bool die;
+    bool die, clear;
 
     Stage* stage;
     Player* player;

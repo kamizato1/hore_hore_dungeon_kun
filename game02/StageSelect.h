@@ -1,14 +1,10 @@
 #pragma once
 #include "AbstractScene.h"
 
-
 //ステージセレクト画面について（３ステージ）
 //New スーパーマリオブラザーズのステージ選択画面を参考にする。
 
-
-
-class StageSelect :
-    public AbstractScene
+class StageSelect : public AbstractScene
 {
 private:
 
@@ -20,6 +16,7 @@ private:
 
     //背景画像
     int image;
+    int player_image;
 
     //カーソルの座標
     float cursor_x;

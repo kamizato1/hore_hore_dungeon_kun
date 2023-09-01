@@ -11,7 +11,6 @@ private:
 	DATA font_location[FONT_NUM];
 	int font_image[FONT_NUM];
 	int back_ground_image;
-	int font_angle[FONT_NUM];
 
 public:
 
