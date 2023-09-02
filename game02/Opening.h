@@ -11,8 +11,11 @@ private:
     //アニメーション時間
     int animation_time;
 
+    //表示時間
+    int display_time;
+
     //画像   
-    int image[4];
+    int image[5];
 
     //次のシーンに行けるのか
     bool can_scene_change;

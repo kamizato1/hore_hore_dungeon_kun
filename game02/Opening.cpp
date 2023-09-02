@@ -4,7 +4,11 @@
 
 Opening::Opening()
 {
-	image[0] = LoadGraph("images/opening.png");
+	image[0] = LoadGraph("images/Opening/†Å‹1.png");
+	image[1] = LoadGraph("images/Opening/†Å‹3.png");
+	image[2] = LoadGraph("images/Opening/†Å‹4.png");
+	image[3] = LoadGraph("images/Opening/†Å‹2.png");
+	image[4] = LoadGraph("images/Opening/†Å‹5.png");
 
 	animation = 0;
 	animation_time = 0;
