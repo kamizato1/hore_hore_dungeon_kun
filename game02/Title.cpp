@@ -148,7 +148,7 @@ AbstractScene* Title::ChangeScene()
 		switch (select_menu)
 		{
 		case 0: //ƒQ[ƒ€ƒƒCƒ“‚É‘JˆÚ
-			return new GameMain();
+			//return new GameMain();
 			break;
 		case 1:
 			//return new herupu

@@ -1,20 +1,23 @@
 #include"DxLib.h"
 #include"Stage.h"
 
-#define IMAGE_CHANGE_TIME 7
+#define IMAGE_CHANGE_TIME 8
 
-Stage::Stage()
+Stage::Stage(int stage_num, int stage_width)
 {
 	Init();
 
+	char stage_data[3][50] = { "data/stage/stage01.txt", "data/stage/stage01.txt","data/stage/stage01.txt" };
+	char treasure_data[3][50] = { "data/stage/treasure01.txt", "data/stage/treasure01.txt","data/stage/treasure01.txt" };
+
 	FILE* fp_s;//ステージ１ファイル読み込み
 	FILE* fp_t;//アイテム１ファイル読み込み
-	fopen_s(&fp_s, "data/stage/stage01.txt", "r");
-	fopen_s(&fp_t, "data/stage/treasure01.txt", "r");
+	fopen_s(&fp_s, stage_data[stage_num], "r");
+	fopen_s(&fp_t, treasure_data[stage_num], "r");
 
 	for (int i = 0; i < STAGE_BLOCK_NUM_Y; i++)
 	{
-		for (int j = 0; j < STAGE_BLOCK_NUM_X; j++)
+		for (int j = 0; j < stage_width; j++)
 		{
 			int block_type, treasure_type;
 			fscanf_s(fp_s, "%d", &block_type);

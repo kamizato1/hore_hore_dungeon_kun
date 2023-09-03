@@ -70,7 +70,7 @@ protected:
    
 public:
 
-    Stage();
+    Stage(int stage_num, int stage_width);
     ////デストラクタ
     ~Stage();
 

@@ -21,6 +21,7 @@ private:
     Ui* ui;
     Pause* pause;
 
+    int max_scroll;
     int life, time, remaining_time;
     float sway_width, sway_size;
     float max_sway_width;
@@ -31,7 +32,7 @@ private:
 
 public:
 
-    GameMain();
+    GameMain(int stage_num, int stage_width);
     ~GameMain();
 
     //•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é
