@@ -46,6 +46,11 @@ void Opening::Update(Key* key)
 		++story_no;
 	}
 
+	/*if (key->KeyDown(A))
+	{
+		display_time =display_time+10;
+	}*/
+
 	////Œo‰ßŽžŠÔ‘ª’è
 	/*if (time % 60 == 0)
 	{
@@ -79,6 +84,16 @@ void Opening::Draw() const
 	DrawRotaGraph(640, 360, 1, 0, animation_image[5], true);
 
 	DrawRotaGraph(640, 360, 1, 0, animation_image[2], true);
+
+	DrawRotaGraph(640, 360, 1, 0, animation_image[6], true);
+
+	DrawRotaGraph(640, 360, 1, 0, animation_image[4], true);
+
+	DrawRotaGraph(640, 360, 1, 0, animation_image[1], true);
+
+	DrawRotaGraph(640, 360, 1, 0, animation_image[0], true);
+
+
 
 	DrawFormatString(200, 400, 0xffffff, "%d", story_no);*/
 
