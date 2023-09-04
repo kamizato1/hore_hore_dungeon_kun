@@ -1,5 +1,8 @@
 #pragma once
 #include "AbstractScene.h"
+
+#define TREASURE_NUM 3
+
 class Result : public AbstractScene
 {
 private:
@@ -13,6 +16,8 @@ private:
     float score_image_size;
     float score_image_angle;
     float move_back_ground_image[3];
+
+    int treasure_num[TREASURE_NUM];
 
     bool end_move_score;
 
