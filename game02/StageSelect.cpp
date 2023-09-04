@@ -1,5 +1,6 @@
 #include"DxLib.h"
 #include "StageSelect.h"
+#include "GameMain.h"
 
 //操作受付時間
 #define TIME 30
@@ -12,13 +13,24 @@
 //-----------------------------------
 StageSelect::StageSelect()
 {
-	image = LoadGraph("images/stageselect.png");
+	back_ground_image = LoadGraph("images/StageSelect/stageselect1.png");
+	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
 	stage_number = 0;
 	operating_time = 0;
 	transition = false;
 	cursor_x = 0;
 	cursor_y = 0;
 
+	FILE* fp_s;//スコアファイル読み込み
+	FILE* fp_w;//スコアファイル読み込み
+	fopen_s(&fp_s, "data/hiscore.txt", "r");
+	fopen_s(&fp_w, "data/stagewidth.txt", "r");
+	for (int i = 0; i < STAGE_NUM; i++)
+	{
+		fscanf_s(fp_s, "%d", &stage_score[i]);
+		fscanf_s(fp_w, "%d", &stage_width[i]);
+	}
+	fclose(fp_s);
 }
 
 //-----------------------------------
@@ -43,15 +55,17 @@ void StageSelect::Update(Key* key)
 	{
 		if (key->GetStickAngle(L).x > 0)
 		{
-			if (++stage_number > 3)stage_number = 0;
+			if (++stage_number > 2)stage_number = 0;
 			operating_time = 0;
 		}
 		else if(key->GetStickAngle(L).x < 0)
 		{
-			if (--stage_number < 0)stage_number = 3;
+			if (--stage_number < 0)stage_number = 2;
 			operating_time = 0;
 		}
 	}
+
+	if (key->KeyDown(B))transition = TRUE;
 }
 
 //-----------------------------------
@@ -59,8 +73,31 @@ void StageSelect::Update(Key* key)
 //-----------------------------------
 void StageSelect::Draw() const
 {
-	DrawRotaGraph(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1, 0, image, TRUE);
-	DrawFormatString(0, 0, 0xffffff, "%d", stage_number);
+	DrawRotaGraph(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1, 0, back_ground_image, TRUE);
+
+	int score_keta = 1000000;
+	int stage_keta = 10;
+	int cnt = 0;
+	int score = stage_score[stage_number];
+	int stage_number = this->stage_number + 1;
+
+	while (score_keta > 0)
+	{
+		//スコア表示
+		int image_type = (score / score_keta);
+		DrawRotaGraph(680 + (cnt * 50), 630, 1, 0, number_image[image_type], TRUE);
+		score -= (image_type * score_keta);
+		score_keta = (score_keta / 10);
+		//ステージ数表示
+		if (stage_keta > 0)
+		{
+			image_type = (stage_number / stage_keta);
+			DrawRotaGraph(450 + (cnt * 50), 160, 1, 0, number_image[image_type], TRUE);
+			stage_number -= (image_type * stage_keta);
+			stage_keta = (stage_keta / 10);
+		}
+		cnt++;
+	}
 }
 
 //-----------------------------------
@@ -71,7 +108,7 @@ AbstractScene* StageSelect::ChangeScene()
 	//次の画面に遷移するのか
 	if (transition)
 	{
-		return this; //コンストラクタで指定する予定
+		return new GameMain(stage_number, stage_width[stage_number]);
 	}
 
 	return this;

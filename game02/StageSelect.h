@@ -1,6 +1,8 @@
 #pragma once
 #include "AbstractScene.h"
 
+#define STAGE_NUM 3
+
 //ステージセレクト画面について（３ステージ）
 //New スーパーマリオブラザーズのステージ選択画面を参考にする。
 
@@ -8,14 +10,14 @@ class StageSelect : public AbstractScene
 {
 private:
 
-    //現在選択中のステージ番号
-    int stage_number;
+    int stage_number;//現在選択中のステージ番号
+    int stage_score[STAGE_NUM];
+    int stage_width[STAGE_NUM];
+    int number_image[10];
 
-    //操作受付
-    int operating_time;
+    int operating_time;//操作受付
 
-    //背景画像
-    int image;
+    int back_ground_image;//背景画像
     int player_image;
 
     //カーソルの座標

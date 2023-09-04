@@ -7,13 +7,14 @@
 #define MAX_SWAY_WIDTH 5
 #define SWAY_SIZE 0.5
 
-GameMain::GameMain()
+GameMain::GameMain(int stage_num, int stage_width)
 {
-    stage = new Stage();
+    stage = new Stage(stage_num, stage_width);
     player = new Player();
     ui = new Ui();
     pause = new Pause();
     life = 3;
+    max_scroll = stage_width - 4;
     Init();
 }
 
@@ -88,7 +89,7 @@ void GameMain::Draw() const
 {
     float camera_work = 0;
     if (player->GetLocation().x >= 350)camera_work = -player->GetLocation().x + 350;
-    if (camera_work <= -(BLOCK_SIZE_X * 100) + SCREEN_WIDTH)camera_work = -(BLOCK_SIZE_X * 100) + SCREEN_WIDTH;
+    if (camera_work <= -(BLOCK_SIZE_X * max_scroll) + SCREEN_WIDTH)camera_work = -(BLOCK_SIZE_X * max_scroll) + SCREEN_WIDTH;
     camera_work += sway_width;
 
     if (die)SetDrawBright(screen_brightness, screen_brightness, screen_brightness);

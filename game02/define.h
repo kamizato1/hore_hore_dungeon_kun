@@ -7,7 +7,6 @@
 
 #define KEY_NUM 11
 
-#define STAGE_BLOCK_NUM_X 104
 #define STAGE_BLOCK_NUM_Y 20
 
 #define BLOCK_SIZE_X 36

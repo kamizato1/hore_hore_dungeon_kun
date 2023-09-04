@@ -20,25 +20,10 @@ Result::Result(int block_break, int time, int item_block)
 	transition = false;
 	end_move_score = false;
 
-	int block = 0;//アイテム（ブロック）
-
-	//アイテムのブロックの数が0だったらブロックの数を１に変更
-	if (item_block == 0)block = 1;
-	else block = item_block;
-	
-	//スコア計算
-	//残りブロック＊時間
-	score = block * time;
-
-	//壊したブロックの数*(調整中)
-	score = 18000;
-	//score += 20 * block_break;
-
-//-----------------------------------
-// 宝のスコアについて（思考中）
-// 
-// カギ 
-//-----------------------------------
+	treasure_num[0] = 18;
+	treasure_num[1] = 3;
+	treasure_num[2] = 33;
+	score = 0000000;
 	
 }
 
@@ -68,8 +53,8 @@ void Result::MoveScore()
 {
 	if (score_image_size > 0.8)
 	{
-		score_image_size -= 0.3;
-		score_image_angle += 0.5;
+		score_image_size -= 0.2;
+		score_image_angle += 0.4;
 	}
 	else
 	{
@@ -93,14 +78,14 @@ void Result::Draw() const
 
 	DrawRotaGraph(640, 360, 1,0,map_image, TRUE);
 
-	int digit = 100000;
+	int digit = 1000000;
 	int count = 0;
 	int score = this->score;
 
 	while (digit > 0)
 	{
 		int image_type = (score / digit);
-		DrawRotaGraph(470 + (count * 70), 250, 0.4, 0, number_image[image_type], TRUE);
+		DrawRotaGraph(430 + (count * 70), 250, 0.4, 0, number_image[image_type], TRUE);
 		score -= (image_type * digit);
 		digit = (digit / 10);
 		count++;
