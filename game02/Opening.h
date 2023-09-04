@@ -14,8 +14,17 @@ private:
     //表示時間
     int display_time;
 
+    //経過時間
+    int time;
+
+    //現在の紙芝居
+    int story_no;
+
     //画像   
     int image[5];
+
+    //アニメーション画像
+    int animation_image[7];
 
     //次のシーンに行けるのか
     bool can_scene_change;
