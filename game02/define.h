@@ -1,5 +1,7 @@
 #pragma once
 
+#define STAGE_NUM 3
+
 #define FPS 60
 
 #define SCREEN_WIDTH 1280
@@ -13,6 +15,7 @@
 #define BLOCK_SIZE_Y 36
 
 #define ITEM_TYPE_NUM 3
+#define TREASURE_TYPE_NUM 4
 
 #define GRAVITY_POWER 0.3
 
@@ -48,9 +51,10 @@ enum class ITEM_TYPE
 
 enum class TREASURE_TYPE
 {
-    KEY,
-    BAG,
     BOM,
+    JEWEL1,
+    JEWEL2,
+    JEWEL3
 };
 
 enum class BLOCK_TYPE

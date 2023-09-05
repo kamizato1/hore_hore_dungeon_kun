@@ -39,6 +39,7 @@ Stage::Stage(int stage_num, int stage_width)
 	image_change_time = IMAGE_CHANGE_TIME;
 	image_type = 0;
 	clear = FALSE;
+	break_block_num = 0;
 }
 
 Stage::~Stage()
@@ -91,6 +92,7 @@ void Stage::Init()
 
 void Stage::Update()
 {
+	break_block_num = 0;
 	if (--image_change_time < 0)
 	{
 		if (++image_type > 3)image_type = 0;
@@ -236,7 +238,7 @@ HIT_BOM Stage::HitBom(BoxCollider* bc)
 
 HIT_TREASURE Stage::HitTreasure(BoxCollider* bc)
 {
-	HIT_TREASURE hit_treasure = { FALSE, 0, TREASURE_TYPE::KEY };
+	HIT_TREASURE hit_treasure = { FALSE, 0, TREASURE_TYPE::BOM };
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		if (treasure[i].HitBox(bc))
@@ -293,7 +295,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 			if ((block_type > 0) && (block_type <= 5))//壊せるブロックなら
 			{
 				int image_type = block_type;
-				if (block_type < 4)image_type = 1;
+				if (block_type < 4)image_type = 1, break_block_num++;
 				effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
 				block.erase(block.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
@@ -308,8 +310,11 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 {
 	if (bc->GetLocation().y > SCREEN_HEIGHT)return FALSE;
-	if ((item_num == 0) && (item_type != ITEM_TYPE::PICKAXE))return FALSE;
-	if ((pickaxe != nullptr) && (item_type == ITEM_TYPE::PICKAXE))return FALSE;
+	if (item_type == ITEM_TYPE::PICKAXE)
+	{
+		if (pickaxe != nullptr)return FALSE;
+	}
+	else if (item_num == 0)return FALSE;
 
 	HIT_STAGE hit_stage = HitBlock(bc);
 	int block_type = static_cast<int>(hit_stage.block_type);
@@ -321,7 +326,11 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 			if ((block_type > 0) && (block_type < 4))//ブロックが土だったら
 			{
 				effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[block_type]);
-				if (--block_type == 0)block.erase(block.begin() + hit_stage.num);
+				if (--block_type == 0)
+				{
+					block.erase(block.begin() + hit_stage.num);
+					return TRUE;
+				}
 				else block[hit_stage.num].SetBlockType(block_type);
 			}
 		}
@@ -336,11 +345,10 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 				treasure.erase(treasure.begin() + hit_treasure.num);
 			}
 		}
-		return TRUE;
 	}
 	else if (item_type == ITEM_TYPE::BLOCK)
 	{
-		if ((!hit_stage.flg)/* && (hit_stage.block_type != BLOCK_TYPE::NONE)*/)
+		if (!hit_stage.flg)
 		{
 			if ((!HitTreasure(bc).flg) && (!HitBom(bc).flg))
 			{
@@ -351,7 +359,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 	}
 	else
 	{
-		if ((!hit_stage.flg)/* && (hit_stage.block_type != BLOCK_TYPE::NONE)*/)
+		if (!hit_stage.flg)
 		{
 			if ((!HitTreasure(bc).flg) && (!HitBom(bc).flg))
 			{

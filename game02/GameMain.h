@@ -26,6 +26,7 @@ private:
     float sway_width, sway_size;
     float max_sway_width;
     int screen_brightness;
+    int stage_num;
 
     void ReStart();
     void Init();

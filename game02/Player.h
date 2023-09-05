@@ -14,7 +14,7 @@ class Player : public BoxCollider
 private:
 
     int image[4];
-    int item_image[3];
+    int item_image[ITEM_TYPE_NUM];
     int answer_image[2];
     int item_set_time;
     bool pickaxe_flg;
@@ -24,7 +24,9 @@ private:
     DATA r_stick_angle_record[R_STICK_ANGLE_RECORD_NUM];
     float speed_x_record[L_STICK_ANGLE_RECORD_NUM];
     int item_type;
-    int item_num[3];
+    int item_num[ITEM_TYPE_NUM];
+    int treasure_num[TREASURE_TYPE_NUM];
+    int break_block_num;
     Cursor* cursor;
     bool clear;
 
@@ -50,4 +52,5 @@ public:
     void SetPlayerDie(bool flg) { die = flg; }
     void Init();
     void SetClear(bool flg) { clear = flg; }
+    int* GetTreasureNum() { return treasure_num; }
 };

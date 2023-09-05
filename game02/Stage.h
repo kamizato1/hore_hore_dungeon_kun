@@ -62,6 +62,7 @@ protected:
     int break_block_se;
     int image_change_time;
     int image_type;
+    int break_block_num;
     bool clear;
 
     void Init();
@@ -93,4 +94,5 @@ public:
     bool ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type, int item_num);
     void Sway();
     bool GetPickaxeFlg();
+    int GetBreakBlockNum() { return break_block_num; }
 };

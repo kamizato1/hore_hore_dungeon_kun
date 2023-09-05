@@ -6,8 +6,8 @@ Treasure::Treasure(DATA location, int type)
     radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2 };
     this->location = location;
     this->type = static_cast<TREASURE_TYPE>(type);
-    int image[3];
-    LoadDivGraph("images/treasure1.png", 3, 3, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
+    int image[TREASURE_TYPE_NUM];
+    LoadDivGraph("images/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
     this->image = image[type];
     old_hit = FALSE;
     can_delete = FALSE;
