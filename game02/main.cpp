@@ -38,7 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     SetDrawScreen(DX_SCREEN_BACK);	// •`‰ææ‰æ–Ê‚ð— ‚É‚·‚é
     SetFontSize(20);		// •¶ŽšƒTƒCƒY‚ðÝ’è
 
-    SceneManager* sceneMng = new SceneManager(new StageSelect());
+    SceneManager* sceneMng = new SceneManager(new Opening());
     Key* key = new Key();
 
     while ((ProcessMessage() == 0) && (sceneMng->GetNowScene() != nullptr))
