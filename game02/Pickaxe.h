@@ -2,6 +2,7 @@
 
 #include"BoxCollider.h"
 #include"Stage.h"
+#include"Player.h"
 #include"define.h"
 
 class Pickaxe : public BoxCollider
@@ -21,7 +22,7 @@ public:
 
     Pickaxe(DATA location, DATA speed, int image, int se);
 
-    void Update(class Stage* stagebase);
+    void Update(class Stage* stage);
     void Draw(float camera_work) const;
 
     bool GetCanDelete() { return can_delete; }

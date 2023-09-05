@@ -2,6 +2,7 @@
 #include"GameMain.h"
 #include"Title.h"
 #include"Stage.h"
+#include"Result.h"
 
 #define TIME 200
 #define MAX_SWAY_WIDTH 5
@@ -157,6 +158,8 @@ AbstractScene* GameMain::ChangeScene()
             }
        }
     }
+
+    if (clear)return new Result(stage_num, player->GetTreasureNum());
 
     return this;
 }

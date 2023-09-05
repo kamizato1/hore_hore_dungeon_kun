@@ -1,8 +1,6 @@
 #pragma once
 #include "AbstractScene.h"
 
-#define STAGE_NUM 3
-
 //ステージセレクト画面について（３ステージ）
 //New スーパーマリオブラザーズのステージ選択画面を参考にする。
 

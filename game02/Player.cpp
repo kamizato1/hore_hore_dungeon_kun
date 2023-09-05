@@ -13,17 +13,15 @@
 Player::Player()
 {
     Init();
-    for (int i = 0; i < 3; i++)item_num[i] = 999;
-    LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, image);
-    LoadDivGraph("images/marubatu1.png", 2, 2, 1, 20, 20, answer_image);
-    item_image[0] = LoadGraph("images/tsuruhashi.png");
-    item_image[1] = LoadGraph("images/angrybom.png");
-    item_image[2] = LoadGraph("images/angrybom.png");
+    for (int i = 0; i < ITEM_TYPE_NUM; i++)item_num[i] = 0;
+    for(int i = 0; i < TREASURE_TYPE_NUM; i++)treasure_num[i] = 0;
+    LoadDivGraph("images/Player/player.png", 4, 4, 1, 30, 30, image);
+    LoadDivGraph("images/Player/marubatu1.png", 2, 2, 1, 20, 20, answer_image);
+    LoadDivGraph("images/Player/item.png", ITEM_TYPE_NUM, ITEM_TYPE_NUM, 1, 50, 50, item_image);
 }
 
 void Player::Init()
 {
-
     location = { 55, 500 };
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
@@ -40,6 +38,7 @@ void Player::Init()
     item_set_time = 0;
     pickaxe_flg = TRUE;
     clear = FALSE;
+    break_block_num = 0;
 }
 
 void Player::Update(Key* key, Stage* stage)
@@ -51,19 +50,9 @@ void Player::Update(Key* key, Stage* stage)
        MoveX(key, stage);
        MoveY(key, stage);
 
-       HIT_TREASURE hit_treasure = stage->HitTreasure(this);
-
-       if (hit_treasure.flg)
-       {
-           stage->DeleteTreasure(hit_treasure.num);
-           item_num[static_cast<int>(hit_treasure.treasure_type)]++;
-       }
-
        //Ç±Ç±Ç©ÇÁâ∫Å´Ç¬ÇÈÇÕÇµÇìäÇ∞ÇÈÇ∆Ç´ÇÃèàóù
-
        DATA all_r_stick_angle_record_calculation = { 0,0 };
        DATA now_r_stick_angle, old_r_stick_angle;
-
        now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);
        now_r_stick_angle.y = (key->GetStickAngle(R).x / 50);
 
@@ -96,34 +85,51 @@ void Player::Update(Key* key, Stage* stage)
            }
        }
 
-       if (item_set_time != 0)
+       if (--item_set_time < 0)item_set_time = 0;
+
+       if (item_set_time == 0)
        {
-           if (++item_set_time > ITEM_SET_TIME)item_set_time = 0;
+           if (key->KeyDown(L))
+           {
+               if (can_throw)
+               {
+                   if (stage->ThrowItem(location, throw_speed, static_cast<ITEM_TYPE>(item_type), item_num[item_type]))
+                   {
+                       item_num[item_type]--;
+                       item_set_time = ITEM_SET_TIME;
+                   }
+               }
+           }
+           else if (key->KeyDown(R))
+           {
+               if (stage->PutItem(cursor, static_cast<ITEM_TYPE>(item_type), item_num[item_type]))
+               {
+                   if (item_type == 0)break_block_num++;
+                   else
+                   {
+                       item_num[item_type]--;
+                       item_set_time = ITEM_SET_TIME;
+                   }
+               }
+               if (item_type == 0)item_set_time = ITEM_SET_TIME;
+           }
        }
 
        pickaxe_flg = stage->GetPickaxeFlg();
 
-       if (key->KeyDown(L))
+       break_block_num += stage->GetBreakBlockNum();
+       if (break_block_num >= 50)
        {
-           if ((can_throw) && (item_set_time == 0))
-           {
-               if (stage->ThrowItem(location, throw_speed, static_cast<ITEM_TYPE>(item_type), item_num[item_type]))
-               {
-                   item_num[item_type]--;
-                   item_set_time++;
-               }
-           }
+           item_num[1] += (break_block_num / 50);
+           break_block_num -= (break_block_num / 50) * 50;
        }
-       else if (key->KeyDown(R))
+       treasure_num[0] = item_num[1];
+       HIT_TREASURE hit_treasure = stage->HitTreasure(this);
+       if (hit_treasure.flg)
        {
-           if (item_set_time == 0)
-           {
-               if (stage->PutItem(cursor, static_cast<ITEM_TYPE>(item_type), item_num[item_type]))
-               {
-                   item_num[item_type]--;
-                   item_set_time++;
-               }
-           }
+           stage->DeleteTreasure(hit_treasure.num);
+           if (hit_treasure.treasure_type == TREASURE_TYPE::BOM)item_num[static_cast<int>(ITEM_TYPE::BOM)]++;
+           else treasure_num[static_cast<int>(hit_treasure.treasure_type)]++;
        }
    }
 }
@@ -163,7 +169,6 @@ void Player::MoveX(Key* key, Stage* stagebase)//Çwç¿ïWÇÃà⁄ìÆ
         if (speed.x > 0)direction = -1;
         else direction = 1;
     }
-
 }
 
 void Player::MoveY(Key* key, Stage* stagebase)//Çxç¿ïWÇÃà⁄ìÆ
@@ -190,39 +195,34 @@ void Player::Draw(float camera_work) const
 {
     if (can_throw)
     {
-        //if((!item_type == 1) && (!item_num[item_type] == 0) && (item_type == 0 && !pickaxe_flg))
         float throw_speed_y = throw_speed.y;
         DATA throw_location = location;
         int count = 0;
         while (throw_location.y < SCREEN_HEIGHT)
         {
-            throw_location.x += throw_speed.x;
             throw_speed_y += GRAVITY_POWER;
             throw_location.y += throw_speed_y;
-                if (!(++count % 5))
-                {
-                    DrawRotaGraph(throw_location.x + camera_work, throw_location.y, 1, 0, answer_image[0], TRUE);
-                }
+            throw_location.x += throw_speed.x;
+            if ((++count % 5) == 0) DrawRotaGraph(throw_location.x + camera_work, throw_location.y, 1, 0, answer_image[0], TRUE);
         }
     }
-
     cursor->Draw(camera_work);
     DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image[image_type], TRUE, direction);
+
     if (item_type == 0)
     {
-        if (pickaxe_flg)
-        {
-            int angle = (direction * 30) + ((item_set_time * 10) * -direction);
-            DrawRotaGraph(location.x + camera_work + (direction * 5), location.y, 1, (M_PI / 180) * angle, item_image[item_type], TRUE);
-        }
+        int angle = (direction * 30) + ((item_set_time * 10) * -direction);
+        if (pickaxe_flg)DrawRotaGraph(location.x + camera_work + (direction * 4), location.y, 1, (M_PI / 180) * angle, item_image[item_type], TRUE);
     }
     else if ((item_set_time == 0) && (item_num[item_type] != 0))
     {
-        DrawRotaGraph(location.x + camera_work + (direction * 10), location.y, 0.8, 0, item_image[item_type], TRUE);
+        DrawRotaGraph(location.x + camera_work + (direction * 13), location.y, 0.6, (0.3 * direction), item_image[item_type], TRUE);
     }
 
     if (item_type == 1)DrawString(0, 60, "ÉuÉçÉbÉN", 0xffffff);
     else if(item_type == 2)DrawString(0, 60, "îöíe", 0xffffff);
     else DrawString(0, 60, "Ç¬ÇÈÇÕÇµ", 0xffffff);
     DrawFormatString(0, 100, 0xffffff, "%d", item_num[item_type]);
+    DrawFormatString(0, 160, 0xffffff, "%d",break_block_num);
+    DrawFormatString(0, 190, 0xffffff, "%d, %d, %d, %d", treasure_num[0], treasure_num[1], treasure_num[2], treasure_num[3]);
 }
