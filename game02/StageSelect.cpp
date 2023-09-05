@@ -11,12 +11,12 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-StageSelect::StageSelect()
+StageSelect::StageSelect(int stage_num)
 {
 	back_ground_image = LoadGraph("images/StageSelect/stageselect1.png");
 	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
 	LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, player_image);
-	stage_number = 0;
+	stage_number = stage_num;
 	operating_time = 0;
 	transition = false;
 	cursor_x = 0;
@@ -68,7 +68,7 @@ void StageSelect::Update(Key* key)
 		}
 	}
 
-	//if (key->KeyDown(B))transition = TRUE;
+	if (key->KeyDown(B))transition = TRUE;
 
 	if (key->KeyPressed(RIGHT))
 	{
@@ -93,7 +93,7 @@ void StageSelect::Update(Key* key)
 //-----------------------------------
 void StageSelect::Draw() const
 {
-	DrawRotaGraph(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1, 0, back_ground_image, TRUE);
+	DrawRotaGraph(640, 360, 1, 0, back_ground_image, TRUE);
 
 	int score_keta = 1000000;
 	int stage_keta = 10;

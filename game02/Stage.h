@@ -63,8 +63,7 @@ protected:
     int image_change_time;
     int image_type;
     int break_block_num;
-    bool clear;
-
+    
     void Init();
     KIRA_KIRA kira_kira[KIRA_KIRA_NUM];
     int kira_kira_image[4];

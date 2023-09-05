@@ -22,7 +22,7 @@ Player::Player()
 
 void Player::Init()
 {
-    location = { 55, 500 };
+    location = { 50, 669 };
     radius = { PLAYER_SIZE_X / 2, PLAYER_SIZE_Y / 2 };
     speed = { 0,0 };
     throw_speed = { 0,0 };
@@ -47,6 +47,8 @@ void Player::Update(Key* key, Stage* stage)
 
    if(!die)
    {
+       clear = stage->HitFlag(this);
+
        MoveX(key, stage);
        MoveY(key, stage);
 
@@ -87,7 +89,7 @@ void Player::Update(Key* key, Stage* stage)
 
        if (--item_set_time < 0)item_set_time = 0;
 
-       if (item_set_time == 0)
+       if ((item_set_time == 0) && (!clear))
        {
            if (key->KeyDown(L))
            {
