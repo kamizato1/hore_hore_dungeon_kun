@@ -1,5 +1,6 @@
 #include"DxLib.h"
 #include"Title.h"
+#include"StageSelect.h"
 #include"GameMain.h"
 
 #define  INPUT_ACCEPTANCE_TIME 10
@@ -148,7 +149,7 @@ AbstractScene* Title::ChangeScene()
 		switch (select_menu)
 		{
 		case 0: //ƒQ[ƒ€ƒƒCƒ“‚É‘JˆÚ
-			//return new GameMain();
+			return new StageSelect();
 			break;
 		case 1:
 			//return new herupu

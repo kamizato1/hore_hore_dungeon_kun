@@ -18,16 +18,23 @@ private:
     int operating_time;//操作受付
 
     int back_ground_image;//背景画像
-    int player_image;
+    int player_image[4]; //プレイヤー画像
+    int type_image; //画像イメージ
 
     //カーソルの座標
     float cursor_x;
     float cursor_y;
 
+    float player_x;
+    float player_y;
+
     
 
     //次の画面に遷移するのか
     bool transition;
+
+    //向いている方向
+    bool direction;
 
 public:
 

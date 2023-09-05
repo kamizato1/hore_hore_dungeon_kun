@@ -15,11 +15,14 @@ StageSelect::StageSelect()
 {
 	back_ground_image = LoadGraph("images/StageSelect/stageselect1.png");
 	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
+	LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, player_image);
 	stage_number = 0;
 	operating_time = 0;
 	transition = false;
 	cursor_x = 0;
 	cursor_y = 0;
+	player_x = 0;
+	player_y = 0;
 
 	FILE* fp_s;//スコアファイル読み込み
 	FILE* fp_w;//スコアファイル読み込み
@@ -65,7 +68,24 @@ void StageSelect::Update(Key* key)
 		}
 	}
 
-	if (key->KeyDown(B))transition = TRUE;
+	//if (key->KeyDown(B))transition = TRUE;
+
+	if (key->KeyPressed(RIGHT))
+	{
+		++player_x;
+	}
+	if (key->KeyPressed(LEFT))
+	{
+		--player_x;
+	}
+	if (key->KeyPressed(UP))
+	{
+		--player_y;
+	}
+	if (key->KeyPressed(DOWN))
+	{
+		++player_y;
+	}
 }
 
 //-----------------------------------
@@ -80,6 +100,10 @@ void StageSelect::Draw() const
 	int cnt = 0;
 	int score = stage_score[stage_number];
 	int stage_number = this->stage_number + 1;
+
+	DrawRotaGraph(player_x, player_y, 1, 0, player_image[0], TRUE, direction);
+	DrawFormatString(200, 400, 0xffffff, "%f", player_x);
+	DrawFormatString(200, 500, 0xffffff, "%f", player_y); 
 
 	while (score_keta > 0)
 	{

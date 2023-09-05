@@ -72,7 +72,7 @@ void Opening::Draw() const
 {
 	if (story_no < 4)
 	{
-		DrawGraph(0, 0, image[story_no], false);
+		DrawRotaGraph(640, 360,0.8f,0 ,image[story_no], false);
 	}
 	else
 	{
