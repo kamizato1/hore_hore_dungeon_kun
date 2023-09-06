@@ -1,7 +1,8 @@
 #include "Result.h"
 #include"DxLib.h"
+#include"StageSelect.h"
 
-#define WAIT_TIME 120
+#define WAIT_TIME 90
 
 //-----------------------------------
 // コンストラクタ
@@ -9,7 +10,7 @@
 Result::Result(int stage_num, int* treasure_num)
 {
 	stamp_image = LoadGraph("images/Result/stamp.png");
-	map_image = LoadGraph("images/Result/scoremap.png");
+	map_image = LoadGraph("images/map.png");
 	score_image = LoadGraph("images/Result/score.png");
 	back_ground_image[0] = LoadGraph("images/background03.png");
 	back_ground_image[1] = LoadGraph("images/background02.png");
@@ -18,11 +19,11 @@ Result::Result(int stage_num, int* treasure_num)
 	LoadDivGraph("images/Result/treasure.png", 4, 4, 1, 60, 60, treasure_image);
 	LoadDivGraph("images/Result/sign.png", 3, 3, 1, 150, 150, sign_image);
 
-	score_image_size = 15;
-	score_image_angle = 0;
-	for (int i = 0; i < 3; i++)back_ground_image_x[i] = 0;
+	score_image_size = 15.0f;
+	score_image_angle = 0.0f;
+	for (int i = 0; i < 3; i++)back_ground_image_x[i] = 0.0f;
 
-	stamp_image_size = 3;
+	stamp_image_size = 3.0f;
 
 	transition = FALSE;
 	end_move_score = FALSE;
@@ -38,14 +39,14 @@ Result::Result(int stage_num, int* treasure_num)
 	treasure_price[3] = 1000000;
 
 	for (int i = 0; i < TREASURE_NUM; i++)this->treasure_num[i] = treasure_num[i];
-	
+	this->stage_num = stage_num;
 	wait_time = WAIT_TIME;
 
 	score = 0;
 
 	for (int i = 0; i < TREASURE_NUM; i++)
 	{
-		treasure_score[i] = this->treasure_num[i] * treasure_price[i];
+		treasure_score[i] =  this->treasure_num[i] * treasure_price[i];
 		score += treasure_score[i];
 	}
 
@@ -81,45 +82,66 @@ void Result::Update(Key* key)
 {
 	if (key->KeyDown(B))
 	{
-		if (wait_time <= 0)transition = TRUE;
-		else skip = TRUE;
+		if (end_move_stamp)transition = TRUE;
+		else if(end_move_score)skip = TRUE;
 	}
 
 	if (!end_move_score)MoveScore();
 	else if (!end_add_score)AddScore();
 	else if (!end_move_stamp)MoveStamp();
-	else wait_time--;
 
-	if ((back_ground_image_x[0] -= 0.3) < -SCREEN_WIDTH)back_ground_image_x[0] = 0;
-	if ((back_ground_image_x[1] -= 0.5) < -SCREEN_WIDTH)back_ground_image_x[1] = 0;
-	if (--back_ground_image_x[2] < -SCREEN_WIDTH)back_ground_image_x[2] = 0;
+	if ((back_ground_image_x[0] -= 0.3f) < -SCREEN_WIDTH)back_ground_image_x[0] = 0.0f;
+	if ((back_ground_image_x[1] -= 0.5f) < -SCREEN_WIDTH)back_ground_image_x[1] = 0.0f;
+	if (--back_ground_image_x[2] < -SCREEN_WIDTH)back_ground_image_x[2] = 0.0f;
 }
 
 void Result::MoveScore()
 {
-	if ((score_image_size > 0.8) && (!skip))
+	if (score_image_size > 0.8f)
 	{
-		score_image_size -= 0.2;
-		score_image_angle += 0.4;
+		score_image_size -= 0.2f;
+		score_image_angle += 0.4f;
 	}
 	else
 	{
-		score_image_size = 0.8;
-		score_image_angle = 0;
-		end_move_score = TRUE;
+		score_image_size = 0.8f;
+		score_image_angle = 0.0f;
+		if (--wait_time <= 0)
+		{
+			end_move_score = TRUE;
+			wait_time = WAIT_TIME;
+		}
 	}
 }
 
 void Result::AddScore()
 {
 	end_add_score = TRUE;
-	for (int i = 0; i < TREASURE_NUM; i++)
+	if (!skip)
 	{
-		int add_score = treasure_score[i];
-		if ((add_score >= 10000) && (!skip))add_score = 10000;
-		treasure_score[i] -= add_score;
-		score += add_score;
-		if (treasure_score[i] != 0)end_add_score = FALSE;
+		for (int i = 0; i < TREASURE_NUM; i++)
+		{
+			int add_score = treasure_score[i];
+			if (add_score >= 10000)add_score = 10000;
+			treasure_score[i] -= add_score;
+			score += add_score;
+			if (treasure_score[i] != 0)end_add_score = FALSE;
+		}
+		if (end_add_score)
+		{
+			if (--wait_time <= 0)wait_time = WAIT_TIME;
+			else end_add_score = FALSE;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < TREASURE_NUM; i++)
+		{
+			int add_score = treasure_score[i];
+			treasure_score[i] -= add_score;
+			score += add_score;
+			wait_time = WAIT_TIME;
+		}
 	}
 }
 
@@ -128,10 +150,14 @@ void Result::MoveStamp()
 	if (new_record)
 	{
 		stamp_flg = TRUE;
-		if ((stamp_image_size > 1) && (!skip))stamp_image_size -= 0.15;
-		else stamp_image_size = 1, end_move_stamp = TRUE;
+		if (stamp_image_size > 1.0f)stamp_image_size -= 0.15f;
+		else
+		{
+			stamp_image_size = 1.0f;
+			if (--wait_time <= 0)wait_time = WAIT_TIME, end_move_stamp = TRUE;
+		}
 	}
-	else end_move_stamp = TRUE;
+	else if (--wait_time <= 0)wait_time = WAIT_TIME, end_move_stamp = TRUE;
 }
 
 
@@ -145,7 +171,7 @@ void Result::Draw() const
 		DrawGraph(back_ground_image_x[i], 0, back_ground_image[i], TRUE);
 		DrawGraph(back_ground_image_x[i] + SCREEN_WIDTH, 0, back_ground_image[i], TRUE);
 	}
-	DrawRotaGraph(640, 360, 1,0,map_image, TRUE);
+	DrawRotaGraph(640, 360, 1, 0, map_image, TRUE);
 
 	int count = 0;
 	int score_digit = 1000000;
@@ -205,6 +231,6 @@ void Result::Draw() const
 //-----------------------------------
 AbstractScene* Result::ChangeScene()
 {
-	if (transition)return nullptr;
+	if (transition)return new StageSelect(stage_num);
 	return this;
 }

@@ -38,7 +38,6 @@ Stage::Stage(int stage_num, int stage_width)
 	pickaxe = nullptr;
 	image_change_time = IMAGE_CHANGE_TIME;
 	image_type = 0;
-	clear = FALSE;
 	break_block_num = 0;
 }
 
@@ -252,12 +251,11 @@ HIT_TREASURE Stage::HitTreasure(BoxCollider* bc)
 
 bool Stage::HitFlag(BoxCollider* bc)
 {
-	bool flg = FALSE;
+	bool flg = TRUE;
 	if (flag != nullptr)
 	{
-		flg = (flag->HitBox(bc));
-		clear = flg;
-		if(flg)flag = nullptr;
+		if (!flag->HitBox(bc))flg = FALSE;
+		else flag = nullptr;
 	}
 	return flg;
 }

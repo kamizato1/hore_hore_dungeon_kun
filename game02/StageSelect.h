@@ -49,7 +49,7 @@ private:
 public:
 
     //コンストラクタ
-    StageSelect();
+    StageSelect(int stage_num);
 
     //デストラクタ
     ~StageSelect();

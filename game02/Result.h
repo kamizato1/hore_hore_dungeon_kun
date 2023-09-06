@@ -19,6 +19,7 @@ private:
     int score_image;
     int back_ground_image[3];
     int number_image[10];
+    int stage_num;
 
     int wait_time;
 

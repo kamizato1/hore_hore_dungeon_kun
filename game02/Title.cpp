@@ -84,7 +84,7 @@ AbstractScene* Title::ChangeScene()
 		switch (select_menu)
 		{
 		case 0: //ƒQ[ƒ€ƒƒCƒ“‚É‘JˆÚ
-			return new StageSelect();
+			return new StageSelect(1);
 			break;
 		case 1:
 			//return new herupu
