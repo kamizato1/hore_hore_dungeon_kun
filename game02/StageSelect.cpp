@@ -15,14 +15,15 @@ StageSelect::StageSelect()
 {
 	back_ground_image = LoadGraph("images/StageSelect/stageselect1.png");
 	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
-	LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, player_image);
+	LoadDivGraph("images/Player/player.png", 4, 4, 1, 30, 30, player_image);
 	stage_number = 0;
 	operating_time = 0;
 	transition = false;
 	cursor_x = 0;
 	cursor_y = 0;
-	player_x = 0;
-	player_y = 0;
+	player_x = 371;
+	player_y = 590;
+	target_location = 0;
 
 	FILE* fp_s;//スコアファイル読み込み
 	FILE* fp_w;//スコアファイル読み込み
@@ -34,6 +35,28 @@ StageSelect::StageSelect()
 		fscanf_s(fp_w, "%d", &stage_width[i]);
 	}
 	fclose(fp_s);
+
+	location[0].x = 371;
+	location[0].y = 590;
+
+	location[1].x = 418;
+	location[1].y = 600;
+
+	location[2].x = 445;
+	location[2].y = 587;
+
+	location[3].x = 472;
+	location[3].y = 562;
+
+	location[4].x = 484;
+	location[4].y = 539;
+
+	location[5].x = 497;
+	location[5].y = 502;
+
+
+	current_location = location[0];
+
 }
 
 //-----------------------------------
@@ -70,22 +93,16 @@ void StageSelect::Update(Key* key)
 
 	//if (key->KeyDown(B))transition = TRUE;
 
-	if (key->KeyPressed(RIGHT))
+	if (key->KeyDown(B))
 	{
-		++player_x;
+		if (++target_location >= 5)
+		{
+			target_location = 0;
+		}
 	}
-	if (key->KeyPressed(LEFT))
-	{
-		--player_x;
-	}
-	if (key->KeyPressed(UP))
-	{
-		--player_y;
-	}
-	if (key->KeyPressed(DOWN))
-	{
-		++player_y;
-	}
+
+	current_location = location[target_location];
+
 }
 
 //-----------------------------------
@@ -101,7 +118,7 @@ void StageSelect::Draw() const
 	int score = stage_score[stage_number];
 	int stage_number = this->stage_number + 1;
 
-	DrawRotaGraph(player_x, player_y, 1, 0, player_image[0], TRUE, direction);
+	DrawRotaGraph(current_location.x, current_location.y, 1, 0, player_image[0], TRUE, direction);
 	DrawFormatString(200, 400, 0xffffff, "%f", player_x);
 	DrawFormatString(200, 500, 0xffffff, "%f", player_y); 
 

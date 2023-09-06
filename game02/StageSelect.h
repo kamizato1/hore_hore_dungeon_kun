@@ -19,6 +19,8 @@ private:
     int player_image[4]; //プレイヤー画像
     int type_image; //画像イメージ
 
+    int target_location; //現在地点
+
     //カーソルの座標
     float cursor_x;
     float cursor_y;
@@ -33,6 +35,16 @@ private:
 
     //向いている方向
     bool direction;
+
+    //脳筋
+    struct Location
+    {
+        float x;
+        float y;
+    };
+
+    Location location[10];
+    Location current_location; //現在地
 
 public:
 
