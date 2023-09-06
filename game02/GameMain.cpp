@@ -15,6 +15,7 @@ GameMain::GameMain(int stage_num, int stage_width)
     player = new Player();
     ui = new Ui();
     pause = new Pause();
+    this->stage_num = stage_num;
     life = 3;
     max_scroll = stage_width - 4;
     stage_clear_image_size = 0.0f;
@@ -111,6 +112,7 @@ void GameMain::Draw() const
     SetDrawBright(255, 255, 255);
 
     DrawRotaGraph(640, 300, stage_clear_image_size, 0, stage_clear_image, TRUE);
+
     if (stop) pause->Draw();
 }
 

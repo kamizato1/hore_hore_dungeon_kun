@@ -61,7 +61,7 @@ Result::Result(int stage_num, int* treasure_num)
 		new_record = TRUE;
 		hi_score[stage_num] = score;
 		fopen_s(&fp_s, "data/hiscore.txt", "w");
-		for (int i = 0; i < STAGE_NUM; i++)fprintf(fp_s, "%d ", hi_score[i]);
+		for (int i = 0; i < STAGE_NUM; i++)fprintf(fp_s, "%d\n", hi_score[i]);
 		fclose(fp_s);
 	}
 	score = 0;

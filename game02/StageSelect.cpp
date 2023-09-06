@@ -13,7 +13,7 @@
 //-----------------------------------
 StageSelect::StageSelect(int stage_num)
 {
-	back_ground_image = LoadGraph("images/StageSelect/stageselect1.png");
+	back_ground_image = LoadGraph("images/StageSelect/map.png");
 	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
 	LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, player_image);
 	stage_number = stage_num;

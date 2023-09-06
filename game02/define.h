@@ -11,15 +11,15 @@
 
 #define STAGE_BLOCK_NUM_Y 20
 
-#define BLOCK_SIZE_X 36
-#define BLOCK_SIZE_Y 36
+#define BLOCK_SIZE_X 36.0f
+#define BLOCK_SIZE_Y 36.0f
 
 #define ITEM_TYPE_NUM 3
 #define TREASURE_TYPE_NUM 4
 
-#define GRAVITY_POWER 0.3
+#define GRAVITY_POWER 0.3f
 
-#define MAX_FALL_SPEED 5
+#define MAX_FALL_SPEED 5.0f
 
 
 enum

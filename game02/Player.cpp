@@ -3,10 +3,10 @@
 #include <math.h>
 #include"Player.h"
 
-#define PLAYER_SIZE_X 30
-#define PLAYER_SIZE_Y 30
-#define JUMP_SPEED 8
-#define PLAYER_SPEED 2
+#define PLAYER_SIZE_X 30.0f
+#define PLAYER_SIZE_Y 30.0f
+#define JUMP_SPEED 8.0f
+#define PLAYER_SPEED 2.0f
 #define ITEM_ANGLE 30
 #define ITEM_SET_TIME 10
 
@@ -153,7 +153,8 @@ void Player::MoveX(Key* key, Stage* stagebase)//Çwç¿ïWÇÃà⁄ìÆ
         now_speed_x = old_speed_x;
         all_speed_x_record_calculation += speed_x_record[i];
     }
-    speed.x = (all_speed_x_record_calculation / L_STICK_ANGLE_RECORD_NUM);
+    float l_stick_angle_record_num = static_cast<float>(L_STICK_ANGLE_RECORD_NUM);
+    speed.x = (all_speed_x_record_calculation / l_stick_angle_record_num);
     location.x += speed.x;
     if (stagebase->HitBlock(this).flg)
     {
