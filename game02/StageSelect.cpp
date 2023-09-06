@@ -15,7 +15,7 @@ StageSelect::StageSelect(int stage_num)
 {
 	back_ground_image = LoadGraph("images/StageSelect/stageselect1.png");
 	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
-	LoadDivGraph("images/player.png", 4, 4, 1, 30, 30, player_image);
+	LoadDivGraph("images/Player/player.png", 4, 4, 1, 30, 30, player_image);
 	stage_number = stage_num;
 	operating_time = 0;
 	transition = false;
@@ -84,73 +84,94 @@ void StageSelect::Update(Key* key)
 			if (++stage_number > 2)stage_number = 0;
 			operating_time = 0;
 		}
-		else if(key->GetStickAngle(L).x < 0)
+		else if (key->GetStickAngle(L).x < 0)
 		{
 			if (--stage_number < 0)stage_number = 2;
 			operating_time = 0;
 		}
 	}
 
-	if (key->KeyDown(B))transition = TRUE;
+	//if (key->KeyDown(B))transition = TRUE;
 
-	if (key->KeyDown(B))
-	{
-		if (++target_location >= 5)
+
+	//デバック
+	
+		if (key->KeyDown(B))
 		{
-			target_location = 0;
+			if (++target_location >= 5)
+			{
+				target_location = 0;
+			}
+		}
+
+		current_location = location[target_location];
+
+		if (key->KeyPressed(RIGHT))
+		{
+			++current_location.x;
+		}
+		if (key->KeyPressed(LEFT))
+		{
+			--current_location.x;
+		}
+		if (key->KeyPressed(UP))
+		{
+			--current_location.y;
+		}
+		if (key->KeyPressed(DOWN))
+		{
+			++current_location.y;
+		}
+
+
+	}
+
+	//-----------------------------------
+	// 描画
+	//-----------------------------------
+	void StageSelect::Draw() const
+	{
+		DrawRotaGraph(640, 360, 1, 0, back_ground_image, TRUE);
+
+		int score_keta = 1000000;
+		int stage_keta = 10;
+		int cnt = 0;
+		int score = stage_score[stage_number];
+		int stage_number = this->stage_number + 1;
+
+		DrawRotaGraph(current_location.x, current_location.y, 1, 0, player_image[0], TRUE, direction);
+		DrawFormatString(200, 400, 0xffffff, "%f", current_location.x);
+		DrawFormatString(200, 500, 0xffffff, "%f", current_location.y);
+
+		while (score_keta > 0)
+		{
+			//スコア表示
+			int image_type = (score / score_keta);
+			DrawRotaGraph(680 + (cnt * 50), 630, 1, 0, number_image[image_type], TRUE);
+			score -= (image_type * score_keta);
+			score_keta = (score_keta / 10);
+			//ステージ数表示
+			if (stage_keta > 0)
+			{
+				image_type = (stage_number / stage_keta);
+				DrawRotaGraph(450 + (cnt * 50), 160, 1, 0, number_image[image_type], TRUE);
+				stage_number -= (image_type * stage_keta);
+				stage_keta = (stage_keta / 10);
+			}
+			cnt++;
 		}
 	}
 
-	current_location = location[target_location];
-
-}
-
-//-----------------------------------
-// 描画
-//-----------------------------------
-void StageSelect::Draw() const
-{
-	DrawRotaGraph(640, 360, 1, 0, back_ground_image, TRUE);
-
-	int score_keta = 1000000;
-	int stage_keta = 10;
-	int cnt = 0;
-	int score = stage_score[stage_number];
-	int stage_number = this->stage_number + 1;
-
-	DrawRotaGraph(current_location.x, current_location.y, 1, 0, player_image[0], TRUE, direction);
-	DrawFormatString(200, 400, 0xffffff, "%f", player_x);
-	DrawFormatString(200, 500, 0xffffff, "%f", player_y); 
-
-	while (score_keta > 0)
+	//-----------------------------------
+	// 遷移
+	//-----------------------------------
+	AbstractScene* StageSelect::ChangeScene()
 	{
-		//スコア表示
-		int image_type = (score / score_keta);
-		DrawRotaGraph(680 + (cnt * 50), 630, 1, 0, number_image[image_type], TRUE);
-		score -= (image_type * score_keta);
-		score_keta = (score_keta / 10);
-		//ステージ数表示
-		if (stage_keta > 0)
+		//次の画面に遷移するのか
+		if (transition)
 		{
-			image_type = (stage_number / stage_keta);
-			DrawRotaGraph(450 + (cnt * 50), 160, 1, 0, number_image[image_type], TRUE);
-			stage_number -= (image_type * stage_keta);
-			stage_keta = (stage_keta / 10);
+			return new GameMain(stage_number, stage_width[stage_number]);
 		}
-		cnt++;
-	}
-}
 
-//-----------------------------------
-// 遷移
-//-----------------------------------
-AbstractScene* StageSelect::ChangeScene()
-{
-	//次の画面に遷移するのか
-	if (transition)
-	{
-		return new GameMain(stage_number, stage_width[stage_number]);
+		return this;
 	}
-
-	return this;
-}
