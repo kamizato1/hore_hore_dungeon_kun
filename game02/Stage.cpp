@@ -8,7 +8,7 @@ Stage::Stage(int stage_num, int stage_width)
 	Init();
 
 	char stage_data[3][50] = { "data/stage/stage01.txt", "data/stage/stage02.txt","data/stage/stage03.txt" };
-	char treasure_data[3][50] = { "data/stage/treasure01.txt", "data/stage/treasure02.txt","data/stage/treasure03.txt" };
+	char treasure_data[3][50] = { "data/stage/treasure01.txt", "data/stage/treasure02.txt","data/stage/treasure0.txt" };
 
 	FILE* fp_s;//ステージ１ファイル読み込み
 	FILE* fp_t;//アイテム１ファイル読み込み
@@ -251,13 +251,15 @@ HIT_TREASURE Stage::HitTreasure(BoxCollider* bc)
 
 bool Stage::HitFlag(BoxCollider* bc)
 {
-	bool flg = TRUE;
 	if (flag != nullptr)
 	{
-		if (!flag->HitBox(bc))flg = FALSE;
-		else flag = nullptr;
+		if (flag->HitBox(bc))
+		{
+			flag = nullptr;
+			return TRUE;
+		}
 	}
-	return flg;
+	return FALSE;
 }
 
 void Stage::DeleteTreasure(int num)

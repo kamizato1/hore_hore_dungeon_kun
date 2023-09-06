@@ -94,4 +94,5 @@ public:
     void Sway();
     bool GetPickaxeFlg();
     int GetBreakBlockNum() { return break_block_num; }
+    void DeleteFlag() { flag = nullptr; }
 };

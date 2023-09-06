@@ -27,17 +27,12 @@ private:
     float max_sway_width;
     int screen_brightness;
     int stage_num;
-    int wait_time;
-    int stage_clear_image;
-    float stage_clear_image_size;
-    bool end_clear_walk;
-    bool end_move_stage_clear;
-
+    bool change_scene;
+  
     void ReStart();
     void Init();
     void Sway();
-    void MoveStageClear();
-
+   
 public:
 
     GameMain(int stage_num, int stage_width);

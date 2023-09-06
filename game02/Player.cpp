@@ -47,8 +47,8 @@ void Player::Update(Key* key, Stage* stage)
 
    if(!die)
    {
-       clear = stage->HitFlag(this);
-
+       if (stage->HitFlag(this))clear = TRUE;
+    
        MoveX(key, stage);
        MoveY(key, stage);
 
