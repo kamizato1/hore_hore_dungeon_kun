@@ -54,6 +54,7 @@ protected:
     int back_ground_image[4];
     int falling_block_image;
     int break_block_image[BLOCK_TYPE_NUM][EFFECT_IMAGE_NUM];
+    int break_treasure_image[TREASURE_TYPE_NUM][EFFECT_IMAGE_NUM];
     int explosion_image[EFFECT_IMAGE_NUM];
     int smoke_image[EFFECT_IMAGE_NUM];
     int change_block_image[BLOCK_TYPE_NUM][4];
@@ -92,6 +93,6 @@ public:
     void Sway();
     bool GetPickaxeFlg();
     int GetBreakBlockNum() { return break_block_num; }
-    void DeleteFlag() { flag = nullptr; }
+    void DeleteFlag();
     void Init();
 };
