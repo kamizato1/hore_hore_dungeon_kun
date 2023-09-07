@@ -2,6 +2,7 @@
 #include"GameMain.h"
 #include"Title.h"
 #include"Stage.h"
+#include"StageSelect.h"
 #include"Result.h"
 
 #define TIME 200
@@ -61,7 +62,7 @@ void GameMain::Update(Key* key)
 
     clear = player->GetClear();
 
-    if ((key->KeyDown(START)) && (!die) && (!clear))stop = !stop;
+    if ((key->KeyDown(START)) && (!die) && (!clear))stop = !stop, pause->Setconfirmation();
 
     if (!stop)
     {
@@ -166,13 +167,15 @@ AbstractScene* GameMain::ChangeScene()
             switch (pause->GetSelectMenu())
             {
             case 0:
-                stop = false;
-                pause->SetNextScene();
-                break;
-            case 1:
                 return new Title();
                 break;
+            case 1:
+                return new StageSelect(1);
+                break;
             case 2:
+                return this; //ƒwƒ‹ƒv‰æ‘œ‚ðŒ©‚¹‚é—\’è
+                break;
+            case 3:
                 return nullptr;
             default:
                 break;

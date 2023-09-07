@@ -91,7 +91,7 @@ void StageSelect::Update(Key* key)
 		}
 	}
 
-	//if (key->KeyDown(B))transition = TRUE;
+	if (key->KeyDown(B))transition = TRUE;
 
 
 	//デバック
