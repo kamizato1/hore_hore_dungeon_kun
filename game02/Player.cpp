@@ -18,6 +18,7 @@ Player::Player()
     LoadDivGraph("images/Player/player.png", 4, 4, 1, 30, 30, image);
     LoadDivGraph("images/Player/marubatu1.png", 2, 2, 1, 20, 20, answer_image);
     LoadDivGraph("images/Player/item.png", ITEM_TYPE_NUM, ITEM_TYPE_NUM, 1, 50, 50, item_image);
+    break_block_num = 0;
 }
 
 void Player::Init()
@@ -38,7 +39,6 @@ void Player::Init()
     item_set_time = 0;
     pickaxe_flg = TRUE;
     clear = FALSE;
-    break_block_num = 0;
 }
 
 void Player::Update(Key* key, Stage* stage)
@@ -125,7 +125,8 @@ void Player::Update(Key* key, Stage* stage)
            item_num[1] += (break_block_num / 50);
            break_block_num -= (break_block_num / 50) * 50;
        }
-       treasure_num[0] = item_num[1];
+
+       treasure_num[0] = item_num[1];//アイテムのブロックを宝のブロックに代入
        HIT_TREASURE hit_treasure = stage->HitTreasure(this);
        if (hit_treasure.flg)
        {
@@ -227,5 +228,5 @@ void Player::Draw(float camera_work) const
     else DrawString(0, 60, "つるはし", 0xffffff);
     DrawFormatString(0, 100, 0xffffff, "%d", item_num[item_type]);
     DrawFormatString(0, 160, 0xffffff, "%d",break_block_num);
-    DrawFormatString(0, 190, 0xffffff, "%d, %d, %d, %d", treasure_num[0], treasure_num[1], treasure_num[2], treasure_num[3]);
+    DrawFormatString(0, 190, 0xffffff, "%d, %d, %d, %d, %d", treasure_num[0], treasure_num[1], treasure_num[2], treasure_num[3], treasure_num[4]);
 }

@@ -1,20 +1,18 @@
 #pragma once
 #include "AbstractScene.h"
 
-#define TREASURE_NUM 4
-
 class Result : public AbstractScene
 {
 private:
 
     int score;
-    int treasure_num[TREASURE_NUM];
-    int treasure_score[TREASURE_NUM];
-    int treasure_price[TREASURE_NUM];
+    int treasure_num[TREASURE_TYPE_NUM];
+    int treasure_score[TREASURE_TYPE_NUM];
+    int treasure_price[TREASURE_TYPE_NUM];
 
     int stamp_image;
     int sign_image[3];
-    int treasure_image[TREASURE_NUM];
+    int treasure_image[TREASURE_TYPE_NUM];
     int map_image;
     int score_image;
     int back_ground_image[3];

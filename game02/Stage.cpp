@@ -1,14 +1,12 @@
 #include"DxLib.h"
 #include"Stage.h"
 
-#define IMAGE_CHANGE_TIME 8
+#define IMAGE_CHANGE_TIME 9
 
 Stage::Stage(int stage_num, int stage_width)
 {
-	Init();
-
 	char stage_data[3][50] = { "data/stage/stage01.txt", "data/stage/stage02.txt","data/stage/stage03.txt" };
-	char treasure_data[3][50] = { "data/stage/treasure01.txt", "data/stage/treasure02.txt","data/stage/treasure0.txt" };
+	char treasure_data[3][50] = { "data/stage/treasure01.txt", "data/stage/treasure02.txt","data/stage/treasure03.txt" };
 
 	FILE* fp_s;//ステージ１ファイル読み込み
 	FILE* fp_t;//アイテム１ファイル読み込み
@@ -28,17 +26,50 @@ Stage::Stage(int stage_num, int stage_width)
 			location.y = (i * BLOCK_SIZE_Y) + (BLOCK_SIZE_Y / 2);
 
 			if (block_type != -1)block.emplace_back(location, block_type);
-			if (treasure_type == 10)flag = new Flag(location);
+			if (treasure_type == 5) flag_location = location;
 			else if (treasure_type != -1)treasure.emplace_back(location, treasure_type);
 		}
 	}
 	fclose(fp_s);
 	fclose(fp_t);
 
-	pickaxe = nullptr;
-	image_change_time = IMAGE_CHANGE_TIME;
-	image_type = 0;
-	break_block_num = 0;
+	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
+	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
+	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
+	LoadDivGraph("images/smoke.png", 10, 10, 1, 500, 500, smoke_image);
+	pickaxe_image = LoadGraph("images/tsuruhashi.png");
+	back_ground_image[0] = LoadGraph("images/background01.png");
+	back_ground_image[1] = LoadGraph("images/background02.png");
+	back_ground_image[2] = LoadGraph("images/background03.png");
+	back_ground_image[3] = LoadGraph("images/background04.png");
+	falling_block_image = LoadGraph("images/fallingblock.png");
+	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
+	LoadDivGraph("images/changeflag.png", 4, 4, 1, 36, 36, change_flag_image);
+
+	int change_image_image[32];
+	int count = 0;
+	LoadDivGraph("images/changeblock.png", 32, 4, BLOCK_TYPE_NUM, 36, 36, change_image_image);
+	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < 4; j++)this->change_block_image[i][j] = change_image_image[count++];
+	}
+
+	int break_block_image[80];
+	count = 0;
+	LoadDivGraph("images/breakblock3.png", 80, EFFECT_IMAGE_NUM, BLOCK_TYPE_NUM, 250, 250, break_block_image);
+	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)this->break_block_image[i][j] = break_block_image[count++];
+	}
+
+	for (int i = 0; i < KIRA_KIRA_NUM; i++)
+	{
+		kira_kira[i].location.y = 250 + GetRand(250);
+		kira_kira[i].location.x = GetRand(SCREEN_WIDTH);
+		kira_kira[i].size = (GetRand(4) + 1) / 5;
+	}
+
+	Init();
 }
 
 Stage::~Stage()
@@ -53,40 +84,12 @@ Stage::~Stage()
 
 void Stage::Init()
 {
-	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
-	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
-	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
-	LoadDivGraph("images/smoke.png", 10, 10, 1, 500, 500, smoke_image);
-	pickaxe_image = LoadGraph("images/tsuruhashi.png");
-	back_ground_image[0] = LoadGraph("images/background01.png");
-	back_ground_image[1] = LoadGraph("images/background02.png");
-	back_ground_image[2] = LoadGraph("images/background03.png");
-	back_ground_image[3] = LoadGraph("images/background04.png");
-	falling_block_image = LoadGraph("images/fallingblock.png");
-	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
-
-	int image[28];
-	int count = 0;
-	LoadDivGraph("images/changeblock.png", 28, 4, 8, 36, 36, image);
-	for (int i = 0; i < 7; i++)
-	{
-		for (int j = 0; j < 4; j++)change_block_image[i][j] = image[count++];
-	}
-
-	int break_block_image[80];
-	count = 0;
-	LoadDivGraph("images/breakblock3.png", 80, 10, 8, 250, 250, break_block_image);
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)this->break_block_image[i][j] = break_block_image[count++];
-	}
-
-	for (int i = 0; i < KIRA_KIRA_NUM; i++)
-	{
-		kira_kira[i].location.y = 250 + GetRand(250);
-		kira_kira[i].location.x = GetRand(SCREEN_WIDTH);
-		kira_kira[i].size =  (GetRand(4) + 1) / 5;
-	}
+	flag = new Flag(flag_location);
+	pickaxe = nullptr;
+	image_change_time = IMAGE_CHANGE_TIME;
+	image_type = 0;
+	break_block_num = 0;
+	fallingblock.clear();
 }
 
 void Stage::Update()
@@ -96,6 +99,7 @@ void Stage::Update()
 	{
 		if (++image_type > 3)image_type = 0;
 		image_change_time = IMAGE_CHANGE_TIME;
+		if(flag != nullptr)flag->SetFlagImage(change_flag_image[image_type]);
 	}
 	for (int i = 0; i < fallingblock.size(); i++)
 	{

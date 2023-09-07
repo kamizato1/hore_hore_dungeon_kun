@@ -35,6 +35,7 @@ StageSelect::StageSelect(int stage_num)
 		fscanf_s(fp_w, "%d", &stage_width[i]);
 	}
 	fclose(fp_s);
+	fclose(fp_w);
 
 	location[0].x = 371;
 	location[0].y = 590;
@@ -91,18 +92,18 @@ void StageSelect::Update(Key* key)
 		}
 	}
 
-	//if (key->KeyDown(B))transition = TRUE;
+	if (key->KeyDown(B))transition = TRUE;
 
 
 	//デバック
 	
-		if (key->KeyDown(B))
+		/*if (key->KeyDown(B))
 		{
 			if (++target_location >= 5)
 			{
 				target_location = 0;
 			}
-		}
+		}*/
 
 		current_location = location[target_location];
 
@@ -170,7 +171,7 @@ void StageSelect::Update(Key* key)
 		//次の画面に遷移するのか
 		if (transition)
 		{
-			return new GameMain(stage_number, stage_width[stage_number]);
+			return new GameMain(stage_number);
 		}
 
 		return this;

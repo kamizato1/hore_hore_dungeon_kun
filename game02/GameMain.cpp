@@ -4,19 +4,25 @@
 #include"Stage.h"
 #include"Result.h"
 
-#define TIME 50
+#define TIME 55
 #define MAX_SWAY_WIDTH 5
 #define SWAY_SIZE 0.5
 
-GameMain::GameMain(int stage_num, int stage_width)
+GameMain::GameMain(int stage_num)
 {
-    stage = new Stage(stage_num, stage_width);
+    int stage_width[STAGE_NUM];
+    FILE* fp_w;//スコアファイル読み込み
+    fopen_s(&fp_w, "data/stagewidth.txt", "r");
+    for (int i = 0; i < STAGE_NUM; i++)fscanf_s(fp_w, "%d", &stage_width[i]);
+    fclose(fp_w);
+
+    stage = new Stage(stage_num, stage_width[stage_num]);
     player = new Player();
     ui = new Ui();
     pause = new Pause();
     this->stage_num = stage_num;
     life = 3;
-    max_scroll = stage_width - 4;
+    max_scroll = stage_width[stage_num] - 4;
     change_scene = FALSE;
     Init();
 }
@@ -114,6 +120,7 @@ void GameMain::ReStart()
     life--;
     Init();
     player->Init();
+    stage->Init();
 }
 
 void GameMain::Sway()

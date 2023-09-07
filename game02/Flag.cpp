@@ -6,7 +6,7 @@ Flag::Flag(DATA location)
     radius = { 10 ,10 };
     this->location = location;
     can_delete = FALSE;
-    image = LoadGraph("images/flag.png");
+    image = LoadGraph("images/Flag/flag.png");
 }
 
 void Flag::Update()

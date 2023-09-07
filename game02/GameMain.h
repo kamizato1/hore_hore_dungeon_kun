@@ -35,7 +35,7 @@ private:
    
 public:
 
-    GameMain(int stage_num, int stage_width);
+    GameMain(int stage_num);
     ~GameMain();
 
     void Update(Key* key) override; //•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é

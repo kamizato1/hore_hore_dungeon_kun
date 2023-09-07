@@ -32,7 +32,7 @@ bool Ui::Update(bool clear)
 
 bool Ui::MoveClearImage()
 {
-	clear_image_size += 0.2f;
+	clear_image_size += 0.1f;
 	if (clear_image_size > 1.0f)
 	{
 		clear_image_size = 1.0f;

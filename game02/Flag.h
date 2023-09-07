@@ -17,4 +17,5 @@ public:
     void Update();
     void Draw(float camera_work) const;
     bool GetCanDelete() { return can_delete; }
+    void SetFlagImage(int image) { this->image = image; }
 };

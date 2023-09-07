@@ -15,7 +15,8 @@
 #define BLOCK_SIZE_Y 36.0f
 
 #define ITEM_TYPE_NUM 3
-#define TREASURE_TYPE_NUM 4
+#define TREASURE_TYPE_NUM 5
+#define BLOCK_TYPE_NUM 8
 
 #define GRAVITY_POWER 0.3f
 
@@ -51,10 +52,11 @@ enum class ITEM_TYPE
 
 enum class TREASURE_TYPE
 {
-    BOM,
-    JEWEL1,
-    JEWEL2,
-    JEWEL3
+    BOM,//爆弾(最終的にはブロック)
+    COIN,//コイン
+    CUP,//カップ
+    CROWN,//王冠
+    JEWEL//宝石
 };
 
 enum class BLOCK_TYPE
