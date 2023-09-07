@@ -10,13 +10,13 @@
 Result::Result(int stage_num, int* treasure_num)
 {
 	stamp_image = LoadGraph("images/Result/stamp.png");
-	map_image = LoadGraph("images/map.png");
+	map_image = LoadGraph("images/Result/map.png");
 	score_image = LoadGraph("images/Result/score.png");
 	back_ground_image[0] = LoadGraph("images/background03.png");
 	back_ground_image[1] = LoadGraph("images/background02.png");
 	back_ground_image[2] = LoadGraph("images/background01.png");
 	LoadDivGraph("images/Result/number.png", 10, 10, 1, 140, 151, number_image);
-	LoadDivGraph("images/Result/treasure.png", 4, 4, 1, 60, 60, treasure_image);
+	LoadDivGraph("images/Result/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, 60, 60, treasure_image);
 	LoadDivGraph("images/Result/sign.png", 3, 3, 1, 150, 150, sign_image);
 
 	score_image_size = 15.0f;
@@ -37,14 +37,15 @@ Result::Result(int stage_num, int* treasure_num)
 	treasure_price[1] = 150000;
 	treasure_price[2] = 500000;
 	treasure_price[3] = 1000000;
+	treasure_price[4] = 2000000;
 
-	for (int i = 0; i < TREASURE_NUM; i++)this->treasure_num[i] = treasure_num[i];
+	for (int i = 0; i < TREASURE_TYPE_NUM; i++)this->treasure_num[i] = treasure_num[i];
 	this->stage_num = stage_num;
 	wait_time = WAIT_TIME;
 
 	score = 0;
 
-	for (int i = 0; i < TREASURE_NUM; i++)
+	for (int i = 0; i < TREASURE_TYPE_NUM; i++)
 	{
 		treasure_score[i] =  this->treasure_num[i] * treasure_price[i];
 		score += treasure_score[i];
@@ -61,7 +62,7 @@ Result::Result(int stage_num, int* treasure_num)
 		new_record = TRUE;
 		hi_score[stage_num] = score;
 		fopen_s(&fp_s, "data/hiscore.txt", "w");
-		for (int i = 0; i < STAGE_NUM; i++)fprintf(fp_s, "%d ", hi_score[i]);
+		for (int i = 0; i < STAGE_NUM; i++)fprintf(fp_s, "%d\n", hi_score[i]);
 		fclose(fp_s);
 	}
 	score = 0;
@@ -119,7 +120,7 @@ void Result::AddScore()
 	end_add_score = TRUE;
 	if (!skip)
 	{
-		for (int i = 0; i < TREASURE_NUM; i++)
+		for (int i = 0; i < TREASURE_TYPE_NUM; i++)
 		{
 			int add_score = treasure_score[i];
 			if (add_score >= 10000)add_score = 10000;
@@ -135,7 +136,7 @@ void Result::AddScore()
 	}
 	else
 	{
-		for (int i = 0; i < TREASURE_NUM; i++)
+		for (int i = 0; i < TREASURE_TYPE_NUM; i++)
 		{
 			int add_score = treasure_score[i];
 			treasure_score[i] -= add_score;
@@ -180,13 +181,13 @@ void Result::Draw() const
 	while (score_digit > 0)
 	{
 		int image_type = (score / score_digit);
-		DrawRotaGraph(430 + (count * 70), 250, 0.4, 0, number_image[image_type], TRUE);
+		DrawRotaGraph(430 + (count * 70), 230, 0.4, 0, number_image[image_type], TRUE);
 		score -= (image_type * score_digit);
 		score_digit = (score_digit / 10);
 		count++;
 	}
 
-	for (int i = 0; i < TREASURE_NUM; i++)
+	for (int i = 0; i < TREASURE_TYPE_NUM; i++)
 	{
 		DrawRotaGraph(300, 340 + (60 * i), 0.7, 0, treasure_image[i], TRUE);
 		DrawRotaGraph(430, 340 + (60 * i), 0.3, 0, sign_image[0], TRUE);
@@ -222,8 +223,8 @@ void Result::Draw() const
 		}
 	}
 
-	DrawRotaGraph(640, 140, score_image_size, score_image_angle, score_image, TRUE);
-	if (stamp_flg)DrawRotaGraph(640, 460, stamp_image_size, 0.2, stamp_image, TRUE);
+	DrawRotaGraph(640, 120, score_image_size, score_image_angle, score_image, TRUE);
+	if (stamp_flg)DrawRotaGraph(640, 470, stamp_image_size, 0.2, stamp_image, TRUE);
 }
 
 //-----------------------------------

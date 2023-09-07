@@ -53,18 +53,19 @@ protected:
 
     int back_ground_image[4];
     int falling_block_image;
-    int break_block_image[8][EFFECT_IMAGE_NUM];
+    int break_block_image[BLOCK_TYPE_NUM][EFFECT_IMAGE_NUM];
+    int break_treasure_image[TREASURE_TYPE_NUM][EFFECT_IMAGE_NUM];
     int explosion_image[EFFECT_IMAGE_NUM];
     int smoke_image[EFFECT_IMAGE_NUM];
-    int change_block_image[8][4];
+    int change_block_image[BLOCK_TYPE_NUM][4];
+    int change_flag_image[4];
     int pickaxe_image;
     int hit_pickaxe_se;
     int break_block_se;
     int image_change_time;
     int image_type;
     int break_block_num;
-    
-    void Init();
+    DATA flag_location;
     KIRA_KIRA kira_kira[KIRA_KIRA_NUM];
     int kira_kira_image[4];
    
@@ -86,12 +87,12 @@ public:
     bool HitFlag(BoxCollider* bc);
 
     void DeleteTreasure(int num);
-
     void HitBlastRange(int bom_num);
-    
     bool PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num);
     bool ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type, int item_num);
     void Sway();
     bool GetPickaxeFlg();
     int GetBreakBlockNum() { return break_block_num; }
+    void DeleteFlag();
+    void Init();
 };
