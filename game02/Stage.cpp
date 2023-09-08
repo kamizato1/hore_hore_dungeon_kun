@@ -5,8 +5,8 @@
 
 Stage::Stage(int stage_num, int stage_width)
 {
-	char stage_data[3][50] = { "data/stage/stage011.txt", "data/stage/stage012.txt","data/stage/stage03.txt" };
-	char treasure_data[3][50] = { "data/stage/treasure011.txt", "data/stage/treasure012.txt","data/stage/treasure03.txt" };
+	char stage_data[3][50] = { "data/stage/stage011.txt", "data/stage/stage012.txt","data/stage/stage013.txt" };
+	char treasure_data[3][50] = { "data/stage/treasure011.txt", "data/stage/treasure012.txt","data/stage/treasure013.txt" };
 
 	FILE* fp_s;//ステージ１ファイル読み込み
 	FILE* fp_t;//アイテム１ファイル読み込み
