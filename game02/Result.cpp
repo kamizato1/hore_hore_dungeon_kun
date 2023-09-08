@@ -224,7 +224,7 @@ void Result::Draw() const
 	}
 
 	DrawRotaGraph(640, 120, score_image_size, score_image_angle, score_image, TRUE);
-	if (stamp_flg)DrawRotaGraph(640, 470, stamp_image_size, 0.2, stamp_image, TRUE);
+	if (stamp_flg)DrawRotaGraph(640, 480, stamp_image_size, 0.2, stamp_image, TRUE);
 }
 
 //-----------------------------------

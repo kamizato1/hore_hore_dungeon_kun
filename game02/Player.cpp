@@ -15,7 +15,7 @@ Player::Player()
     Init();
     for (int i = 0; i < ITEM_TYPE_NUM; i++)item_num[i] = 0;
     for(int i = 0; i < TREASURE_TYPE_NUM; i++)treasure_num[i] = 0;
-    LoadDivGraph("images/Player/player.png", 4, 4, 1, 30, 30, image);
+    LoadDivGraph("images/Player/player1.png", 5, 5, 1, 30, 30, image);
     LoadDivGraph("images/Player/marubatu1.png", 2, 2, 1, 20, 20, answer_image);
     LoadDivGraph("images/Player/item.png", ITEM_TYPE_NUM, ITEM_TYPE_NUM, 1, 50, 50, item_image);
     break_block_num = 0;
@@ -157,6 +157,7 @@ void Player::MoveX(Key* key, Stage* stagebase)//‚wÀ•W‚ÌˆÚ“®
     float l_stick_angle_record_num = static_cast<float>(L_STICK_ANGLE_RECORD_NUM);
     speed.x = (all_speed_x_record_calculation / l_stick_angle_record_num);
     location.x += speed.x;
+
     if (stagebase->HitBlock(this).flg)
     {
         location.x = floor(location.x);
@@ -191,8 +192,10 @@ void Player::MoveY(Key* key, Stage* stagebase)//‚xÀ•W‚ÌˆÚ“®
         if (sign == -1)//’n–Ê‚ÉG‚ê‚Ä‚¢‚é‚Æ‚«
         {
             if (key->KeyDown(A))speed.y = -JUMP_SPEED;
+            if(image_type == 4)image_type = 0;
         }
     }
+    else image_type = 4;
 }
 
 void Player::Draw(float camera_work) const

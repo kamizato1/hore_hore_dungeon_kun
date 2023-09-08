@@ -13,7 +13,7 @@ class Player : public BoxCollider
 {
 private:
 
-    int image[4];
+    int image[5];
     int item_image[ITEM_TYPE_NUM];
     int answer_image[2];
     int item_set_time;
