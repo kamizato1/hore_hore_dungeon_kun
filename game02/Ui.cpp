@@ -5,8 +5,9 @@
 
 Ui::Ui()
 {
+	LoadDivGraph("images/Ui/item.png", 3, 3, 1, 100, 100, item_image);
 	clear_image = LoadGraph("images/Ui/clear.png");
-	life_image = LoadGraph("images/Ui/life.png");
+	life_image = LoadGraph("images/Ui/player.jpg");
 	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, number_image);
 	wait_time = WAIT_TIME;
 	end_clear_walk = FALSE;
@@ -41,9 +42,9 @@ bool Ui::MoveClearImage()
 	return FALSE;
 }
 
-void Ui::Draw(int time, int life) const
+void Ui::Draw(int time, int life, int item_type) const
 {
-	DrawRotaGraph(45, 30, 1,0,life_image, TRUE);
+	DrawRotaGraph(35, 35, 0.8,0,life_image, TRUE);
 	DrawRotaGraph(90, 40, 1, 0, number_image[life], TRUE);
 
 	int digit = 100;
@@ -57,6 +58,16 @@ void Ui::Draw(int time, int life) const
 		digit = (digit / 10);
 		count++;
 	}
+
+	DrawRotaGraph(640, 55, 1, 0, item_image[item_type], TRUE);
+
+	int item = item_type - 1;
+	if (item < 0)item = 2;
+	DrawRotaGraph(560, 40, 0.5, 0, item_image[item], TRUE);
+
+	item = item_type + 1;
+	if (item > 2)item = 0;
+	DrawRotaGraph(720, 40, 0.5, 0, item_image[item], TRUE);
 
 	DrawRotaGraph(640, 300, clear_image_size, 0, clear_image, TRUE);
 }

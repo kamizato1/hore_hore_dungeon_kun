@@ -5,7 +5,7 @@
 #include"StageSelect.h"
 #include"Result.h"
 
-#define TIME 55
+#define TIME 100
 #define MAX_SWAY_WIDTH 5
 #define SWAY_SIZE 0.5
 
@@ -89,9 +89,7 @@ void GameMain::Update(Key* key)
                 if (!sway_flg)sway_flg = TRUE;
             }
         }
-        
         change_scene = ui->Update(clear);
-
     }
     else pause->Update(key);
 }
@@ -109,7 +107,7 @@ void GameMain::Draw() const
     player->Draw(camera_work);
     stage->Draw2(camera_work);
    
-    ui->Draw(remaining_time, life);
+    ui->Draw(remaining_time, life, player->GetItemType());
 
     SetDrawBright(255, 255, 255);
 

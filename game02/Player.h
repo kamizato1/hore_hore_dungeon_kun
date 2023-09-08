@@ -52,5 +52,6 @@ public:
     void SetPlayerDie(bool flg) { die = flg; }
     void Init();
     bool GetClear() { return clear; }
+    int GetItemType()const { return item_type; }
     int* GetTreasureNum() { return treasure_num; }
 };
