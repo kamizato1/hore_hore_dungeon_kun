@@ -5,7 +5,7 @@
 #include"StageSelect.h"
 #include"Result.h"
 
-#define TIME 100
+#define TIME 300
 #define MAX_SWAY_WIDTH 5
 #define SWAY_SIZE 0.5
 
