@@ -13,7 +13,7 @@ Title::Title()
 	input_time = 0;
 	can_scene_change = FALSE;
 	select_menu = 0;
-	image = LoadGraph("images/home.png");
+	image = LoadGraph("images/Title.png");
 	int menu_image[8];
 	LoadDivGraph("images/Menu/menu.png", 8, 2, 4, 600, 100, menu_image);
 	int count = 0;
