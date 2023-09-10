@@ -23,8 +23,13 @@ private:
     //画像   
     int image[5];
 
-    //アニメーション画像
-    int animation_image[7];
+    //文字画像
+    int character_image[5];
+
+    int background_image;
+
+    //明るさ
+    int brightness;
 
     //次のシーンに行けるのか
     bool can_scene_change;
