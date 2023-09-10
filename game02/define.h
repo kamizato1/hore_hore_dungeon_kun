@@ -1,6 +1,6 @@
 #pragma once
 
-#define STAGE_NUM 3
+#define STAGE_NUM 5
 
 #define FPS 60
 

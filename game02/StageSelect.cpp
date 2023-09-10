@@ -82,12 +82,12 @@ void StageSelect::Update(Key* key)
 	{
 		if (key->GetStickAngle(L).x > 0)
 		{
-			if (++stage_number > 2)stage_number = 0;
+			if (++stage_number >= STAGE_NUM)stage_number = 0;
 			operating_time = 0;
 		}
 		else if (key->GetStickAngle(L).x < 0)
 		{
-			if (--stage_number < 0)stage_number = 2;
+			if (--stage_number < 0)stage_number = STAGE_NUM - 1;
 			operating_time = 0;
 		}
 	}
