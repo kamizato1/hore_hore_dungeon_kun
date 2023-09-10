@@ -1,0 +1,17 @@
+MusMus-BGM-020 (1)→GameMainBGM
+MusMus-BGM-009 →TitleBGM
+tousen →　ClearSE
+gameover2_8bit　→ GameOverSE
+MusMus-BGM-093 → StageSelectBGM
+MusMus-BGM-089 →　OpingBGM
+
+
+閲覧サイト一覧↓
+
+タイトル　紙芝居　ステージセレクト　　ゲームメイン　4つ同じ
+https://musmus.main.jp/music_game_05.html
+
+ゲームクリア
+https://pocket-se.info/archives/tag/%E6%88%90%E5%8A%9F/
+ゲームオーバー
+https://howlingindicator.net/gemeover/
