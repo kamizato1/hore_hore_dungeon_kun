@@ -70,7 +70,11 @@ void GameMain::Update(Key* key)
         }
     }
     
-    if ((key->KeyDown(START)) && (!die) && (!clear))stop = !stop, pause->Setconfirmation();
+    if ((key->KeyDown(START)) && (!die) && (!clear))
+    {
+        stop = !stop;
+        if (stop)pause->Init();
+    }
 
     if (!stop)
     {
@@ -91,7 +95,7 @@ void GameMain::Update(Key* key)
         }
         change_scene = ui->Update(clear);
     }
-    else pause->Update(key);
+    else if (pause->Update(key))stop = !stop;
 }
 
 void GameMain::Draw() const
@@ -149,28 +153,10 @@ AbstractScene* GameMain::ChangeScene()
 {
     if (stop)
     {
-        if (pause->GetNextScene())
-        {
-            switch (pause->GetSelectMenu())
-            {
-            case 0:
-                return new Title();
-                break;
-            case 1:
-                return new StageSelect(1);
-                break;
-            case 2:
-                return this; //ƒwƒ‹ƒv‰æ‘œ‚ğŒ©‚¹‚é—\’è
-                break;
-            case 3:
-                return nullptr;
-            default:
-                break;
-            }
-       }
+        if (pause->GetChangeScene() == 1)return new GameMain(stage_num);
+        else if(pause->GetChangeScene() == 2)return new StageSelect(stage_num);
     }
-
-    if(change_scene)return new Result(stage_num, player->GetTreasureNum());
+    else if(change_scene)return new Result(stage_num, player->GetTreasureNum());
 
     return this;
 }

@@ -8,35 +8,35 @@
 //-----------------------------------
 Pause::Pause()
 {
-	input_time = 0;
-	cursor_y = 0;
-	cursor_x = 0;
-	select_menu = static_cast<int>(MENU::TITLE);
-	confirmation_menu = static_cast<int>(SELECTION::NO);
-	next_scene = false;
-	confirmation = false;
+	back_ground_image = LoadGraph("images/Pause/map.png");
+	help_image = LoadGraph("images/Pause/help.png");
+	pause_image = LoadGraph("images/Pause/pause.png");
+	int menu_image[8];
+	int count = 0;
+	LoadDivGraph("images/Pause/menu.png", 8, 2, 4, 630, 90, menu_image);
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 2; j++)this->menu_image[i][j] = menu_image[count++];
+	}
+	int answer_image[4];
+	count = 0;
+	LoadDivGraph("images/Pause/answer.png", 4, 2, 2, 288, 90, answer_image);
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)this->answer_image[i][j] = answer_image[count++];
+	}
+	LoadDivGraph("images/Pause/text.png", 3, 1, 3, 750, 60, text_image);
+}
 
-	image[0] = LoadGraph("images/Pause/はい.png");
-	image[1] = LoadGraph("images/Pause/いいえ.png");
-	image[2] = LoadGraph("images/Pause/ゲームスタート.png"); //いる？
-	image[3] = LoadGraph("images/Pause/タイトル.png");
-	image[4] = LoadGraph("images/Pause/ステージセレクト.png");
-	image[5] = LoadGraph("images/Pause/ステージセレクトに戻りますか？.png");
-	image[6] = LoadGraph("images/Pause/ヘルプ.png");
-	image[7] = LoadGraph("images/Pause/リスタート.png");
-	image[8] = LoadGraph("images/Pause/取った宝は失われます。.png");
-	image[9] = LoadGraph("images/Pause/諦める.png");
-	image[10] = LoadGraph("images/Pause/ゲーム終了.png");
-
-	image1[0] = LoadGraph("images/Pause/タイトル.png");
-	image1[1] = LoadGraph("images/Pause/ステージセレクトに戻りますか？.png");
-	//image1[2];ヘルプ画像？
-	image1[3] = LoadGraph("images/Pause/諦める.png");
-	image1[4] = LoadGraph("images/Pause/取った宝は失われます。.png");
-
-
-	background= LoadGraph("images/Pause/背景.png");
-
+void Pause::Init()
+{
+	input_time = INPUT_ACCEPTANCE_TIME;
+	select_menu_num = 0;
+	select_menu_decision = FALSE;
+	answer_num = 0;
+	answer_decision = FALSE;
+	can_close = FALSE;
+	change_scene = 0;
 }
 
 //-----------------------------------
@@ -50,91 +50,74 @@ Pause::~Pause()
 //-----------------------------------
 // 更新
 //-----------------------------------
-void Pause::Update(Key* key)
+bool Pause::Update(Key* key)
 {
+	if (!select_menu_decision)MenuUpdate(key);
+	else TextUpdate(key);
 
-	if (confirmation)
+	return can_close;
+}
+
+void Pause::MenuUpdate(Key* key)
+{
+	//スティックを動かしたら
+	if (key->GetStickAngle(L).y == 0)input_time = 0;
+	else if (--input_time < 0)input_time = 0;
+
+	//操作受け
+	if (input_time == 0)
 	{
-		if (++input_time > INPUT_ACCEPTANCE_TIME)
+		if (key->GetStickAngle(L).y > 0)
 		{
-			if (key->GetStickAngle(L).x > 0)
-			{
-				confirmation_menu = (confirmation_menu + 1) % static_cast<int>(SELECTION::MENU_SIZE);
-			}
-			else if (key->GetStickAngle(L).x < 0)
-			{
-				confirmation_menu = (confirmation_menu - 1 + static_cast<int>(SELECTION::MENU_SIZE)) % static_cast<int>(SELECTION::MENU_SIZE);
-			}
-			input_time = 0;
+			if (++select_menu_num > 3)select_menu_num = 0;
+			input_time = INPUT_ACCEPTANCE_TIME;
 		}
-
-		cursor_y = 400;
-		switch (confirmation_menu)
+		else if (key->GetStickAngle(L).y < 0)
 		{
-		case 0:
-			cursor_x = 300;
-			break;
-		case 1:
-			cursor_x = 700;
-			break;
-
-		default:
-			break;
+			if (--select_menu_num < 0)select_menu_num = 3;
+			input_time = INPUT_ACCEPTANCE_TIME;
 		}
-
-		if (key->KeyDown(B) && confirmation_menu == 1)
-		{
-			confirmation = false;
-		}
-		else if (key->KeyDown(B) && confirmation_menu == 0)
-		{
-			next_scene = true;
-		}
-
-	}
-	else
-	{
-		if (++input_time > INPUT_ACCEPTANCE_TIME)
-		{
-			if (key->GetStickAngle(L).y > 0)
-			{
-				select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
-			}
-			else if (key->GetStickAngle(L).y < 0)
-			{
-				select_menu = (select_menu - 1 + static_cast<int>(MENU::MENU_SIZE)) % static_cast<int>(MENU::MENU_SIZE);
-			}
-			input_time = 0;
-		}
-
-
-		if (key->KeyDown(B))
-		{
-			confirmation = true;
-		}
-		cursor_x = 400;
-		switch (select_menu)
-		{
-		case 0:
-			cursor_y = 200;
-			break;
-		case 1:
-			cursor_y = 300;
-			break;
-		case 2:
-			cursor_y = 400;
-			break;
-		case 3:
-			cursor_y = 500;
-			break;
-		default:
-			break;
-		}
-
 	}
 
+	if (key->KeyDown(B))
+	{
+		select_menu_decision = TRUE;
+		if (select_menu_num == 0)can_close = TRUE;
+	}
+	else if(key->KeyDown(A))can_close = TRUE;
+}
 
+void Pause::TextUpdate(Key* key)
+{
+	//スティックを動かしたら
+	if (key->GetStickAngle(L).x == 0)input_time = 0;
+	else if (--input_time < 0)input_time = 0;
 
+	//操作受け
+	if (input_time == 0)
+	{
+		if (key->GetStickAngle(L).x > 0)
+		{
+			if (++answer_num > 1)answer_num = 0;
+			input_time = INPUT_ACCEPTANCE_TIME;
+		}
+		else if (key->GetStickAngle(L).x < 0)
+		{
+			if (--answer_num < 0)answer_num = 1;
+			input_time = INPUT_ACCEPTANCE_TIME;
+		}
+	}
+
+	if (key->KeyDown(B))
+	{
+		if (select_menu_num != 3)
+		{
+			if (answer_num == 0)change_scene = select_menu_num;
+			else select_menu_decision = FALSE, answer_num = 0;
+		}
+		
+	}
+	else if (key->KeyDown(A))select_menu_decision = FALSE, answer_num = 0;
 }
 
 //-----------------------------------
@@ -143,68 +126,38 @@ void Pause::Update(Key* key)
 void Pause::Draw() const
 {
 
-	DrawRotaGraph(630, 360, 1, 0, background, false);
+	DrawRotaGraph(640, 360, 1, 0, back_ground_image, TRUE);
+	DrawRotaGraph(640, 110, 1, 0, pause_image, TRUE);
 
-	if (confirmation)
+	if (!select_menu_decision)
 	{
-		DrawRotaGraph(600, 200, 0.6f, 0, image1[select_menu], TRUE);
-
-		DrawRotaGraph(600, 300, 0.6f, 0, image1[4], TRUE);
-
-		DrawRotaGraph(430, 400, 0.6f, 0, image[0], TRUE); //はい
-		DrawRotaGraph(830, 400, 0.6f, 0, image[1], TRUE); //いいえ
-
-		DrawFormatString(0, 500, 0xffffff, "%d", confirmation_menu);
-
-		DrawString(cursor_x, cursor_y, "■", 0xffffff);
-
+		
+		for (int i = 0; i < 4; i++)
+		{
+			bool flg = FALSE;
+			if (i == select_menu_num)flg = TRUE;
+			DrawRotaGraph(640, 240 + (i * 100), 1, 0, menu_image[i][flg], TRUE);
+		}
 	}
-	
 	else
 	{
+		if (select_menu_num == 3)DrawRotaGraph(637, 358, 0.9987, 0, help_image, TRUE);
+		else
+		{
+			DrawRotaGraph(640, 240, 1, 0, text_image[select_menu_num], TRUE);
+			DrawRotaGraph(640, 340, 1, 0, text_image[0], TRUE);
 
-		DrawString(cursor_x, cursor_y, "■", 0xffffff);
-
-		DrawRotaGraph(600, 200, 0.6, 0, image[3], TRUE); //タイトル
-
-		DrawRotaGraph(730, 300, 0.6f, 0, image[4], TRUE); //ステージセレクト
-
-		DrawRotaGraph(570, 400, 0.6f, 0, image[6], TRUE); //ヘルプ
-
-		DrawRotaGraph(630, 500, 0.6f, 0, image[10], TRUE); //ゲーム終了
-
-		DrawFormatString(0, 500, 0xffffff, "%d", select_menu);
-
+			for (int i = 0; i < 2; i++)
+			{
+				bool flg = FALSE;
+				if (i == answer_num)flg = TRUE;
+				DrawRotaGraph(430 + (i * 400), 500, 1, 0, answer_image[i][flg], TRUE);
+			}
+		}
+		
 	}
 
-
 }
 
-//-----------------------------------
-// 値変更
-//-----------------------------------
-void Pause::SetNextScene()
-{
-	next_scene = false;
-}
 
-void Pause::Setconfirmation()
-{
-	confirmation = false;
-}
 
-//-----------------------------------
-// 値参照
-//-----------------------------------
-int Pause::GetSelectMenu()
-{
-	return select_menu;
-}
-
-//-----------------------------------
-// 値を参照させるため
-//-----------------------------------
-bool Pause::GetNextScene()
-{
-	return next_scene;
-}

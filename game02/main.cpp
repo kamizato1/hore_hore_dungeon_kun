@@ -52,6 +52,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         if(sceneMng->GetNowScene() != nullptr)sceneMng->Draw();
         key->Draw();
 
+
+        int x, y;
+        GetMousePoint(&x, &y);
+        DrawFormatString(0, 700, 0xffffff, "%d = x,  %d = y", x, y);
+
+
         ScreenFlip();			// 裏画面の内容を表画面に反映
 
         //フレームレートの設定
