@@ -78,11 +78,15 @@ void Opening::Update(Key* key)
 void Opening::Draw() const
 {
 
+	DrawRotaGraph(640, 360, 1, 0, background_image, false);
+
 	SetDrawBright(brightness, brightness, brightness);
 
 	DrawRotaGraph(640, 300,0.7f,0 ,image[story_no], false);
 
 	DrawRotaGraph(640, 630, 0.5, 0, character_image[story_no], true);
+
+	SetDrawBright(225, 225, 225);
 
 }
 
