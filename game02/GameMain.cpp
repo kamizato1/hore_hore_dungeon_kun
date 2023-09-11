@@ -17,6 +17,9 @@ GameMain::GameMain(int stage_num)
     for (int i = 0; i < STAGE_NUM; i++)fscanf_s(fp_w, "%d", &stage_width[i]);
     fclose(fp_w);
 
+    stage_bgm = LoadSoundMem("bgm/GameMain.mp3");
+    stage_clear_bgm = LoadSoundMem("bgm/GameClearSe.mp3");
+
     stage = new Stage(stage_num, stage_width[stage_num]);
     player = new Player();
     ui = new Ui();
@@ -48,6 +51,8 @@ void GameMain::Init()
     sway_size = SWAY_SIZE;
     sway_flg = FALSE;
     screen_brightness = 255;
+    StopSoundMem(stage_bgm);
+    PlaySoundMem(stage_bgm, DX_PLAYTYPE_LOOP, TRUE);
 }
 
 void GameMain::Update(Key* key)
@@ -62,7 +67,15 @@ void GameMain::Update(Key* key)
     }
     else
     {
-        if (player->GetClear())clear = TRUE;
+        if (player->GetClear())
+        {
+            if (clear == FALSE)
+            {
+                PlaySoundMem(stage_clear_bgm, DX_PLAYTYPE_BACK, TRUE);
+                StopSoundMem(stage_bgm);
+            }
+            clear = TRUE;   
+        }
         else
         {
             if (player->GetPlayerDie())die = TRUE;
@@ -153,8 +166,16 @@ AbstractScene* GameMain::ChangeScene()
 {
     if (stop)
     {
-        if (pause->GetChangeScene() == 1)return new GameMain(stage_num);
-        else if(pause->GetChangeScene() == 2)return new StageSelect(stage_num);
+        if (pause->GetChangeScene() == 1)
+        {
+            StopSoundMem(stage_bgm);
+            return new GameMain(stage_num);
+        }
+        else if (pause->GetChangeScene() == 2)
+        {
+            StopSoundMem(stage_bgm);
+            return new StageSelect(stage_num);
+        }
     }
     else if(change_scene)return new Result(stage_num, player->GetTreasureNum());
 

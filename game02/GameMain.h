@@ -21,6 +21,9 @@ private:
     Ui* ui;
     Pause* pause;
 
+    int stage_bgm;
+    int stage_clear_bgm;
+
     int max_scroll;
     int life, time, remaining_time;
     float sway_width, sway_size;

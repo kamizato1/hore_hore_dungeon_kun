@@ -57,7 +57,9 @@ void Ui::Draw(int time, int life, int item_type) const
 		count++;
 	}
 
-	//DrawRotaGraph(35, 35, 1,0,life_image, TRUE);
+	//DrawCircleGauge(935, 35, 50, life_image);
+
+	//DrawRotaGraph(935, 35, 1,0,life_image, TRUE);
 	//DrawRotaGraph(75, 40, 1, 0, number_image[0], TRUE);
 	//DrawRotaGraph(90, 40, 1, 0, number_image[life], TRUE);
 
