@@ -55,16 +55,16 @@ void Player::Update(Key* key, Stage* stage)
        //‚±‚±‚©‚ç‰º«‚Â‚é‚Í‚µ‚ð“Š‚°‚é‚Æ‚«‚Ìˆ—
        DATA all_r_stick_angle_record_calculation = { 0,0 };
        DATA now_r_stick_angle, old_r_stick_angle;
-       now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);//Æ€‚ð•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ð•Ï‚¦‚Ä‚Ë
-       now_r_stick_angle.y = (key->GetStickAngle(R).x / 50);//Æ€‚ð•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ð•Ï‚¦‚Ä‚Ë
+       now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);//Æ€‚ð•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ð•Ï‚¦‚Ä‚Ë
+       now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);//Æ€‚ð•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ð•Ï‚¦‚Ä‚Ë
 
        for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
        {
            old_r_stick_angle = r_stick_angle_record[i];
            r_stick_angle_record[i] = now_r_stick_angle;
            now_r_stick_angle = old_r_stick_angle;
-           all_r_stick_angle_record_calculation.x += r_stick_angle_record[i].x;
-           all_r_stick_angle_record_calculation.y += r_stick_angle_record[i].y;
+           all_r_stick_angle_record_calculation.x += r_stick_angle_record[i].y;
+           all_r_stick_angle_record_calculation.y += r_stick_angle_record[i].x;
        }
 
        throw_speed.x = (all_r_stick_angle_record_calculation.x / R_STICK_ANGLE_RECORD_NUM);

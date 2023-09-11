@@ -11,11 +11,14 @@ class Title : public AbstractScene
 private:
 
     int image; //背景画像
+    int help_image; //ヘルプイメージ
     int menu_image[MENU_NUM][2]; //メニュー画像
 
     int input_time; //入力受付時間
     int select_menu; // 現在入力しているメニュー
     bool can_scene_change; //次のシーンに行けるか
+    bool help; //ヘルプ画面開くのか
+
 
 public:
 
