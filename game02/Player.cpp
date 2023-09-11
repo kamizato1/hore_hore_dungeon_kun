@@ -226,9 +226,6 @@ void Player::Draw(float camera_work) const
         DrawRotaGraph(location.x + camera_work + (direction * 13), location.y, 0.6, (0.3 * direction), item_image[item_type], TRUE);
     }
 
-    if (item_type == 1)DrawString(0, 60, "ÉuÉçÉbÉN", 0xffffff);
-    else if(item_type == 2)DrawString(0, 60, "îöíe", 0xffffff);
-    else DrawString(0, 60, "Ç¬ÇÈÇÕÇµ", 0xffffff);
     DrawFormatString(0, 100, 0xffffff, "%d", item_num[item_type]);
     DrawFormatString(0, 160, 0xffffff, "%d",break_block_num);
     DrawFormatString(0, 190, 0xffffff, "%d, %d, %d, %d, %d", treasure_num[0], treasure_num[1], treasure_num[2], treasure_num[3], treasure_num[4]);

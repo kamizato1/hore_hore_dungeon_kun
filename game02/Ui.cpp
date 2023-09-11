@@ -44,7 +44,7 @@ bool Ui::MoveClearImage()
 
 void Ui::Draw(int time, int life, int item_type) const
 {
-	DrawRotaGraph(35, 35, 0.8,0,life_image, TRUE);
+	DrawRotaGraph(35, 35, 1,0,life_image, TRUE);
 	DrawRotaGraph(90, 40, 1, 0, number_image[life], TRUE);
 
 	int digit = 100;
