@@ -16,6 +16,7 @@ Title::Title()
 	image = LoadGraph("images/Title.png");
 	int menu_image[8];
 	LoadDivGraph("images/Menu/menu.png", 8, 2, 4, 600, 100, menu_image);
+	help = false;
 	int count = 0;
 	for (int i = 0; i < MENU_NUM; i++)
 	{
@@ -37,7 +38,16 @@ Title::~Title()
 void Title::Update(Key* key)
 {
 	//ボタンが押されたら
-	if (key->KeyDown(B))can_scene_change = TRUE;
+	if (key->KeyDown(B) && select_menu != 1)
+	{
+		can_scene_change = TRUE;
+	}
+
+	else
+	{
+		help = true;
+	}
+
 
 	//入力受付るのか
 	if (++input_time > INPUT_ACCEPTANCE_TIME)
@@ -85,9 +95,6 @@ AbstractScene* Title::ChangeScene()
 		{
 		case 0: //ゲームメインに遷移
 			return new StageSelect(0);
-			break;
-		case 1:
-			//return new herupu
 			break;
 		case 2:
 			//return new rannking
