@@ -7,6 +7,7 @@ Ui::Ui()
 {
 	LoadDivGraph("images/Ui/item.png", 3, 3, 1, 100, 100, item_image);
 	clear_image = LoadGraph("images/Ui/clear.png");
+	timer_image = LoadGraph("images/Ui/timer.png");
 	life_image = LoadGraph("images/Ui/player.png");
 	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, number_image);
 	wait_time = WAIT_TIME;
@@ -44,20 +45,23 @@ bool Ui::MoveClearImage()
 
 void Ui::Draw(int time, int life, int item_type) const
 {
-	DrawRotaGraph(35, 35, 1,0,life_image, TRUE);
-	DrawRotaGraph(90, 40, 1, 0, number_image[life], TRUE);
+	DrawRotaGraph(35, 35, 1, 0, timer_image, TRUE);
 
-	int digit = 100;
-	int count = 0;
-	
+	int digit = 100, count = 0;
 	while (digit > 0)
 	{
 		int image_type = (time / digit);
-		DrawRotaGraph(1000 + (count * 16), 40, 1, 0, number_image[image_type], TRUE);
+		DrawRotaGraph(70 + (count * 17), 32, 1, 0, number_image[image_type], TRUE);
 		time -= (image_type * digit);
 		digit = (digit / 10);
 		count++;
 	}
+
+	//DrawRotaGraph(35, 35, 1,0,life_image, TRUE);
+	//DrawRotaGraph(75, 40, 1, 0, number_image[0], TRUE);
+	//DrawRotaGraph(90, 40, 1, 0, number_image[life], TRUE);
+
+	
 
 	DrawRotaGraph(640, 55, 1, 0, item_image[item_type], TRUE);
 

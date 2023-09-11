@@ -10,6 +10,7 @@ private:
     float clear_image_size;
     int wait_time;
     int item_image[3];
+    int timer_image;
     bool end_clear_walk;
    
 public:
