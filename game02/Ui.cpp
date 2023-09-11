@@ -7,7 +7,7 @@ Ui::Ui()
 {
 	LoadDivGraph("images/Ui/item.png", 3, 3, 1, 100, 100, item_image);
 	clear_image = LoadGraph("images/Ui/clear.png");
-	life_image = LoadGraph("images/Ui/player.jpg");
+	life_image = LoadGraph("images/Ui/player.png");
 	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, number_image);
 	wait_time = WAIT_TIME;
 	end_clear_walk = FALSE;

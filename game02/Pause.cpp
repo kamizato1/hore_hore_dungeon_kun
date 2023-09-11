@@ -141,7 +141,7 @@ void Pause::Draw() const
 	}
 	else
 	{
-		if (select_menu_num == 3)DrawRotaGraph(637, 358, 0.9987, 0, help_image, TRUE);
+		if (select_menu_num == 3)DrawRotaGraph(640, 360, 1, 0, help_image, TRUE);
 		else
 		{
 			DrawRotaGraph(640, 240, 1, 0, text_image[select_menu_num], TRUE);
