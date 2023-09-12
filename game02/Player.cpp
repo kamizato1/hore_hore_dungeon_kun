@@ -127,7 +127,7 @@ void Player::Update(Key* key, Stage* stage)
            break_block_num -= (break_block_num / 50) * 50;
        }
 
-       HIT_TREASURE hit_treasure = stage->HitTreasure(this);
+       HIT_TREASURE hit_treasure = stage->HitTreasure(this, FALSE);
        if (hit_treasure.flg)
        {
            stage->DeleteTreasure(hit_treasure.num);

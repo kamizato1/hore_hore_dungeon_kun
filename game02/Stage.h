@@ -82,8 +82,8 @@ public:
     bool HitPickaxe(BoxCollider* bc);
 
     HIT_STAGE HitBlock(BoxCollider* bc);
-    HIT_TREASURE HitTreasure(BoxCollider* bc);
-    HIT_BOM HitBom(BoxCollider* bc);
+    HIT_TREASURE HitTreasure(BoxCollider* bc, bool is_it_treasure);
+    HIT_BOM HitBom(BoxCollider* bc, bool is_it_bom);
     bool HitFlag(BoxCollider* bc);
 
     void DeleteTreasure(int num);

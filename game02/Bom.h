@@ -26,7 +26,7 @@ public:
 
     Bom(DATA location, DATA speed);
 
-    void Update(class Stage* stagebase);
+    void Update(class Stage* stage);
     void Draw(float camera_work) const;
     bool HitExplosion(BoxCollider* bc);
     bool GetCanDelete() { return can_delete; }

@@ -231,29 +231,51 @@ HIT_STAGE Stage::HitBlock(BoxCollider* bc)
 	return hit_stage;
 }
 
-HIT_BOM Stage::HitBom(BoxCollider* bc)
+HIT_BOM Stage::HitBom(BoxCollider* bc, bool is_it_bom)
 {
 	HIT_BOM hit_bom = { FALSE, 0 };
 	for (int i = 0; i < bom.size(); i++)
 	{
 		if (bom[i].HitBox(bc))
 		{
-			hit_bom = { TRUE, i };
-			break;
+			if (is_it_bom)
+			{
+				if ((bc->GetLocation().x != bom[i].GetLocation().x) || (bc->GetLocation().y != bom[i].GetLocation().y))
+				{
+					hit_bom = { TRUE, i };
+					break;
+				}
+			}
+			else
+			{
+				hit_bom = { TRUE, i };
+				break;
+			}
 		}
 	}
 	return hit_bom;
 }
 
-HIT_TREASURE Stage::HitTreasure(BoxCollider* bc)
+HIT_TREASURE Stage::HitTreasure(BoxCollider* bc, bool is_it_treasure)
 {
 	HIT_TREASURE hit_treasure = { FALSE, 0, TREASURE_TYPE::BOM };
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		if (treasure[i].HitBox(bc))
 		{
-			hit_treasure = { TRUE, i, treasure[i].GetTreasureType() };
-			break;
+			if (is_it_treasure)
+			{
+				if ((bc->GetLocation().x != treasure[i].GetLocation().x) || (bc->GetLocation().y != treasure[i].GetLocation().y))
+				{
+					hit_treasure = { TRUE, i , treasure[i].GetTreasureType() };
+					break;
+				}
+			}
+			else
+			{
+				hit_treasure = { TRUE, i , treasure[i].GetTreasureType() };
+				break;
+			}
 		}
 	}
 	return hit_treasure;
@@ -353,9 +375,9 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 		}
 		else
 		{
-			HIT_BOM hit_bom = HitBom(bc);
+			HIT_BOM hit_bom = HitBom(bc, FALSE);
 			if (hit_bom.flg)bom[hit_bom.num].SetCanDelete(TRUE);
-			HIT_TREASURE hit_treasure = HitTreasure(bc);
+			HIT_TREASURE hit_treasure = HitTreasure(bc, FALSE);
 			if (hit_treasure.flg)
 			{
 				if (hit_treasure.treasure_type == TREASURE_TYPE::BOM)bom.emplace_back(treasure[hit_treasure.num].GetLocation(), DATA{ 0,0 });
@@ -368,7 +390,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 	{
 		if (!hit_stage.flg)
 		{
-			if ((!HitTreasure(bc).flg) && (!HitBom(bc).flg))
+			if ((!HitTreasure(bc, FALSE).flg) && (!HitBom(bc, FALSE).flg))
 			{
 				block.emplace_back(bc->GetLocation(), 4);
 				return TRUE;
@@ -379,7 +401,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 	{
 		if (!hit_stage.flg)
 		{
-			if ((!HitTreasure(bc).flg) && (!HitBom(bc).flg))
+			if ((!HitTreasure(bc, FALSE).flg) && (!HitBom(bc, FALSE).flg))
 			{
 				bom.emplace_back(bc->GetLocation(), DATA{ 0,0 });
 				return TRUE;

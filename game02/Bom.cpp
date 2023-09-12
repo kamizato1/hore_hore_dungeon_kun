@@ -33,7 +33,7 @@ Bom::Bom(DATA location, DATA speed)
     old_hit = FALSE;
 }
 
-void Bom::Update(Stage* stagebase)
+void Bom::Update(Stage* stage)
 {
     if (--bom_size_change_time == 0)
     {
@@ -56,12 +56,12 @@ void Bom::Update(Stage* stagebase)
         
         angle += angle_direction;
 
-        if (stagebase->HitBlock(this).flg)can_delete = TRUE;
+        if (stage->HitBlock(this).flg)can_delete = TRUE;
     }
     else
     {
-        if (!stagebase->HitBlock(this).flg)location.y += 1;
-        if(stagebase->HitBlock(this).flg)
+        if ((!stage->HitBlock(this).flg) && (!stage->HitTreasure(this, FALSE).flg)&&(!stage->HitBom(this, TRUE).flg))location.y += 1;
+        if((stage->HitBlock(this).flg) || (stage->HitTreasure(this, FALSE).flg) || (stage->HitBom(this, TRUE).flg))
         {
             int y = location.y / BLOCK_SIZE_Y;
             location.y = (y * BLOCK_SIZE_Y) + (radius.y);
