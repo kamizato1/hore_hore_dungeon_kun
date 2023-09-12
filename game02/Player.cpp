@@ -63,8 +63,8 @@ void Player::Update(Key* key, Stage* stage)
            old_r_stick_angle = r_stick_angle_record[i];
            r_stick_angle_record[i] = now_r_stick_angle;
            now_r_stick_angle = old_r_stick_angle;
-           all_r_stick_angle_record_calculation.x += r_stick_angle_record[i].y;
-           all_r_stick_angle_record_calculation.y += r_stick_angle_record[i].x;
+           all_r_stick_angle_record_calculation.x += r_stick_angle_record[i].x;
+           all_r_stick_angle_record_calculation.y += r_stick_angle_record[i].y;
        }
 
        throw_speed.x = (all_r_stick_angle_record_calculation.x / R_STICK_ANGLE_RECORD_NUM);
