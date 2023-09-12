@@ -4,6 +4,9 @@ tousen →　ClearSE
 gameover2_8bit　→ GameOverSE
 MusMus-BGM-093 → StageSelectBGM
 MusMus-BGM-089 →　OpingBGM
+se_bomb5 → ExplosionSE
+Timer01-1(10_Seconds) →　BombTimeSE
+ジャンプ_レトロ_その４ →　JumpSE
 
 
 閲覧サイト一覧↓
