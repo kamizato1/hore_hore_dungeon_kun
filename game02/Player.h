@@ -17,6 +17,7 @@ private:
     int item_image[ITEM_TYPE_NUM];
     int answer_image[2];
     int item_set_time;
+    int block_set_time;
     bool pickaxe_flg;
     bool can_throw, die;
     DATA speed;
@@ -24,11 +25,12 @@ private:
     DATA r_stick_angle_record[R_STICK_ANGLE_RECORD_NUM];
     float speed_x_record[L_STICK_ANGLE_RECORD_NUM];
     int item_type;
-    int item_num[ITEM_TYPE_NUM];
+    int bom_num;
     int treasure_num[TREASURE_TYPE_NUM];
     int break_block_num;
     Cursor* cursor;
     bool clear;
+    bool can_use_item[ITEM_TYPE_NUM];
 
     //ƒeƒXƒg
     
@@ -54,4 +56,5 @@ public:
     bool GetClear() { return clear; }
     int GetItemType()const { return item_type; }
     int* GetTreasureNum() { return treasure_num; }
+    int GetBlockSetTime()const { return block_set_time; }
 };

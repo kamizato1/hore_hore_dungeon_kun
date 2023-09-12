@@ -10,10 +10,11 @@
 #define ITEM_ANGLE 30
 #define ITEM_SET_TIME 10
 
+
 Player::Player()
 {
     Init();
-    for (int i = 0; i < ITEM_TYPE_NUM; i++)item_num[i] = 0;
+    bom_num = 999;
     for(int i = 0; i < TREASURE_TYPE_NUM; i++)treasure_num[i] = 0;
     LoadDivGraph("images/Player/player1.png", 5, 5, 1, 30, 30, image);
     LoadDivGraph("images/Player/marubatu1.png", 2, 2, 1, 20, 20, answer_image);
@@ -37,8 +38,10 @@ void Player::Init()
     image_type = 0;
     image_change_time = 0;
     item_set_time = 0;
+    block_set_time = 0;
     pickaxe_flg = TRUE;
     clear = FALSE;
+    for (int i = 0; i < ITEM_TYPE_NUM; i++)can_use_item[i] = FALSE;
 }
 
 void Player::Update(Key* key, Stage* stage)
@@ -88,32 +91,30 @@ void Player::Update(Key* key, Stage* stage)
        }
 
        if (--item_set_time < 0)item_set_time = 0;
+       if (--block_set_time < 0)block_set_time = 0;
 
-       if ((item_set_time == 0) && (!clear))
+       if (!clear)
        {
            if (key->KeyDown(L))
            {
-               if (can_throw)
+               if ((can_throw) && (can_use_item[item_type]))
                {
-                   if (stage->ThrowItem(location, throw_speed, static_cast<ITEM_TYPE>(item_type), item_num[item_type]))
-                   {
-                       item_num[item_type]--;
-                       item_set_time = ITEM_SET_TIME;
-                   }
+                   stage->ThrowItem(location, throw_speed, static_cast<ITEM_TYPE>(item_type));
+                   if (item_type == 2)item_set_time = ITEM_SET_TIME, bom_num--;
                }
            }
            else if (key->KeyDown(R))
            {
-               if (stage->PutItem(cursor, static_cast<ITEM_TYPE>(item_type), item_num[item_type]))
+               if (can_use_item[item_type])
                {
-                   if (item_type == 0)break_block_num++;
-                   else
+                   if (stage->PutItem(cursor, static_cast<ITEM_TYPE>(item_type)))
                    {
-                       item_num[item_type]--;
-                       item_set_time = ITEM_SET_TIME;
+                       if (item_type == 0)break_block_num++;
+                       else if (item_type == 1)block_set_time = BLOCK_SET_TIME;
+                       else item_set_time = ITEM_SET_TIME, bom_num--;
                    }
+                   if (item_type == 0)item_set_time = ITEM_SET_TIME;
                }
-               if (item_type == 0)item_set_time = ITEM_SET_TIME;
            }
        }
 
@@ -122,18 +123,22 @@ void Player::Update(Key* key, Stage* stage)
        break_block_num += stage->GetBreakBlockNum();
        if (break_block_num >= 50)
        {
-           item_num[1] += (break_block_num / 50);
+           treasure_num[0] += (break_block_num / 50);
            break_block_num -= (break_block_num / 50) * 50;
        }
 
-       treasure_num[0] = item_num[1];//アイテムのブロックを宝のブロックに代入
        HIT_TREASURE hit_treasure = stage->HitTreasure(this);
        if (hit_treasure.flg)
        {
            stage->DeleteTreasure(hit_treasure.num);
-           if (hit_treasure.treasure_type == TREASURE_TYPE::BOM)item_num[static_cast<int>(ITEM_TYPE::BOM)]++;
+           if (hit_treasure.treasure_type == TREASURE_TYPE::BOM)bom_num++;
            else treasure_num[static_cast<int>(hit_treasure.treasure_type)]++;
        }
+
+       for (int i = 0; i < ITEM_TYPE_NUM; i++)can_use_item[i] = FALSE;
+       if (pickaxe_flg)can_use_item[0] = TRUE;
+       if (block_set_time == 0)can_use_item[1] = TRUE;
+       if((item_set_time == 0) && (bom_num != 0))can_use_item[2] = TRUE;
    }
 }
 
@@ -221,12 +226,12 @@ void Player::Draw(float camera_work) const
         int angle = (direction * 30) + ((item_set_time * 10) * -direction);
         if (pickaxe_flg)DrawRotaGraph(location.x + camera_work + (direction * 4), location.y, 1, (M_PI / 180) * angle, item_image[item_type], TRUE);
     }
-    else if ((item_set_time == 0) && (item_num[item_type] != 0))
+    else if (can_use_item[item_type])
     {
         DrawRotaGraph(location.x + camera_work + (direction * 13), location.y, 0.6, (0.3 * direction), item_image[item_type], TRUE);
     }
 
-    DrawFormatString(0, 100, 0xffffff, "%d", item_num[item_type]);
+    DrawFormatString(0, 100, 0xffffff, "%d", bom_num);
     DrawFormatString(0, 160, 0xffffff, "%d",break_block_num);
     DrawFormatString(0, 190, 0xffffff, "%d, %d, %d, %d, %d", treasure_num[0], treasure_num[1], treasure_num[2], treasure_num[3], treasure_num[4]);
 }

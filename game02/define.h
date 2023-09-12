@@ -22,6 +22,8 @@
 
 #define MAX_FALL_SPEED 5.0f
 
+#define BLOCK_SET_TIME 300
+
 
 enum
 {
@@ -65,8 +67,8 @@ enum class BLOCK_TYPE
     BROKEN_BLOCK,//壊れそうなブロック
     WOUNDED_BLOCK,//傷ついているブロック
     NORMAL_BLOCK,//ブロック
+    GENERATE_BLOCK,
     GROUND_BLOCK,//地面のブロック
-    JEWEL_BLOCK,//宝石
     HARD_BLOCK,//かたいブロック
     VERY_HARD_BLOCK//とても固いブロック
 };
