@@ -11,10 +11,13 @@ private:
 	DATA font_location[FONT_NUM];
 	int font_image[FONT_NUM];
 	int back_ground_image;
+	bool change_scene;
+	int stage_num;
+	int wait_time;
 
 public:
 
-	GameOver();
+	GameOver(int stage_num);
 	void Update(Key* key) override;
 	void Draw() const override;
 	AbstractScene* ChangeScene() override;

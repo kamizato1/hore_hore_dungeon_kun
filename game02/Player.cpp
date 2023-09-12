@@ -58,8 +58,8 @@ void Player::Update(Key* key, Stage* stage)
        //‚±‚±‚©‚ç‰º«‚Â‚é‚Í‚µ‚ð“Š‚°‚é‚Æ‚«‚Ìˆ—
        DATA all_r_stick_angle_record_calculation = { 0,0 };
        DATA now_r_stick_angle, old_r_stick_angle;
-       now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);//Æ€‚ð•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ð•Ï‚¦‚Ä‚Ë
-       now_r_stick_angle.y = (key->GetStickAngle(R).y / 50);//Æ€‚ð•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ð•Ï‚¦‚Ä‚Ë
+       now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);//Æ€‚ð•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ð•Ï‚¦‚Ä‚Ë
+       now_r_stick_angle.y = (key->GetStickAngle(R).x / 50);//Æ€‚ð•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ð•Ï‚¦‚Ä‚Ë
 
        for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
        {
@@ -228,7 +228,7 @@ void Player::Draw(float camera_work) const
     }
     else if (can_use_item[item_type])
     {
-        DrawRotaGraph(location.x + camera_work + (direction * 13), location.y, 0.6, (0.3 * direction), item_image[item_type], TRUE);
+        DrawRotaGraph(location.x + camera_work + (direction * 14), location.y, 1, (0.3 * direction), item_image[item_type], TRUE);
     }
 
     DrawFormatString(0, 100, 0xffffff, "%d", bom_num);

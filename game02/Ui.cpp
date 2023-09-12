@@ -10,7 +10,7 @@ Ui::Ui()
 	clear_image = LoadGraph("images/Ui/clear.png");
 	timer_image = LoadGraph("images/Ui/timer.png");
 	life_image = LoadGraph("images/Ui/player.png");
-	LoadDivGraph("images/Ui/block.png", 2, 2, 1, 170, 170, block_image);
+	LoadDivGraph("images/Ui/block.png", 2, 2, 1, 160, 160, block_image);
 	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, number_image);
 	wait_time = WAIT_TIME;
 	end_clear_walk = FALSE;
@@ -66,7 +66,11 @@ void Ui::Draw(int time, int life, int item_type, int block_set_time) const
 	block_set_time = ((BLOCK_SET_TIME - block_set_time) / 3);
 
 	DrawRotaGraph(640, 55, 1, 0, item_image[item_type], TRUE);
-	if (item_type == 1)DrawCircleGauge(640, 55, block_set_time, block_image[0]);
+	if (item_type == 1)
+	{
+
+		DrawCircleGauge(640, 55, block_set_time, block_image[0]);
+	}
 
 	int item = item_type - 1;
 	if (item < 0)item = 2;
