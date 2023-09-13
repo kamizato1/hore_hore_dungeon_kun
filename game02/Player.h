@@ -64,4 +64,6 @@ public:
     int GetItemType()const { return item_type; }
     int* GetTreasureNum() { return treasure_num; }
     PLAYER_UI GetPlayerUi()const;
+
+    
 };

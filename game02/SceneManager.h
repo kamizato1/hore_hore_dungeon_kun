@@ -12,10 +12,10 @@ public:
 	SceneManager(AbstractScene* scene);
 
 	//デストラクタ
-	/*~SceneManager()
+	~SceneManager()
 	{
 		delete mScene;
-	}*/
+	}
 
 	//描画以外の更新を実装する
 	void Update(Key* key);

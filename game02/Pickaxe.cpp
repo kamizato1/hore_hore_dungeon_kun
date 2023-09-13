@@ -22,6 +22,7 @@ Pickaxe::Pickaxe(DATA location, DATA speed, int image,int throw_pickaxe_se, int 
     this->break_pickaxe_se = break_pickaxe_se;
     this->hit_pickaxe_se = hit_pickaxe_se;
     PlaySoundMem(throw_pickaxe_se, DX_PLAYTYPE_LOOP, TRUE);
+    can_throw_pickaxe_se = TRUE;
 }
 
 Pickaxe::~Pickaxe()
@@ -52,16 +53,29 @@ void Pickaxe::Update(Stage* stage)
             angle_direction = -(angle_direction / 2);
             PlaySoundMem(hit_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
             StopSoundMem(throw_pickaxe_se);
+            can_throw_pickaxe_se = FALSE;
         }
         angle += angle_direction;
         if (angle > 360)angle = 0;
         else if (angle < 0)angle = 360;
     }
 
-    if (location.y > SCREEN_HEIGHT)can_delete = TRUE;
+    if (location.y > SCREEN_HEIGHT + 100)can_delete = TRUE;
 }
 
 void Pickaxe::Draw(float camera_work) const
 {
     DrawRotaGraph(location.x + camera_work, location.y, 1, ((M_PI / 180) * angle), image, TRUE);
+}
+
+void Pickaxe::Pause(bool flg)
+{
+    if (flg)
+    {
+        StopSoundMem(throw_pickaxe_se);
+    }
+    else
+    {
+        if(can_throw_pickaxe_se) PlaySoundMem(throw_pickaxe_se, DX_PLAYTYPE_LOOP, TRUE);
+    }
 }

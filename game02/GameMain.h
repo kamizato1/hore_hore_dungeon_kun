@@ -24,6 +24,8 @@ private:
     int stage_bgm;
     int stage_clear_bgm;
 
+    int earthquake_se;
+
     int max_scroll;
     int life, time, remaining_time;
     float sway_width, sway_size;
@@ -36,6 +38,7 @@ private:
     void ReStart();
     void Init();
     void Sway();
+    void Pause(bool flg);
    
 public:
 

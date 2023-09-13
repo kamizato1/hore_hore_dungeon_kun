@@ -13,6 +13,8 @@ private:
     int throw_pickaxe_se;
     int hit_pickaxe_se;
 
+    int can_throw_pickaxe_se;
+
     int image;
     int angle;
     int angle_direction;
@@ -30,4 +32,6 @@ public:
     void Draw(float camera_work) const;
 
     bool GetCanDelete() { return can_delete; }
+
+    void Pause(bool flg);
 };

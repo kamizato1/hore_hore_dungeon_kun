@@ -151,6 +151,7 @@ void Stage::Update()
 		pickaxe->Update(this);
 		if (pickaxe->GetCanDelete())
 		{
+			effect.emplace_back(pickaxe->GetLocation(), break_block_image[0]);
 			delete pickaxe;
 			pickaxe = nullptr;
 		}
@@ -451,5 +452,18 @@ void Stage::Sway()
 				else block[i].SetBlockType(block_type - 1);
 			}
 		}
+	}
+}
+
+
+void Stage::Pause(bool flg)
+{
+	if (flg)
+	{
+		if (pickaxe != nullptr)pickaxe->Pause(TRUE);
+	}
+	else
+	{
+		if (pickaxe != nullptr)pickaxe->Pause(FALSE);
 	}
 }

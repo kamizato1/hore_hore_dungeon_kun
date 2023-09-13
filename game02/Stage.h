@@ -101,4 +101,5 @@ public:
     int GetBreakBlockNum() { return break_block_num; }
     void DeleteFlag();
     void Init();
+    void Pause(bool flg);
 };

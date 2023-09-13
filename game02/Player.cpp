@@ -254,3 +254,5 @@ PLAYER_UI Player::GetPlayerUi()const
     player_ui.bom_num = 0;
     return player_ui;
 }
+
+

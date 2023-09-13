@@ -6,7 +6,7 @@
 #include"Result.h"
 #include"GameOver.h"
 
-#define TIME 300
+#define TIME 160
 #define MAX_SWAY_WIDTH 5
 #define SWAY_SIZE 0.5
 
@@ -20,11 +20,12 @@ GameMain::GameMain(int stage_num)
 
     stage_bgm = LoadSoundMem("bgm/GameMain.mp3");
     stage_clear_bgm = LoadSoundMem("bgm/GameClearSe.mp3");
+    earthquake_se = LoadSoundMem("bgm/earthquake.mp3");
 
     stage = new Stage(stage_num, stage_width[stage_num]);
     player = new Player();
     ui = new Ui();
-    pause = new Pause();
+    pause = new class Pause();
     this->stage_num = stage_num;
     life = 3;
     max_scroll = stage_width[stage_num] - 4;
@@ -53,6 +54,7 @@ void GameMain::Init()
     sway_size = SWAY_SIZE;
     sway_flg = FALSE;
     screen_brightness = 255;
+    Pause(TRUE);
     StopSoundMem(stage_bgm);
     PlaySoundMem(stage_bgm, DX_PLAYTYPE_LOOP, TRUE);
 }
@@ -88,7 +90,12 @@ void GameMain::Update(Key* key)
     if ((key->KeyDown(START)) && (!die) && (!clear))
     {
         stop = !stop;
-        if (stop)pause->Init();
+        if (stop)
+        {
+            Pause(TRUE);
+            pause->Init();
+        }
+        else Pause(FALSE);
     }
 
     if (!stop)
@@ -105,7 +112,11 @@ void GameMain::Update(Key* key)
 
             if ((remaining_time == 150) || (remaining_time == 100) || (remaining_time == 50) || (remaining_time == 0))
             {
-                if (!sway_flg)sway_flg = TRUE;
+                if (!sway_flg)
+                {
+                    sway_flg = TRUE;
+                    PlaySoundMem(earthquake_se, DX_PLAYTYPE_BACK, TRUE);
+                }
             }
         }
         change_result_scene = ui->Update(clear);
@@ -178,18 +189,41 @@ AbstractScene* GameMain::ChangeScene()
         if (pause->GetChangeScene() == 1)
         {
             StopSoundMem(stage_bgm);
+            Pause(TRUE);
             return new GameMain(stage_num);
         }
         else if (pause->GetChangeScene() == 2)
         {
             StopSoundMem(stage_bgm);
+            Pause(TRUE);
             return new StageSelect(stage_num);
         }
     }
-    else if(change_result_scene)return new Result(stage_num, player->GetTreasureNum());
+    else if (change_result_scene)
+    {
+        Pause(TRUE);
+        return new Result(stage_num, player->GetTreasureNum());
+    }
 
-    if (change_game_over_scene)return new GameOver(stage_num);
+    if (change_game_over_scene)
+    {
+        Pause(TRUE);
+        return new GameOver(stage_num);
+    }
 
     return this;
 }
 
+void GameMain::Pause(bool flg)
+{
+    if (flg)
+    {
+        StopSoundMem(earthquake_se);
+    }
+    else
+    {
+        if(sway_flg)PlaySoundMem(earthquake_se, DX_PLAYTYPE_BACK, FALSE);
+    }
+
+    stage->Pause(flg);
+}
