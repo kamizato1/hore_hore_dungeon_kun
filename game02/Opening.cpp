@@ -43,18 +43,11 @@ void Opening::Update(Key* key)
 
 	int old_story_no = story_no;
 
-	//STARTキーが押された、もしくは紙芝居終了時にタイトルへ
-	if (key->KeyDown(START) || story_no > 4)
+	//Aキーが押された、もしくは紙芝居終了時にタイトルへ
+	if (key->KeyDown(B) || story_no > 4)
 	{
 		can_scene_change = true;
 	}
-
-	if (key->KeyDown(B))
-	{
-		++story_no;
-		time = 0; 
-	}
-
 
 	//60で÷と秒に治る
 	if (++time % 400 == 0) 

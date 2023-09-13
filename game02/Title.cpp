@@ -1,6 +1,7 @@
 #include"DxLib.h"
 #include"Title.h"
 #include"StageSelect.h"
+#include"Opening.h"
 #include"GameMain.h"
 
 #define  INPUT_ACCEPTANCE_TIME 10
@@ -109,6 +110,13 @@ AbstractScene* Title::ChangeScene()
 			break;
 		}
 	}
+
+	//‘€ì‚µ‚È‚©‚Á‚½‚ç†Å‹
+	if (input_time % 400 == 0)
+	{
+		return new Opening();
+	}
+
 
 	return this;
 }
