@@ -45,9 +45,9 @@ void Opening::Update(Key* key)
 	int old_story_no = story_no;
 
 
-	if (CheckSoundMem(bgm) != 1) {   //SEが流れていなかったら再生
-		ChangeVolumeSoundMem(255 * 40 / 100, bgm); //SE音量調整 255最大音量から80%再生
-		PlaySoundMem(bgm, DX_PLAYTYPE_BACK, TRUE); //SE再生
+	if (CheckSoundMem(bgm) != 1) {   //BGMが流れていなかったら再生
+		ChangeVolumeSoundMem(255 * 40 / 100, bgm); //BGM音量調整 255最大音量から40%再生
+		PlaySoundMem(bgm, DX_PLAYTYPE_BACK, TRUE); //BGM再生
 	}
 
 	//Aキーが押された、もしくは紙芝居終了時にタイトルへ
@@ -78,9 +78,10 @@ void Opening::Update(Key* key)
 void Opening::Draw() const
 {
 	
-	//https://scrapbox.io/dxlib/SetDrawBlendMode
+
 	DrawRotaGraph(640, 360, 1, 0, background_image, false);
 	
+	//https://scrapbox.io/dxlib/SetDrawBlendMode
 	//透明度
     SetDrawBlendMode(DX_BLENDMODE_ALPHA, brightness);
 
