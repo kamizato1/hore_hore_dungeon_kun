@@ -27,7 +27,7 @@ Stage::Stage(int stage_num, int stage_width)
 
 			if (block_type != -1)block.emplace_back(location, block_type);
 			if (treasure_type == 5) flag_location = location;
-			else if (treasure_type != -1)treasure.emplace_back(location, treasure_type);
+			else if ((treasure_type != -1) && treasure_type != 0)treasure.emplace_back(location, treasure_type);
 		}
 	}
 	fclose(fp_s);
@@ -157,8 +157,7 @@ void Stage::HitBlastRange(int bom_num)
 		{
 			if ((bom[bom_num].HitExplosion(&treasure[i])) && (!HitBlock(&treasure[i]).flg))
 			{
-				if (treasure[i].GetTreasureType() == TREASURE_TYPE::BOM)bom.emplace_back(treasure[i].GetLocation(), DATA{ 0,0 });
-				else effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
+				effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
 				treasure.erase(treasure.begin() + i);
 				i--;
 			}
@@ -259,7 +258,7 @@ HIT_BOM Stage::HitBom(BoxCollider* bc, bool is_it_bom)
 
 HIT_TREASURE Stage::HitTreasure(BoxCollider* bc, bool is_it_treasure)
 {
-	HIT_TREASURE hit_treasure = { FALSE, 0, TREASURE_TYPE::BOM };
+	HIT_TREASURE hit_treasure = { FALSE, 0, TREASURE_TYPE::COIN };
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		if (treasure[i].HitBox(bc))
@@ -309,19 +308,14 @@ void Stage::DeleteTreasure(int num)
 
 bool Stage::HitPickaxe(BoxCollider* bc)
 {
-	for (int i = 0; i < bom.size(); i++)if ((bom[i].HitBox(bc)) && (!bom[i].GetOldHit()))bom[i].SetCanDelete(TRUE);
+	for (int i = 0; i < bom.size(); i++)if (bom[i].HitBox(bc))bom[i].SetCanDelete(TRUE);
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		if (treasure[i].HitBox(bc))
 		{
 			if (!treasure[i].GetOldHit(this))
 			{
-				if (treasure[i].GetTreasureType() == TREASURE_TYPE::BOM)
-				{
-					bom.emplace_back(treasure[i].GetLocation(), DATA{ 0,0 });
-					bom[bom.size() - 1].SetOldHit(TRUE);
-				}
-				else effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
+				effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
 				treasure.erase(treasure.begin() + i);
 				i--;
 			}
@@ -381,8 +375,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			HIT_TREASURE hit_treasure = HitTreasure(bc, FALSE);
 			if (hit_treasure.flg)
 			{
-				if (hit_treasure.treasure_type == TREASURE_TYPE::BOM)bom.emplace_back(treasure[hit_treasure.num].GetLocation(), DATA{ 0,0 });
-				else effect.emplace_back(treasure[hit_treasure.num].GetLocation(), break_treasure_image[static_cast<int>(treasure[hit_treasure.num].GetTreasureType())]);
+				effect.emplace_back(treasure[hit_treasure.num].GetLocation(), break_treasure_image[static_cast<int>(treasure[hit_treasure.num].GetTreasureType())]);
 				treasure.erase(treasure.begin() + hit_treasure.num);
 			}
 		}
@@ -417,7 +410,6 @@ void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 	if (item_type == ITEM_TYPE::PICKAXE)
 	{
 		if (pickaxe == nullptr)pickaxe = new Pickaxe(location, speed, pickaxe_image, hit_pickaxe_se);
-		for (int i = 0; i < bom.size(); i++)bom[i].SetOldHit(FALSE);
 		for (int i = 0; i < treasure.size(); i++)treasure[i].SetOldHit(FALSE);
 	}
 	else if (item_type == ITEM_TYPE::BOM)bom.emplace_back(location, speed);

@@ -22,7 +22,7 @@
 
 #define MAX_FALL_SPEED 5.0f
 
-#define BLOCK_SET_TIME 300
+
 
 
 enum
@@ -43,7 +43,8 @@ enum
 struct PLAYER_UI
 {
     int item_type;
-    int block_set_time;
+    float now_item_set_time[ITEM_TYPE_NUM];
+    float item_set_time[ITEM_TYPE_NUM];
     int treasure_num[TREASURE_TYPE_NUM];
     int bom_num;
 };
@@ -62,8 +63,8 @@ enum class ITEM_TYPE
 
 enum class TREASURE_TYPE
 {
-    BOM,//爆弾(最終的にはブロック)
-    COIN,//コイン
+    //0番目は生成されたブロック
+    COIN = 1,//コイン
     CUP,//カップ
     CROWN,//王冠
     JEWEL//宝石
