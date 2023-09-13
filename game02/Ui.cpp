@@ -6,13 +6,21 @@
 
 Ui::Ui()
 {
-	LoadDivGraph("images/Ui/item.png", 3, 3, 1, 100, 100, item_image);
-	LoadDivGraph("images/Ui/sign.png", 2, 2, 1, 20, 40, sign_image);
+	LoadDivGraph("images/Ui/item.png", ITEM_TYPE_NUM, ITEM_TYPE_NUM, 1, 100, 100, item_image);
 	LoadDivGraph("images/Ui/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, 40, 40, treasure_image);
 	clear_image = LoadGraph("images/Ui/clear.png");
 	timer_image = LoadGraph("images/Ui/timer.png");
 	life_image = LoadGraph("images/Ui/player.png");
-	LoadDivGraph("images/Ui/block.png", 2, 2, 1, 160, 160, block_image);
+
+	int dark_item_image[6];
+	int count = 0;
+	LoadDivGraph("images/Ui/darkitem.png", 6, 2, ITEM_TYPE_NUM, 160, 160, dark_item_image);
+	for (int i = 0; i < ITEM_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < 2; j++)this->dark_item_image[i][j] = dark_item_image[count++];
+	}
+
+
 	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, number_image);
 	wait_time = WAIT_TIME;
 	end_clear_walk = FALSE;
@@ -47,7 +55,7 @@ bool Ui::MoveClearImage()
 	return FALSE;
 }
 
-void Ui::Draw(int time, int life, PLAYER_UI player_ui) const
+void Ui::Draw(int time, int life, int pickaxe_flg, PLAYER_UI player_ui) const
 {
 	for (int i = 0; i < TREASURE_TYPE_NUM; i++)DrawRotaGraph(30, 150 + (i * 50), 1, 0, treasure_image[i], TRUE);
 
@@ -56,7 +64,7 @@ void Ui::Draw(int time, int life, PLAYER_UI player_ui) const
 	DrawRotaGraph(30, 80, 1, 0, life_image, TRUE);
 	DrawRotaGraph(65, 80, 0.9, 0, number_image[0], TRUE);
 	DrawRotaGraph(80, 80, 0.9, 0, number_image[life], TRUE);
-	
+
 
 	int timer_digit = 100;
 	int treasure_num_digit = 10;
@@ -79,24 +87,34 @@ void Ui::Draw(int time, int life, PLAYER_UI player_ui) const
 			}
 			treasure_num_digit = (treasure_num_digit / 10);
 		}
-
 		count++;
 	}
-	int block_set_time = ((BLOCK_SET_TIME - player_ui.block_set_time) / 3);
 
+	for (int i = 0; i < ITEM_TYPE_NUM; i++)player_ui.now_item_set_time[i] = (player_ui.now_item_set_time[i] / player_ui.item_set_time[i]) * 100;
 	DrawRotaGraph(640, 55, 1, 0, item_image[player_ui.item_type], TRUE);
-	if (player_ui.item_type == 1)DrawCircleGauge(640, 55, block_set_time, block_image[0]);
+	if (player_ui.item_type == 0)
+	{
+		if (pickaxe_flg)DrawRotaGraph(640, 55, 1, 0, dark_item_image[player_ui.item_type][0], TRUE);
+	}
+	else DrawCircleGauge(640, 55, player_ui.now_item_set_time[player_ui.item_type], dark_item_image[player_ui.item_type][0]);
 
-	int item = player_ui.item_type - 1;
-	if (item < 0)item = 2;
-	DrawRotaGraph(560, 35, 0.5, 0, item_image[item], TRUE);
-	if (item == 1)DrawCircleGauge(560, 35, block_set_time, block_image[1]);
+	int item_type = player_ui.item_type - 1;
+	if (item_type < 0)item_type = 2;
+	DrawRotaGraph(560, 35, 0.5, 0, item_image[item_type], TRUE);
+	if (item_type == 0)
+	{
+		if (pickaxe_flg)DrawRotaGraph(560, 35, 1, 0, dark_item_image[item_type][1], TRUE);
+	}
+	else DrawCircleGauge(560, 35, player_ui.now_item_set_time[item_type], dark_item_image[item_type][1]);
 
-	item = player_ui.item_type + 1;
-	if (item > 2)item = 0;
-	DrawRotaGraph(720, 35, 0.5, 0, item_image[item], TRUE);
-	if (item == 1)DrawCircleGauge(720, 35, block_set_time, block_image[1]);
+	item_type = player_ui.item_type + 1;
+	if (item_type > 2)item_type = 0;
+	DrawRotaGraph(720, 35, 0.5, 0, item_image[item_type], TRUE);
+	if (item_type == 0)
+	{
+		if (pickaxe_flg)DrawRotaGraph(720, 35, 1, 0, dark_item_image[item_type][1], TRUE);
+	}
+	else DrawCircleGauge(720, 35, player_ui.now_item_set_time[item_type], dark_item_image[item_type][1]);
 
 	DrawRotaGraph(640, 300, clear_image_size, 0, clear_image, TRUE);
-	
 }

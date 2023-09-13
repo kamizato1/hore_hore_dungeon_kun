@@ -9,6 +9,10 @@
 #define R_STICK_ANGLE_RECORD_NUM 20
 #define L_STICK_ANGLE_RECORD_NUM 15
 
+#define PICKAXE_SET_TIME 10
+#define BLOCK_SET_TIME 300
+#define BOM_SET_TIME 20
+
 class Player : public BoxCollider
 {
 private:
@@ -16,8 +20,9 @@ private:
     int image[5];
     int item_image[ITEM_TYPE_NUM];
     int answer_image[2];
-    int item_set_time;
-    int block_set_time;
+
+    int now_item_set_time[ITEM_TYPE_NUM];
+    int item_set_time[ITEM_TYPE_NUM] = { PICKAXE_SET_TIME , BLOCK_SET_TIME ,BOM_SET_TIME };
     bool pickaxe_flg;
     bool can_throw, die;
     DATA speed;
@@ -25,7 +30,6 @@ private:
     DATA r_stick_angle_record[R_STICK_ANGLE_RECORD_NUM];
     float speed_x_record[L_STICK_ANGLE_RECORD_NUM];
     int item_type;
-    int bom_num;
     int treasure_num[TREASURE_TYPE_NUM];
     int break_block_num;
     Cursor* cursor;

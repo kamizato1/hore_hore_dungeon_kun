@@ -47,16 +47,18 @@ Result::Result(int stage_num, int* treasure_num)
 
 	for (int i = 0; i < TREASURE_TYPE_NUM; i++)
 	{
-		treasure_score[i] =  this->treasure_num[i] * treasure_price[i];
+		treasure_score[i] = treasure_num[i] * treasure_price[i];
 		score += treasure_score[i];
+		if (treasure_score[i] > 9999999)treasure_score[i] = 9999999;
 	}
+	if (score > 9999999)score = 9999999;
 
 	int hi_score[STAGE_NUM];
 	FILE* fp_s;//ステージ１ファイル読み込み
 	fopen_s(&fp_s, "data/hiscore.txt", "r");
 	for (int i = 0; i < STAGE_NUM; i++)fscanf_s(fp_s, "%d", &hi_score[i]);
 	fclose(fp_s);
-
+	
 	if (score > hi_score[stage_num])
 	{
 		new_record = TRUE;
@@ -144,6 +146,8 @@ void Result::AddScore()
 			wait_time = WAIT_TIME;
 		}
 	}
+
+	if (score > 9999999)score = 9999999;
 }
 
 void Result::MoveStamp()
