@@ -9,8 +9,11 @@ class Pickaxe : public BoxCollider
 {
 private:
 
+    int break_pickaxe_se;
+    int throw_pickaxe_se;
+    int hit_pickaxe_se;
+
     int image;
-    int se;
     int angle;
     int angle_direction;
     bool can_delete;
@@ -20,7 +23,8 @@ private:
 
 public:
 
-    Pickaxe(DATA location, DATA speed, int image, int se);
+    Pickaxe(DATA location, DATA speed, int image, int throw_pickaxe_se, int hit_pickaxe_se, int break_pickaxe_se);
+    ~Pickaxe();
 
     void Update(class Stage* stage);
     void Draw(float camera_work) const;

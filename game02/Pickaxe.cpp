@@ -6,19 +6,27 @@
 #define PICKAXE_SIZE_X 15
 #define PICKAXE_SIZE_Y 15
 
-Pickaxe::Pickaxe(DATA location, DATA speed, int image, int se)
+Pickaxe::Pickaxe(DATA location, DATA speed, int image,int throw_pickaxe_se, int hit_pickaxe_se, int break_pickaxe_se)
 {
     this->location = location;
     old_location = location;
     this->speed = speed;
     radius = { PICKAXE_SIZE_X / 2, PICKAXE_SIZE_Y / 2};
     this->image = image;
-    this->se = se;
     can_delete = FALSE;
     angle = 0;
     angle_direction = 10;
     if (speed.x < 0)angle_direction = -10;
-    
+
+    this->throw_pickaxe_se = throw_pickaxe_se;
+    this->break_pickaxe_se = break_pickaxe_se;
+    this->hit_pickaxe_se = hit_pickaxe_se;
+    PlaySoundMem(throw_pickaxe_se, DX_PLAYTYPE_LOOP, TRUE);
+}
+
+Pickaxe::~Pickaxe()
+{
+    StopSoundMem(throw_pickaxe_se);
 }
 
 void Pickaxe::Update(Stage* stage)
@@ -31,7 +39,7 @@ void Pickaxe::Update(Stage* stage)
     if (stage->HitPickaxe(this) && speed.y > 0)
     {
         can_delete = TRUE;
-        PlaySoundMem(se, DX_PLAYTYPE_BACK, TRUE);
+        PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
     }
     else
     {
@@ -42,7 +50,8 @@ void Pickaxe::Update(Stage* stage)
             speed.x = 0;
             speed.y = 0;
             angle_direction = -(angle_direction / 2);
-            PlaySoundMem(se, DX_PLAYTYPE_BACK, TRUE);
+            PlaySoundMem(hit_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
+            StopSoundMem(throw_pickaxe_se);
         }
         angle += angle_direction;
         if (angle > 360)angle = 0;

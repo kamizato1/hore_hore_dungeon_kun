@@ -21,6 +21,9 @@ private:
     int item_image[ITEM_TYPE_NUM];
     int answer_image[2];
 
+    int jump_se;
+    int get_treasure_se;
+
     int now_item_set_time[ITEM_TYPE_NUM];
     int item_set_time[ITEM_TYPE_NUM] = { PICKAXE_SET_TIME , BLOCK_SET_TIME ,BOM_SET_TIME };
     bool pickaxe_flg;

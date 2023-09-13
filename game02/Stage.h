@@ -61,8 +61,13 @@ protected:
     int change_block_image[BLOCK_TYPE_NUM][4];
     int change_flag_image[4];
     int pickaxe_image;
+
     int hit_pickaxe_se;
     int break_block_se;
+    int explosion_se;
+    int throw_pickaxe_se;
+    int break_pickaxe_se;
+
     int image_change_time;
     int image_type;
     int break_block_num;

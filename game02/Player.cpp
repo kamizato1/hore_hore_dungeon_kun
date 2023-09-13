@@ -16,6 +16,10 @@ Player::Player()
     LoadDivGraph("images/Player/player1.png", 5, 5, 1, 30, 30, image);
     LoadDivGraph("images/Player/marubatu1.png", 2, 2, 1, 20, 20, answer_image);
     LoadDivGraph("images/Player/item.png", ITEM_TYPE_NUM, ITEM_TYPE_NUM, 1, 50, 50, item_image);
+
+    jump_se = LoadSoundMem("bgm/JumpSE.mp3");
+    get_treasure_se = LoadSoundMem("bgm/GetItem.mp3");
+
     break_block_num = 0;
 }
 
@@ -130,6 +134,7 @@ void Player::Update(Key* key, Stage* stage)
        {
            stage->DeleteTreasure(hit_treasure.num);
            treasure_num[static_cast<int>(hit_treasure.treasure_type)]++;
+           PlaySoundMem(get_treasure_se, DX_PLAYTYPE_BACK, TRUE);
        }
 
        for (int i = 0; i < ITEM_TYPE_NUM; i++)can_use_item[i] = FALSE;
@@ -193,7 +198,11 @@ void Player::MoveY(Key* key, Stage* stagebase)//‚xÀ•W‚ÌˆÚ“®
 
         if (sign == -1)//’n–Ê‚ÉG‚ê‚Ä‚¢‚é‚Æ‚«
         {
-            if (key->KeyDown(A))speed.y = -JUMP_SPEED;
+            if (key->KeyDown(A))
+            {
+                speed.y = -JUMP_SPEED;
+                PlaySoundMem(jump_se, DX_PLAYTYPE_BACK, TRUE);
+            }
             if(image_type == 4)image_type = 0;
         }
     }

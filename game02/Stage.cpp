@@ -33,8 +33,12 @@ Stage::Stage(int stage_num, int stage_width)
 	fclose(fp_s);
 	fclose(fp_t);
 
+	explosion_se = LoadSoundMem("bgm/ExplosionSE.mp3");
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
 	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
+	throw_pickaxe_se = LoadSoundMem("bgm/PickaxeThrow.mp3");
+	break_pickaxe_se = LoadSoundMem("bgm/breakpickaxe.mp3");
+
 	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
 	LoadDivGraph("images/smoke.png", 10, 10, 1, 500, 500, smoke_image);
 	pickaxe_image = LoadGraph("images/tsuruhashi.png");
@@ -88,6 +92,7 @@ Stage::~Stage()
 	bom.clear();
 	fallingblock.clear();
 	delete pickaxe;
+	delete flag;
 }
 
 void Stage::Init()
@@ -144,7 +149,11 @@ void Stage::Update()
 	if (pickaxe != nullptr)
 	{
 		pickaxe->Update(this);
-		if (pickaxe->GetCanDelete())pickaxe = nullptr;
+		if (pickaxe->GetCanDelete())
+		{
+			delete pickaxe;
+			pickaxe = nullptr;
+		}
 	}
 }
 
@@ -188,6 +197,7 @@ void Stage::HitBlastRange(int bom_num)
 		effect.emplace_back(bom[bom_num].GetLocation(), smoke_image);
 		effect.emplace_back(bom[bom_num].GetLocation(), explosion_image);
 		bom.erase(bom.begin() + bom_num);
+		PlaySoundMem(explosion_se, DX_PLAYTYPE_BACK, TRUE);
 	}
 	else if (bom[bom_num].GetLocation().y > SCREEN_HEIGHT + 200)bom.erase(bom.begin() + bom_num);
 }
@@ -409,7 +419,7 @@ void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 {
 	if (item_type == ITEM_TYPE::PICKAXE)
 	{
-		if (pickaxe == nullptr)pickaxe = new Pickaxe(location, speed, pickaxe_image, hit_pickaxe_se);
+		if (pickaxe == nullptr)pickaxe = new Pickaxe(location, speed, pickaxe_image, throw_pickaxe_se, hit_pickaxe_se, break_pickaxe_se);
 		for (int i = 0; i < treasure.size(); i++)treasure[i].SetOldHit(FALSE);
 	}
 	else if (item_type == ITEM_TYPE::BOM)bom.emplace_back(location, speed);
