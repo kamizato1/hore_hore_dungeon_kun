@@ -31,6 +31,9 @@ private:
     //明るさ
     int brightness;
 
+    //使うBGM
+    int bgm;
+
     //次のシーンに行けるのか
     bool can_scene_change;
 
