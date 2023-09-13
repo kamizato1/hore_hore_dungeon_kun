@@ -28,8 +28,6 @@ private:
 
     int background_image;
 
-    float size;
-
     //–¾‚é‚³
     int brightness;
 

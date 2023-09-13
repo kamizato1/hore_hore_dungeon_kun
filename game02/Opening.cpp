@@ -61,15 +61,6 @@ void Opening::Update(Key* key)
 	if (++time % 400 == 0) 
 	{
 		++story_no;
-		size = 0;
-	}
-	else
-	{
-		size += 0.0032;
-		if (size > 0.5)
-		{
-			size = 0.5;
-		}
 	}
 
 	if (brightness< 255)
