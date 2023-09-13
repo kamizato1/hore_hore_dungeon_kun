@@ -23,7 +23,6 @@ Opening::Opening()
 
 	bgm = LoadSoundMem("bgm/Opnig.mp3");
 
-	size = 0;
 	animation = 0;
 	animation_time = 0;
 	display_time = 0;
