@@ -26,12 +26,16 @@ Title::Title()
 	}
 	help_menu = 0;
 
+	credit = false;
+
 	decision_se = LoadSoundMem("bgm/Click.mp3");
 	move_se = LoadSoundMem("bgm/MoveCursor.mp3");
 
 	help_image[0] = LoadGraph("images/Menu/help.png");
 	help_image[1] = LoadGraph("images/Menu/map (2).png");
 	help_image[2] = LoadGraph("images/Menu/map (3).png");
+
+	credit_image = LoadGraph("images/Menu/map.png");
 
 }
 
@@ -60,6 +64,12 @@ void Title::Update(Key* key)
 	{
 		help = true;
 	}
+	
+	else if(key->KeyDown(B) && select_menu == 2)
+	{
+		credit = true;
+	}
+
 	else if (key->KeyDown(B))
 	{
 		ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SE音量調整 255最大音量から80%再生
@@ -101,6 +111,16 @@ void Title::Update(Key* key)
 		}
 
 	}
+
+	else if(credit)
+	{
+
+		if (key->KeyDown(A))
+		{
+			credit = false;
+		}
+	}
+
 	else
 	{
 
@@ -152,6 +172,11 @@ void Title::Draw() const
 		DrawRotaGraph(640, 400, 1.15f, 0, help_image[help_menu], TRUE);
 	}
 
+	if (credit)
+	{
+		DrawRotaGraph(640, 400, 1.15f, 0, credit_image, TRUE);
+	}
+
 }
 
 //-----------------------------------
@@ -169,17 +194,13 @@ AbstractScene* Title::ChangeScene()
 			return new StageSelect(0);
 			break;
 
-		case 3:
-			//return new クレジット
-			break;
-
-		case 4: //ゲーム終了
+		case 3: //ゲーム終了
 			return nullptr;
 			break;
 		}
 	}
 
-	if (help == false)
+	if (help == false && credit == false)
 	{
 		//操作しなかったら紙芝居
 		if (input_time % 400 == 0)
