@@ -28,8 +28,13 @@ private:
 
     int background_image;
 
+    float size;
+
     //明るさ
     int brightness;
+
+    //使うBGM
+    int bgm;
 
     //次のシーンに行けるのか
     bool can_scene_change;

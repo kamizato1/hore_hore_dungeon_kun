@@ -18,10 +18,12 @@ Opening::Opening()
 	character_image[3] = LoadGraph("images/Opening/Character/「これは、トレジャーハンターだった.png");
 	character_image[4] = LoadGraph("images/Opening/Character/少年はタカラをさがす旅に出ましたとさ。.png");
 
-
+	//背景
 	background_image = LoadGraph("images/Opening/map.png");
 
+	bgm = LoadSoundMem("bgm/Opnig.mp3");
 
+	size = 0;
 	animation = 0;
 	animation_time = 0;
 	display_time = 0;
@@ -43,6 +45,12 @@ void Opening::Update(Key* key)
 
 	int old_story_no = story_no;
 
+
+	if (CheckSoundMem(bgm) != 1) {   //SEが流れていなかったら再生
+		ChangeVolumeSoundMem(255 * 40 / 100, bgm); //SE音量調整 255最大音量から80%再生
+		PlaySoundMem(bgm, DX_PLAYTYPE_BACK, TRUE); //SE再生
+	}
+
 	//Aキーが押された、もしくは紙芝居終了時にタイトルへ
 	if (key->KeyDown(B) || story_no > 4)
 	{
@@ -53,6 +61,15 @@ void Opening::Update(Key* key)
 	if (++time % 400 == 0) 
 	{
 		++story_no;
+		size = 0;
+	}
+	else
+	{
+		size += 0.0032;
+		if (size > 0.5)
+		{
+			size = 0.5;
+		}
 	}
 
 	if (brightness< 255)
@@ -77,9 +94,9 @@ void Opening::Draw() const
 
 	DrawRotaGraph(640, 300,0.7f,0 ,image[story_no], false);
 
-	DrawRotaGraph(640, 630, 0.5, 0, character_image[story_no], true);
-
 	SetDrawBright(225, 225, 225);
+
+	DrawRotaGraph(640, 630, size, 0, character_image[story_no], true);
 
 }
 
@@ -89,6 +106,7 @@ AbstractScene* Opening::ChangeScene()
 	if (can_scene_change)
 	{
 		SetDrawBright(225, 225, 225);
+		StopSoundMem(bgm);
 		return new Title();
 	}
 
