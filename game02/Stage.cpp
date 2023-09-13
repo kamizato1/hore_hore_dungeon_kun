@@ -130,7 +130,7 @@ void Stage::Update()
 		if (image_change_time == 0)
 		{
 			int block_type = static_cast<int>(block[i].GetBlockType());
-			if ((block_type == 1) || (block_type == 2) || (block_type == 3) || (block_type == 5))
+			if ((block_type == 1) || (block_type == 2) || (block_type == 3))
 			{
 				block[i].SetBlockImage(change_block_image[block_type][image_type]);
 			}
@@ -231,29 +231,51 @@ HIT_STAGE Stage::HitBlock(BoxCollider* bc)
 	return hit_stage;
 }
 
-HIT_BOM Stage::HitBom(BoxCollider* bc)
+HIT_BOM Stage::HitBom(BoxCollider* bc, bool is_it_bom)
 {
 	HIT_BOM hit_bom = { FALSE, 0 };
 	for (int i = 0; i < bom.size(); i++)
 	{
 		if (bom[i].HitBox(bc))
 		{
-			hit_bom = { TRUE, i };
-			break;
+			if (is_it_bom)
+			{
+				if ((bc->GetLocation().x != bom[i].GetLocation().x) || (bc->GetLocation().y != bom[i].GetLocation().y))
+				{
+					hit_bom = { TRUE, i };
+					break;
+				}
+			}
+			else
+			{
+				hit_bom = { TRUE, i };
+				break;
+			}
 		}
 	}
 	return hit_bom;
 }
 
-HIT_TREASURE Stage::HitTreasure(BoxCollider* bc)
+HIT_TREASURE Stage::HitTreasure(BoxCollider* bc, bool is_it_treasure)
 {
 	HIT_TREASURE hit_treasure = { FALSE, 0, TREASURE_TYPE::BOM };
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		if (treasure[i].HitBox(bc))
 		{
-			hit_treasure = { TRUE, i, treasure[i].GetTreasureType() };
-			break;
+			if (is_it_treasure)
+			{
+				if ((bc->GetLocation().x != treasure[i].GetLocation().x) || (bc->GetLocation().y != treasure[i].GetLocation().y))
+				{
+					hit_treasure = { TRUE, i , treasure[i].GetTreasureType() };
+					break;
+				}
+			}
+			else
+			{
+				hit_treasure = { TRUE, i , treasure[i].GetTreasureType() };
+				break;
+			}
 		}
 	}
 	return hit_treasure;
@@ -325,14 +347,9 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 	return FALSE;
 }
 
-bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
+bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 {
 	if (bc->GetLocation().y > SCREEN_HEIGHT)return FALSE;
-	if (item_type == ITEM_TYPE::PICKAXE)
-	{
-		if (pickaxe != nullptr)return FALSE;
-	}
-	else if (item_num == 0)return FALSE;
 
 	HIT_STAGE hit_stage = HitBlock(bc);
 	int block_type = static_cast<int>(hit_stage.block_type);
@@ -341,22 +358,26 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 	{
 		if (hit_stage.flg)
 		{
-			if ((block_type > 0) && (block_type < 4))//ブロックが土だったら
+			if ((block_type > 0) && (block_type <= 4))//ブロックが土だったら
 			{
 				effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[block_type]);
-				if (--block_type == 0)
+				if (block_type == 4) block.erase(block.begin() + hit_stage.num);
+				else
 				{
-					block.erase(block.begin() + hit_stage.num);
-					return TRUE;
+					if (--block_type == 0)
+					{
+						block.erase(block.begin() + hit_stage.num);
+						return TRUE;
+					}
+					else block[hit_stage.num].SetBlockType(block_type);
 				}
-				else block[hit_stage.num].SetBlockType(block_type);
 			}
 		}
 		else
 		{
-			HIT_BOM hit_bom = HitBom(bc);
+			HIT_BOM hit_bom = HitBom(bc, FALSE);
 			if (hit_bom.flg)bom[hit_bom.num].SetCanDelete(TRUE);
-			HIT_TREASURE hit_treasure = HitTreasure(bc);
+			HIT_TREASURE hit_treasure = HitTreasure(bc, FALSE);
 			if (hit_treasure.flg)
 			{
 				if (hit_treasure.treasure_type == TREASURE_TYPE::BOM)bom.emplace_back(treasure[hit_treasure.num].GetLocation(), DATA{ 0,0 });
@@ -369,9 +390,9 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 	{
 		if (!hit_stage.flg)
 		{
-			if ((!HitTreasure(bc).flg) && (!HitBom(bc).flg))
+			if ((!HitTreasure(bc, FALSE).flg) && (!HitBom(bc, FALSE).flg))
 			{
-				block.emplace_back(bc->GetLocation(), 5);
+				block.emplace_back(bc->GetLocation(), 4);
 				return TRUE;
 			}
 		}
@@ -380,7 +401,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 	{
 		if (!hit_stage.flg)
 		{
-			if ((!HitTreasure(bc).flg) && (!HitBom(bc).flg))
+			if ((!HitTreasure(bc, FALSE).flg) && (!HitBom(bc, FALSE).flg))
 			{
 				bom.emplace_back(bc->GetLocation(), DATA{ 0,0 });
 				return TRUE;
@@ -390,7 +411,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type, int item_num)
 	return FALSE;
 }
 
-bool Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type, int item_num)
+void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 {
 	if (item_type == ITEM_TYPE::PICKAXE)
 	{
@@ -398,15 +419,7 @@ bool Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type, int item_n
 		for (int i = 0; i < bom.size(); i++)bom[i].SetOldHit(FALSE);
 		for (int i = 0; i < treasure.size(); i++)treasure[i].SetOldHit(FALSE);
 	}
-	else if (item_type == ITEM_TYPE::BOM)
-	{
-		if (item_num != 0)
-		{
-			bom.emplace_back(location, speed);
-			return TRUE;
-		}
-	}
-	return FALSE;
+	else if (item_type == ITEM_TYPE::BOM)bom.emplace_back(location, speed);
 }
 
 bool Stage::GetPickaxeFlg()
@@ -424,10 +437,10 @@ void Stage::Sway()
 		if (GetRand(1000) == 0)
 		{
 			int block_type = static_cast<int>(block[i].GetBlockType());
-			if ((block_type > 0) && (block_type <= 3))//ブロックが土だったら
+			if ((block_type > 0) && (block_type <= 4))//ブロックが土だったら
 			{
 				effect.emplace_back(block[i].GetLocation(), break_block_image[block_type]);
-				if (block_type == 1)
+				if ((block_type == 1) || (block_type == 4))
 				{
 					block.erase(block.begin() + i);
 					i--;

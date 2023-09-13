@@ -11,12 +11,13 @@ private:
     int wait_time;
     int item_image[3];
     int timer_image;
+    int block_image[2];
     bool end_clear_walk;
    
 public:
 
     Ui();
     bool Update(bool clear);
-    void Draw(int time, int life, int item_type) const;
+    void Draw(int time, int life, int item_type, int block_set_time) const;
     bool MoveClearImage();
 };

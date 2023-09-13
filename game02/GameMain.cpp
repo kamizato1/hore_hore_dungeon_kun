@@ -4,6 +4,7 @@
 #include"Stage.h"
 #include"StageSelect.h"
 #include"Result.h"
+#include"GameOver.h"
 
 #define TIME 300
 #define MAX_SWAY_WIDTH 5
@@ -27,7 +28,8 @@ GameMain::GameMain(int stage_num)
     this->stage_num = stage_num;
     life = 3;
     max_scroll = stage_width[stage_num] - 4;
-    change_scene = FALSE;
+    change_result_scene = FALSE;
+    change_game_over_scene = FALSE;
     Init();
 }
 
@@ -106,7 +108,7 @@ void GameMain::Update(Key* key)
                 if (!sway_flg)sway_flg = TRUE;
             }
         }
-        change_scene = ui->Update(clear);
+        change_result_scene = ui->Update(clear);
     }
     else if (pause->Update(key))stop = !stop;
 }
@@ -124,7 +126,7 @@ void GameMain::Draw() const
     player->Draw(camera_work);
     stage->Draw2(camera_work);
    
-    ui->Draw(remaining_time, life, player->GetItemType());
+    ui->Draw(remaining_time, life, player->GetItemType(),player->GetBlockSetTime());
 
     SetDrawBright(255, 255, 255);
 
@@ -133,10 +135,17 @@ void GameMain::Draw() const
 
 void GameMain::ReStart()
 {
-    life--;
-    Init();
-    player->Init();
-    stage->Init();
+    if (--life == 0)
+    {
+        StopSoundMem(stage_bgm);
+        change_game_over_scene = TRUE;
+    }
+    else
+    {
+        Init();
+        player->Init();
+        stage->Init();
+    }
 }
 
 void GameMain::Sway()
@@ -177,7 +186,9 @@ AbstractScene* GameMain::ChangeScene()
             return new StageSelect(stage_num);
         }
     }
-    else if(change_scene)return new Result(stage_num, player->GetTreasureNum());
+    else if(change_result_scene)return new Result(stage_num, player->GetTreasureNum());
+
+    if (change_game_over_scene)return new GameOver(stage_num);
 
     return this;
 }

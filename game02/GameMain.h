@@ -30,7 +30,8 @@ private:
     float max_sway_width;
     int screen_brightness;
     int stage_num;
-    bool change_scene;
+    bool change_result_scene;
+    bool change_game_over_scene;
   
     void ReStart();
     void Init();

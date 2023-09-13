@@ -15,8 +15,8 @@ Treasure::Treasure(DATA location, int type)
 
 void Treasure::Update(Stage* stage)
 {
-    if (!stage->HitBlock(this).flg)location.y += 1;
-    if (stage->HitBlock(this).flg)
+    if ((!stage->HitBlock(this).flg) && (!stage->HitBom(this, FALSE).flg) && (!stage->HitTreasure(this, TRUE).flg))location.y += 1;
+    if ((stage->HitBlock(this).flg) || (stage->HitBom(this, FALSE).flg) || (stage->HitTreasure(this, TRUE).flg))
     {
         int y = location.y / BLOCK_SIZE_Y;
         location.y = (y * BLOCK_SIZE_Y) + (radius.y);
