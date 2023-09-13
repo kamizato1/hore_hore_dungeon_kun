@@ -24,6 +24,7 @@ struct HIT_STAGE
     bool flg;
     int num;
     BLOCK_TYPE block_type;
+    bool can_put;
 };
 
 struct HIT_TREASURE

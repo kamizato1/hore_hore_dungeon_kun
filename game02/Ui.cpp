@@ -53,15 +53,15 @@ void Ui::Draw(int time, int life, int item_type, int block_set_time) const
 	while (digit > 0)
 	{
 		int image_type = (time / digit);
-		DrawRotaGraph(70 + (count * 17), 32, 1, 0, number_image[image_type], TRUE);
+		DrawRotaGraph(70 + (count * 17), 35, 1, 0, number_image[image_type], TRUE);
 		time -= (image_type * digit);
 		digit = (digit / 10);
 		count++;
 	}
 
-	//DrawRotaGraph(935, 35, 1,0,life_image, TRUE);
-	//DrawRotaGraph(75, 40, 1, 0, number_image[0], TRUE);
-	//DrawRotaGraph(90, 40, 1, 0, number_image[life], TRUE);
+	DrawRotaGraph(200, 35, 1,0,life_image, TRUE);
+	DrawRotaGraph(235, 35, 1, 0, number_image[0], TRUE);
+	DrawRotaGraph(252, 35, 1, 0, number_image[life], TRUE);
 
 	block_set_time = ((BLOCK_SET_TIME - block_set_time) / 3);
 

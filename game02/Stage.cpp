@@ -215,13 +215,14 @@ void Stage::Draw2(float camera_work) const
 
 HIT_STAGE Stage::HitBlock(BoxCollider* bc)
 {
-	HIT_STAGE hit_stage = {FALSE, 0, BLOCK_TYPE::NONE};
+	HIT_STAGE hit_stage = {FALSE, 0, BLOCK_TYPE::NONE, TRUE};
 
 	for (int i = 0; i < block.size(); i++)  // 全要素に対するループ
 	{
 		if (block[i].HitBox(bc))
 		{
-			if (block[i].GetBlockType() != BLOCK_TYPE::NONE)
+			if (block[i].GetBlockType() == BLOCK_TYPE::NONE)hit_stage.can_put = FALSE;
+			else
 			{
 				hit_stage = { TRUE, i, block[i].GetBlockType() };
 				break;
@@ -388,7 +389,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 	}
 	else if (item_type == ITEM_TYPE::BLOCK)
 	{
-		if (!hit_stage.flg)
+		if ((!hit_stage.flg) && (hit_stage.can_put))
 		{
 			if ((!HitTreasure(bc, FALSE).flg) && (!HitBom(bc, FALSE).flg))
 			{
