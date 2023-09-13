@@ -9,7 +9,6 @@ Cursor::Cursor(DATA location)
     image = LoadGraph("images/cursor.png");
     cursor_sign_x = 1;
     cursor_sign_y = 0;
-    hit_player = FALSE;
 }
 
 void Cursor::Update(BoxCollider* bc, DATA r_stick_angle)
@@ -36,12 +35,9 @@ void Cursor::Update(BoxCollider* bc, DATA r_stick_angle)
         while (HitBox(bc))location.y += (BLOCK_SIZE_Y * cursor_sign_y);
         location.x += (BLOCK_SIZE_X * cursor_sign_x);  
     }
-
-    if (HitBox(bc))hit_player = TRUE;
 }
 
 void Cursor::Draw(float camera_work) const
 {
     DrawRotaGraphF(location.x + camera_work, location.y, 1, 0, image, TRUE);
-    DrawFormatString(0, 130, 0xffffff, "%d = hit_player (これが'1'なら（Cursor）エラーです。)", hit_player);
 }

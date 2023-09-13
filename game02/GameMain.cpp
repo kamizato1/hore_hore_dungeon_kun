@@ -126,7 +126,7 @@ void GameMain::Draw() const
     player->Draw(camera_work);
     stage->Draw2(camera_work);
    
-    ui->Draw(remaining_time, life, player->GetItemType(),player->GetBlockSetTime());
+    ui->Draw(remaining_time, life, player->GetPlayerUi());
 
     SetDrawBright(255, 255, 255);
 

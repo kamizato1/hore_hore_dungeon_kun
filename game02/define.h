@@ -40,6 +40,14 @@ enum
     START
 };
 
+struct PLAYER_UI
+{
+    int item_type;
+    int block_set_time;
+    int treasure_num[TREASURE_TYPE_NUM];
+    int bom_num;
+};
+
 struct DATA //座標,大きさ,スピードなどに使う
 {
     float x, y;

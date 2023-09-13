@@ -56,5 +56,5 @@ public:
     bool GetClear() { return clear; }
     int GetItemType()const { return item_type; }
     int* GetTreasureNum() { return treasure_num; }
-    int GetBlockSetTime()const { return block_set_time; }
+    PLAYER_UI GetPlayerUi()const;
 };
