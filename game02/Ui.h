@@ -1,4 +1,5 @@
 #pragma once
+#include"define.h"
 
 class Ui
 {
@@ -12,12 +13,14 @@ private:
     int item_image[3];
     int timer_image;
     int block_image[2];
+    int sign_image[2];
+    int treasure_image[TREASURE_TYPE_NUM];
     bool end_clear_walk;
    
 public:
 
     Ui();
     bool Update(bool clear);
-    void Draw(int time, int life, int item_type, int block_set_time) const;
+    void Draw(int time, int life, PLAYER_UI player_ui) const;
     bool MoveClearImage();
 };

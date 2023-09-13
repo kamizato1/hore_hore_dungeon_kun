@@ -233,5 +233,15 @@ void Player::Draw(float camera_work) const
 
     DrawFormatString(0, 100, 0xffffff, "%d", bom_num);
     DrawFormatString(0, 160, 0xffffff, "%d",break_block_num);
-    DrawFormatString(0, 190, 0xffffff, "%d, %d, %d, %d, %d", treasure_num[0], treasure_num[1], treasure_num[2], treasure_num[3], treasure_num[4]);
+}
+
+
+PLAYER_UI Player::GetPlayerUi()const
+{
+    PLAYER_UI player_ui;
+    player_ui.item_type = item_type;
+    player_ui.block_set_time = block_set_time;
+    for (int i = 0; i < TREASURE_TYPE_NUM; i++)player_ui.treasure_num[i] = treasure_num[i];
+    player_ui.bom_num = bom_num;
+    return player_ui;
 }
