@@ -56,12 +56,12 @@ void Title::Update(Key* key)
 		if (key->GetStickAngle(L).y > 0)
 		{
 			if (++select_menu == MENU_NUM)select_menu = 0;
-			input_time = 0;
+			input_time = 1;
 		}
 		else if (key->GetStickAngle(L).y < 0)
 		{
 			if (--select_menu < 0)select_menu = MENU_NUM - 1;
-			input_time = 0;
+			input_time = 1;
 		}
 	}
 
