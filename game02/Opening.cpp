@@ -87,16 +87,18 @@ void Opening::Update(Key* key)
 
 void Opening::Draw() const
 {
-
+	
+	//https://scrapbox.io/dxlib/SetDrawBlendMode
 	DrawRotaGraph(640, 360, 1, 0, background_image, false);
-
-	SetDrawBright(brightness, brightness, brightness);
+	
+	//ìßñæìx
+    SetDrawBlendMode(DX_BLENDMODE_ALPHA, brightness);
 
 	DrawRotaGraph(640, 300,0.7f,0 ,image[story_no], false);
 
-	SetDrawBright(225, 225, 225);
+	DrawRotaGraph(640, 630, 0.5, 0, character_image[story_no], true);
 
-	DrawRotaGraph(640, 630, size, 0, character_image[story_no], true);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 
 }
 
@@ -105,7 +107,7 @@ AbstractScene* Opening::ChangeScene()
 	//ÉVÅ[ÉìêÿÇËë÷Ç¶
 	if (can_scene_change)
 	{
-		SetDrawBright(225, 225, 225);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 		StopSoundMem(bgm);
 		return new Title();
 	}
