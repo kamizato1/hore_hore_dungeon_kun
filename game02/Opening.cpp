@@ -88,7 +88,7 @@ void Opening::Draw() const
 {
 	
 
-	DrawRotaGraph(640, 360, 1, 0, background_image, false);
+	DrawRotaGraph(640, 360, 1.1f, 0, background_image, false);
 	
 	//https://scrapbox.io/dxlib/SetDrawBlendMode
 	//“§–¾“x
@@ -96,7 +96,7 @@ void Opening::Draw() const
 
 	DrawRotaGraph(640, 270,0.7f,0 ,image[story_no], false);
 
-	DrawRotaGraph(640, 600, 0.5, 0, character_image[story_no], true);
+	DrawRotaGraph(640, 600, 0.5f, 0, character_image[story_no], true);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 
