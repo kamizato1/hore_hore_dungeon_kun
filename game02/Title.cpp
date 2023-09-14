@@ -37,6 +37,8 @@ Title::Title()
 
 	credit_image = LoadGraph("images/Menu/map.png");
 
+	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, num_image);
+	LoadDivGraph("images/Ui/sign.png", 2, 2, 1, 20, 40, slash_image);
 }
 
 //-----------------------------------
@@ -60,24 +62,31 @@ void Title::Update(Key* key)
 
 	//É{É^ÉìÇ™âüÇ≥ÇÍÇΩÇÁ
 
-	if (key->KeyDown(B) && select_menu == 1)
+	if (credit == false && help == false)
 	{
-		help = true;
-	}
-	
-	else if(key->KeyDown(B) && select_menu == 2)
-	{
-		credit = true;
-	}
 
-	else if (key->KeyDown(B))
-	{
-		ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SEâπó í≤êÆ 255ç≈ëÂâπó Ç©ÇÁ80%çƒê∂
-		PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEçƒê∂
-		can_scene_change = TRUE;
-	}
-	
+		if (key->KeyDown(B) && select_menu == 1)
+		{
+			help = true;
+			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SEâπó í≤êÆ 255ç≈ëÂâπó Ç©ÇÁ80%çƒê∂
+			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEçƒê∂
+		}
 
+		else if (key->KeyDown(B) && select_menu == 2)
+		{
+			credit = true;
+			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SEâπó í≤êÆ 255ç≈ëÂâπó Ç©ÇÁ80%çƒê∂
+			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEçƒê∂
+		}
+
+		else if (key->KeyDown(B))
+		{
+			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SEâπó í≤êÆ 255ç≈ëÂâπó Ç©ÇÁ80%çƒê∂
+			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEçƒê∂
+			can_scene_change = TRUE;
+		}
+
+	}
 	if (help)
 	{
 
@@ -105,6 +114,8 @@ void Title::Update(Key* key)
 
 		if (key->KeyDown(A))
 		{
+			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SEâπó í≤êÆ 255ç≈ëÂâπó Ç©ÇÁ80%çƒê∂
+			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEçƒê∂
 			input_time = 1;
 			help_menu = 0;
 			help = false;
@@ -117,6 +128,8 @@ void Title::Update(Key* key)
 
 		if (key->KeyDown(A))
 		{
+			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SEâπó í≤êÆ 255ç≈ëÂâπó Ç©ÇÁ80%çƒê∂
+			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEçƒê∂
 			credit = false;
 		}
 	}
@@ -170,6 +183,9 @@ void Title::Draw() const
 	if (help)
 	{
 		DrawRotaGraph(640, 400, 1.15f, 0, help_image[help_menu], TRUE);
+		DrawRotaGraph(1000, 100, 1, 0, num_image[help_menu + 1], TRUE);
+		DrawRotaGraph(1040, 100, 1, 0, slash_image[1], TRUE);
+		DrawRotaGraph(1080, 100, 1, 0, num_image[3], TRUE);
 	}
 
 	if (credit)

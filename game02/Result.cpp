@@ -68,6 +68,26 @@ Result::Result(int stage_num, int* treasure_num)
 		fclose(fp_s);
 	}
 	score = 0;
+
+	int stage = stage_num + 2;
+
+	int clear_stage;
+
+	FILE* fp_c; //クリア済みのステージ
+	fopen_s(&fp_c, "data/clearstage.txt", "r");
+	fscanf_s(fp_c, "%d", &clear_stage);
+	fclose(fp_c);
+
+	if (clear_stage != 5)
+	{
+		//ステージ解放
+		if (stage > clear_stage)
+		{
+			fopen_s(&fp_c, "data/clearstage.txt", "w");
+			fprintf(fp_c, "%d\n", stage);
+			fclose(fp_c);
+		}
+	}
 }
 
 //-----------------------------------
