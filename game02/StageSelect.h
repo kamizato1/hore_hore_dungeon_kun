@@ -16,6 +16,7 @@ private:
     int player_image[5]; //プレイヤー画像
     int player_image_type; //画像イメージ
     int player_image_change_time;
+    int clear_stage; //クリアステージ
     DATA player_location[STAGE_NUM];
     bool transition;//次の画面に遷移するのか
  

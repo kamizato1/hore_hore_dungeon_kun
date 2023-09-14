@@ -27,6 +27,11 @@ StageSelect::StageSelect(int stage_num)
 	for (int i = 0; i < STAGE_NUM; i++)fscanf_s(fp_s, "%d", &stage_score[i]);
 	fclose(fp_s);
 
+	FILE* fp_c; //クリア済みのステージ
+	fopen_s(&fp_c, "data/clearstage.txt", "r");
+	fscanf_s(fp_c, "%d", &clear_stage);
+	fclose(fp_c);
+
 	player_location[0].x = 490;
 	player_location[0].y = 520;
 	player_location[1].x = 670;
@@ -67,12 +72,12 @@ void StageSelect::Update(Key* key)
 	{
 		if (key->GetStickAngle(L).x > 0)
 		{
-			if (++stage_number >= STAGE_NUM)stage_number = 0;
+			if (++stage_number >= clear_stage)stage_number = 0;
 			operating_time = TIME;
 		}
 		else if (key->GetStickAngle(L).x < 0)
 		{
-			if (--stage_number < 0)stage_number = STAGE_NUM - 1;
+			if (--stage_number < 0)stage_number = clear_stage - 1;
 			operating_time = TIME;
 		}
 	}
