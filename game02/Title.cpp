@@ -28,7 +28,7 @@ Title::Title()
 
 	credit = false;
 
-	decision_se = LoadSoundMem("bgm/Click.mp3");
+	decision_se = LoadSoundMem("bgm/ï“èWÇµÇƒégópÇµÇΩÇ‚Ç¬/Click (mp3cut.net).mp3");
 	move_se = LoadSoundMem("bgm/MoveCursor.mp3");
 
 	help_image[0] = LoadGraph("images/Menu/help.png");
@@ -36,9 +36,10 @@ Title::Title()
 	help_image[2] = LoadGraph("images/Menu/map (3).png");
 
 	credit_image = LoadGraph("images/Menu/map.png");
+	slash_image = LoadGraph("images/Menu/éŒê¸çïâè.png");
 
 	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, num_image);
-	LoadDivGraph("images/Ui/sign.png", 2, 2, 1, 20, 40, slash_image);
+
 }
 
 //-----------------------------------
@@ -82,7 +83,7 @@ void Title::Update(Key* key)
 		else if (key->KeyDown(B))
 		{
 			ChangeVolumeSoundMem(255 * 80 / 100, decision_se); //SEâπó í≤êÆ 255ç≈ëÂâπó Ç©ÇÁ80%çƒê∂
-			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEçƒê∂
+			PlaySoundMem(decision_se, DX_PLAYTYPE_NORMAL, TRUE); //SEçƒê∂
 			can_scene_change = TRUE;
 		}
 
@@ -183,8 +184,8 @@ void Title::Draw() const
 	if (help)
 	{
 		DrawRotaGraph(640, 400, 1.15f, 0, help_image[help_menu], TRUE);
-		DrawRotaGraph(1000, 100, 1, 0, num_image[help_menu + 1], TRUE);
-		DrawRotaGraph(1040, 100, 1, 0, slash_image[1], TRUE);
+		DrawRotaGraph(1000, 90, 1, 0, num_image[help_menu + 1], TRUE);
+		DrawRotaGraph(1040, 100, 1, 0, slash_image, TRUE);
 		DrawRotaGraph(1080, 100, 1, 0, num_image[3], TRUE);
 	}
 
