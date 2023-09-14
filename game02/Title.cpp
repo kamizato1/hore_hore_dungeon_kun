@@ -38,7 +38,7 @@ Title::Title()
 	credit_image = LoadGraph("images/Menu/map.png");
 	slash_image = LoadGraph("images/Menu/Îü•‰.png");
 
-	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, num_image);
+	LoadDivGraph("images/Menu/number.png", 10, 10, 1, 20, 40, num_image);
 
 }
 
