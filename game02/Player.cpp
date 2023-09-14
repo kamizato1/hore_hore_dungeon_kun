@@ -21,10 +21,9 @@ Player::Player()
     {
         for (int j = 0; j < 5; j++)this->image[i][j] = image[count++];
     }
-   
-    LoadDivGraph("images/Player/marubatu1.png", 2, 2, 1, 20, 20, answer_image);
     LoadDivGraph("images/Player/item.png", ITEM_TYPE_NUM, ITEM_TYPE_NUM, 1, 50, 50, item_image);
-
+    frame_image = LoadGraph("images/Player/frame.png");
+    sign_image = LoadGraph("images/Player/sign.png");
     jump_se = LoadSoundMem("bgm/JumpSE.mp3");
     get_treasure_se = LoadSoundMem("bgm/GetItem.mp3");
     die_se = LoadSoundMem("bgm/playerdie.mp3");
@@ -225,20 +224,23 @@ void Player::MoveY(Key* key, Stage* stagebase)//Çxç¿ïWÇÃà⁄ìÆ
 
 void Player::Draw(float camera_work) const
 {
-    if ((can_throw) && (item_type != 1))
+    if ((!die) && (!clear))
     {
-        float throw_speed_y = throw_speed.y;
-        DATA throw_location = location;
-        int count = 0;
-        while (throw_location.y < SCREEN_HEIGHT)
+        if ((can_throw) && (item_type != 1))
         {
-            throw_speed_y += GRAVITY_POWER;
-            throw_location.y += throw_speed_y;
-            throw_location.x += throw_speed.x;
-            if ((++count % 5) == 0) DrawRotaGraph(throw_location.x + camera_work, throw_location.y, 1, 0, answer_image[0], TRUE);
+            float throw_speed_y = throw_speed.y;
+            DATA throw_location = location;
+            int count = 0;
+            while (throw_location.y < SCREEN_HEIGHT)
+            {
+                throw_speed_y += GRAVITY_POWER;
+                throw_location.y += throw_speed_y;
+                throw_location.x += throw_speed.x;
+                if ((++count % 5) == 0) DrawRotaGraph(throw_location.x + camera_work, throw_location.y, 1, 0, sign_image, TRUE);
+            }
         }
+        cursor->Draw(camera_work);
     }
-    cursor->Draw(camera_work);
 
     int player_image_type = 0;
     if ((speed.x == 0) && (speed.y == 0))player_image_type = 1;
@@ -253,6 +255,7 @@ void Player::Draw(float camera_work) const
     else if (can_use_item[item_type])
     {
         DrawRotaGraph(location.x + camera_work + (direction * 14), location.y + (player_image_type * image_type), 1, (0.3 * direction), item_image[item_type], TRUE);
+        if ((!die) && (!clear) && (item_type == 2))DrawRotaGraph(cursor->GetLocation().x + camera_work, cursor->GetLocation().y, 1, 0, frame_image, TRUE);
     }
 }
 

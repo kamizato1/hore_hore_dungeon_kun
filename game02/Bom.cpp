@@ -19,7 +19,7 @@ Bom::Bom(DATA location, DATA speed)
         radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
     }
     image = LoadGraph("images/Bom/angrybom.png");
-    blast_range_image = LoadGraph("images/Bom/wakuwaku.png");
+    frame_image = LoadGraph("images/Bom/frame.png");
     LoadDivGraph("images/Bom/bomnumber.png", 6, 6, 1, 14, 23, number_image);
     can_delete = FALSE;
     angle = 0;
@@ -81,8 +81,9 @@ bool Bom::HitExplosion(BoxCollider* bc)
 
 void Bom::Draw(float camera_work) const
 {
+    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, frame_image, TRUE);
     int count = this->count / FPS;
     DrawRotaGraph(location.x + camera_work, location.y, bom_size, ((M_PI / 180) * angle), image, TRUE);
     if(!throw_flg)DrawRotaGraph((location.x - 2) + camera_work, location.y + 1, bom_size, 0, number_image[count], TRUE);
-    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, blast_range_image, TRUE);
+    
 }

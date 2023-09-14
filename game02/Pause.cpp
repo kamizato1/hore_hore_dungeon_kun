@@ -10,7 +10,7 @@ Pause::Pause()
 {
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	select_se = LoadSoundMem("bgm/MoveCursor.mp3");
-
+	
 	back_ground_image = LoadGraph("images/Pause/map.png");
 	LoadDivGraph("images/Pause/help.png", 3, 3, 1, 1000, 700, help_image);
 	LoadDivGraph("images/Pause/number.png", 4, 4, 1, 140, 150, number_image);

@@ -51,12 +51,12 @@ Stage::Stage(int stage_num, int stage_width)
 	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
 	LoadDivGraph("images/changeflag.png", 4, 4, 1, 36, 36, change_flag_image);
 
-	int change_image_image[32];
+	int change_block_image[32];
 	int count = 0;
-	LoadDivGraph("images/changeblock.png", 32, 4, BLOCK_TYPE_NUM, 36, 36, change_image_image);
+	LoadDivGraph("images/changeblock.png", 32, 4, BLOCK_TYPE_NUM, 36, 36, change_block_image);
 	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
 	{
-		for (int j = 0; j < 4; j++)this->change_block_image[i][j] = change_image_image[count++];
+		for (int j = 0; j < 4; j++)this->change_block_image[i][j] = change_block_image[count++];
 	}
 
 	int break_block_image[80];
@@ -213,9 +213,14 @@ void Stage::Draw1(float camera_work) const
 	for (int i = 0; i < KIRA_KIRA_NUM; i++)DrawRotaGraph(kira_kira[i].location.x, kira_kira[i].location.y, kira_kira[i].size, 0, kira_kira_image[image_type], TRUE);
 	DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
 	DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
+	for (int i = 0; i < fallingblock.size(); i++)if(fallingblock[i].GetSize() < 0.5)fallingblock[i].Draw(camera_work);
 	DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
 	if(flag != nullptr)flag->Draw(camera_work);
-	for (int i = 0; i < treasure.size(); i++) treasure[i].Draw(camera_work);
+	for (int i = 0; i < treasure.size(); i++)
+	{
+		treasure[i].Draw(camera_work);
+		//DrawRotaGraph(treasure[i].GetLocation().x + camera_work, treasure[i].GetLocation().y, 1, 0, change_block_image[0][image_type], TRUE);
+	}
 	for (int i = 0; i < block.size(); i++)block[i].Draw(camera_work);
 }
 
@@ -224,7 +229,7 @@ void Stage::Draw2(float camera_work) const
 	for (int i = 0; i < effect.size(); i++)effect[i].Draw(camera_work);
 	for (int i = 0; i < bom.size(); i++)bom[i].Draw(camera_work);
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
-	for (int i = 0; i < fallingblock.size(); i++)fallingblock[i].Draw(camera_work);
+	for (int i = 0; i < fallingblock.size(); i++)if (fallingblock[i].GetSize() >= 0.5)fallingblock[i].Draw(camera_work);
 }
 
 HIT_STAGE Stage::HitBlock(BoxCollider* bc)
@@ -330,6 +335,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 		{
 			if (!treasure[i].GetOldHit(this))
 			{
+				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
 				effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
 				treasure.erase(treasure.begin() + i);
 				i--;
@@ -392,6 +398,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			HIT_TREASURE hit_treasure = HitTreasure(bc, FALSE);
 			if (hit_treasure.flg)
 			{
+				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
 				effect.emplace_back(treasure[hit_treasure.num].GetLocation(), break_treasure_image[static_cast<int>(treasure[hit_treasure.num].GetTreasureType())]);
 				treasure.erase(treasure.begin() + hit_treasure.num);
 			}

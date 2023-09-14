@@ -9,7 +9,7 @@ class Bom : public BoxCollider
 private:
 
     int image;
-    int blast_range_image;
+    int frame_image;
     int angle;
     int angle_direction;
     float bom_size;
