@@ -56,7 +56,7 @@ void Title::Update(Key* key)
 {
 
 	if (CheckSoundMem(bgm) != 1) {   //SE‚ª—¬‚ê‚Ä‚¢‚È‚©‚Á‚½‚çÄ¶
-		ChangeVolumeSoundMem(255 * 40 / 100, bgm); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+		ChangeVolumeSoundMem(255 * 80 / 100, bgm); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 		PlaySoundMem(bgm, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 	}
 
@@ -68,20 +68,20 @@ void Title::Update(Key* key)
 		if (key->KeyDown(B) && select_menu == 1)
 		{
 			help = true;
-			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+			ChangeVolumeSoundMem(255 * 80 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 		}
 
 		else if (key->KeyDown(B) && select_menu == 2)
 		{
 			credit = true;
-			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+			ChangeVolumeSoundMem(255 * 80 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 		}
 
 		else if (key->KeyDown(B))
 		{
-			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+			ChangeVolumeSoundMem(255 * 80 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 			can_scene_change = TRUE;
 		}
@@ -95,7 +95,7 @@ void Title::Update(Key* key)
 			if (key->GetStickAngle(L).x > 0)
 			{
 
-				ChangeVolumeSoundMem(255 * 40 / 100, move_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+				ChangeVolumeSoundMem(255 * 80 / 100, move_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 				PlaySoundMem(move_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 
 				if (++help_menu == 3)help_menu = 0;
@@ -104,7 +104,7 @@ void Title::Update(Key* key)
 			else if (key->GetStickAngle(L).x < 0)
 			{
 
-				ChangeVolumeSoundMem(255 * 40 / 100, move_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+				ChangeVolumeSoundMem(255 * 80 / 100, move_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 				PlaySoundMem(move_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 
 				if (--help_menu < 0)help_menu = 2;
@@ -114,7 +114,7 @@ void Title::Update(Key* key)
 
 		if (key->KeyDown(A))
 		{
-			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+			ChangeVolumeSoundMem(255 * 80 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 			input_time = 1;
 			help_menu = 0;
@@ -128,7 +128,7 @@ void Title::Update(Key* key)
 
 		if (key->KeyDown(A))
 		{
-			ChangeVolumeSoundMem(255 * 40 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+			ChangeVolumeSoundMem(255 * 80 / 100, decision_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 			credit = false;
 		}
@@ -143,7 +143,7 @@ void Title::Update(Key* key)
 			if (key->GetStickAngle(L).y > 0)
 			{
 
-				ChangeVolumeSoundMem(255 * 40 / 100, move_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+				ChangeVolumeSoundMem(255 * 80 / 100, move_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 				PlaySoundMem(move_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 
 				if (++select_menu == MENU_NUM)select_menu = 0;
@@ -152,7 +152,7 @@ void Title::Update(Key* key)
 			else if (key->GetStickAngle(L).y < 0)
 			{
 
-				ChangeVolumeSoundMem(255 * 40 / 100, move_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
+				ChangeVolumeSoundMem(255 * 80 / 100, move_se); //SE‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç80%Ä¶
 				PlaySoundMem(move_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 
 				if (--select_menu < 0)select_menu = MENU_NUM - 1;
@@ -177,7 +177,7 @@ void Title::Draw() const
 		bool flg = FALSE;
 		if (i == select_menu)flg = TRUE;
 
-		DrawRotaGraph(1010, 250 + (i * 100), 1, 0, menu_image[i][flg], TRUE);
+		DrawRotaGraph(990, 250 + (i * 100), 1, 0, menu_image[i][flg], TRUE);
 	}
 
 	if (help)
@@ -219,7 +219,7 @@ AbstractScene* Title::ChangeScene()
 	if (help == false && credit == false)
 	{
 		//‘€ì‚µ‚È‚©‚Á‚½‚çŽ†ŽÅ‹
-		if (input_time % 400 == 0)
+		if (input_time % 600 == 0)
 		{
 			StopSoundMem(bgm);
 			return new Opening();

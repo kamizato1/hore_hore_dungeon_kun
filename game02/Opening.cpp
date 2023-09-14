@@ -46,31 +46,40 @@ void Opening::Update(Key* key)
 
 
 	if (CheckSoundMem(bgm) != 1) {   //BGMが流れていなかったら再生
-		ChangeVolumeSoundMem(255 * 40 / 100, bgm); //BGM音量調整 255最大音量から40%再生
+		ChangeVolumeSoundMem(255 * 80 / 100, bgm); //BGM音量調整 255最大音量から40%再生
 		PlaySoundMem(bgm, DX_PLAYTYPE_BACK, TRUE); //BGM再生
 	}
 
 	//Aキーが押された、もしくは紙芝居終了時にタイトルへ
-	if (key->KeyDown(B) || story_no > 4)
+	if (key->KeyDown(B))
 	{
 		can_scene_change = true;
 	}
 
-	//60で÷と秒に治る
-	if (++time % 400 == 0) 
+	if (can_scene_change != true)
 	{
-		++story_no;
-	}
 
-	if (brightness< 255)
-	{
-		brightness += 1;
-	}
+		//60で÷と秒に治る
+		if (++time % 400 == 0)
+		{
+			if (++story_no > 4)
+			{
+				can_scene_change = true;
+				story_no = 4;
+			}
+		}
+
+		if (brightness < 255)
+		{
+			brightness += 1;
+		}
 
 
-	if (story_no != old_story_no)
-	{
-		brightness = 0;
+		if (story_no != old_story_no)
+		{
+			brightness = 0;
+		}
+
 	}
 
 }
@@ -85,9 +94,9 @@ void Opening::Draw() const
 	//透明度
     SetDrawBlendMode(DX_BLENDMODE_ALPHA, brightness);
 
-	DrawRotaGraph(640, 300,0.7f,0 ,image[story_no], false);
+	DrawRotaGraph(640, 270,0.7f,0 ,image[story_no], false);
 
-	DrawRotaGraph(640, 630, 0.5, 0, character_image[story_no], true);
+	DrawRotaGraph(640, 600, 0.5, 0, character_image[story_no], true);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 
@@ -101,6 +110,7 @@ AbstractScene* Opening::ChangeScene()
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 		StopSoundMem(bgm);
 		return new Title();
+		
 	}
 
 	return this;

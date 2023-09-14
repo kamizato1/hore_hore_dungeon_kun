@@ -12,7 +12,7 @@ private:
     int stage_score[STAGE_NUM];
     int number_image[10];
     int operating_time;//‘€ìó•t
-    int back_ground_image;//”wŒi‰æ‘œ
+    int back_ground_image[5];//”wŒi‰æ‘œ
     int player_image[5]; //ƒvƒŒƒCƒ„[‰æ‘œ
     int player_image_type; //‰æ‘œƒCƒ[ƒW
     int player_image_change_time;
