@@ -177,7 +177,7 @@ void Title::Draw() const
 		bool flg = FALSE;
 		if (i == select_menu)flg = TRUE;
 
-		DrawRotaGraph(1010, 250 + (i * 100), 1, 0, menu_image[i][flg], TRUE);
+		DrawRotaGraph(990, 250 + (i * 100), 1, 0, menu_image[i][flg], TRUE);
 	}
 
 	if (help)
@@ -219,7 +219,7 @@ AbstractScene* Title::ChangeScene()
 	if (help == false && credit == false)
 	{
 		//ëÄçÏÇµÇ»Ç©Ç¡ÇΩÇÁéÜé≈ãè
-		if (input_time % 400 == 0)
+		if (input_time % 600 == 0)
 		{
 			StopSoundMem(bgm);
 			return new Opening();

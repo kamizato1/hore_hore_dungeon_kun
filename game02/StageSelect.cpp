@@ -13,7 +13,12 @@
 //-----------------------------------
 StageSelect::StageSelect(int stage_num)
 {
-	back_ground_image = LoadGraph("images/StageSelect/map.png");
+	back_ground_image[0] = LoadGraph("images/StageSelect/map1.png");
+	back_ground_image[1] = LoadGraph("images/StageSelect/map2.png");
+	back_ground_image[2] = LoadGraph("images/StageSelect/map3.png");
+	back_ground_image[3] = LoadGraph("images/StageSelect/map4.png");
+	back_ground_image[4] = LoadGraph("images/StageSelect/map5.png");
+
 	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
 	LoadDivGraph("images/Player/player1.png", 5, 5, 1, 30, 30, player_image);
 	stage_number = stage_num;
@@ -90,7 +95,7 @@ void StageSelect::Update(Key* key)
 	//-----------------------------------
 	void StageSelect::Draw() const
 	{
-		DrawRotaGraph(640, 360, 1, 0, back_ground_image, TRUE);
+		DrawRotaGraph(640, 360, 1, 0, back_ground_image[clear_stage - 1], TRUE);
 
 		int score_digit = 1000000;
 		int stage_digit = 10;
