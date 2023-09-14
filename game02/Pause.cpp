@@ -8,8 +8,12 @@
 //-----------------------------------
 Pause::Pause()
 {
+	decision_se = LoadSoundMem("bgm/click.mp3");
+	select_se = LoadSoundMem("bgm/MoveCursor.mp3");
+
 	back_ground_image = LoadGraph("images/Pause/map.png");
-	help_image = LoadGraph("images/Pause/help.png");
+	LoadDivGraph("images/Pause/help.png", 3, 3, 1, 1000, 700, help_image);
+	LoadDivGraph("images/Pause/number.png", 4, 4, 1, 140, 150, number_image);
 	pause_image = LoadGraph("images/Pause/pause.png");
 	int menu_image[8];
 	int count = 0;
@@ -37,6 +41,7 @@ void Pause::Init()
 	answer_decision = FALSE;
 	can_close = FALSE;
 	change_scene = 0;
+	help_num = 0;
 }
 
 //-----------------------------------
@@ -71,11 +76,13 @@ void Pause::MenuUpdate(Key* key)
 		{
 			if (++select_menu_num > 3)select_menu_num = 0;
 			input_time = INPUT_ACCEPTANCE_TIME;
+			PlaySoundMem(select_se, DX_PLAYTYPE_BACK, TRUE);
 		}
 		else if (key->GetStickAngle(L).y < 0)
 		{
 			if (--select_menu_num < 0)select_menu_num = 3;
 			input_time = INPUT_ACCEPTANCE_TIME;
+			PlaySoundMem(select_se, DX_PLAYTYPE_BACK, TRUE);
 		}
 	}
 
@@ -83,13 +90,16 @@ void Pause::MenuUpdate(Key* key)
 	{
 		select_menu_decision = TRUE;
 		if (select_menu_num == 0)can_close = TRUE;
+		PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE);
 	}
 	else if(key->KeyDown(A))can_close = TRUE;
 }
 
 void Pause::TextUpdate(Key* key)
 {
-	//スティックを動かしたら
+	int select_num = 1;
+	if(select_menu_num == 3)select_num = 2;
+
 	if (key->GetStickAngle(L).x == 0)input_time = 0;
 	else if (--input_time < 0)input_time = 0;
 
@@ -98,13 +108,15 @@ void Pause::TextUpdate(Key* key)
 	{
 		if (key->GetStickAngle(L).x > 0)
 		{
-			if (++answer_num > 1)answer_num = 0;
+			if (++answer_num > select_num)answer_num = 0;
 			input_time = INPUT_ACCEPTANCE_TIME;
+			PlaySoundMem(select_se, DX_PLAYTYPE_BACK, TRUE);
 		}
 		else if (key->GetStickAngle(L).x < 0)
 		{
-			if (--answer_num < 0)answer_num = 1;
+			if (--answer_num < 0)answer_num = select_num;
 			input_time = INPUT_ACCEPTANCE_TIME;
+			PlaySoundMem(select_se, DX_PLAYTYPE_BACK, TRUE);
 		}
 	}
 
@@ -114,6 +126,7 @@ void Pause::TextUpdate(Key* key)
 		{
 			if (answer_num == 0)change_scene = select_menu_num;
 			else select_menu_decision = FALSE, answer_num = 0;
+			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE);
 		}
 		
 	}
@@ -141,7 +154,13 @@ void Pause::Draw() const
 	}
 	else
 	{
-		if (select_menu_num == 3)DrawRotaGraph(640, 360, 1, 0, help_image, TRUE);
+		if (select_menu_num == 3)
+		{
+			DrawRotaGraph(640, 360, 1, 0, help_image[answer_num], TRUE);
+			DrawRotaGraph(890, 90, 0.3, 0, number_image[0], TRUE, TRUE);
+			DrawRotaGraph(970, 90, 0.3, 0, number_image[answer_num + 1], TRUE);
+			DrawRotaGraph(1050, 90, 0.3, 0, number_image[0], TRUE);
+		}
 		else
 		{
 			DrawRotaGraph(640, 240, 1, 0, text_image[select_menu_num], TRUE);

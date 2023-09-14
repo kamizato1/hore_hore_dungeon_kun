@@ -10,6 +10,9 @@
 
 GameOver::GameOver(int stage_num)
 {
+	game_over_bgm = LoadSoundMem("bgm/gameover.mp3");
+	PlaySoundMem(game_over_bgm, DX_PLAYTYPE_BACK, TRUE);
+
 	back_ground_image = LoadGraph("images/GameOver/gameoverimage.png");
 	LoadDivGraph("images/GameOver/gameover.png", 8, 8, 1, 110, 110, font_image);
 	for (int i = 0; i < FONT_NUM; i++)

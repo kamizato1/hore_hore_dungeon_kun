@@ -13,12 +13,21 @@ Player::Player()
 {
     Init();
     for(int i = 0; i < TREASURE_TYPE_NUM; i++)treasure_num[i] = 0;
-    LoadDivGraph("images/Player/player1.png", 5, 5, 1, 30, 30, image);
+
+    int image[10];
+    int count = 0;
+    LoadDivGraph("images/Player/player.png", 10, 5, 2, 30, 30, image);
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 5; j++)this->image[i][j] = image[count++];
+    }
+   
     LoadDivGraph("images/Player/marubatu1.png", 2, 2, 1, 20, 20, answer_image);
     LoadDivGraph("images/Player/item.png", ITEM_TYPE_NUM, ITEM_TYPE_NUM, 1, 50, 50, item_image);
 
     jump_se = LoadSoundMem("bgm/JumpSE.mp3");
     get_treasure_se = LoadSoundMem("bgm/GetItem.mp3");
+    die_se = LoadSoundMem("bgm/playerdie.mp3");
 
     break_block_num = 0;
 }
@@ -49,12 +58,22 @@ void Player::Init()
 
 void Player::Update(Key* key, Stage* stage)
 {
-   if (location.y > SCREEN_HEIGHT + 50)die = TRUE;
+    if (location.y > SCREEN_HEIGHT + 50)
+    {
+        if(!die)PlaySoundMem(die_se, DX_PLAYTYPE_BACK, TRUE);
+        die = TRUE;
+    }
 
    if(!die)
    {
        if (stage->HitFlag(this))clear = TRUE;
     
+       if (++image_change_time > 10)
+       {
+           if (++image_type > 3)image_type = 0;
+           image_change_time = 0;
+       }
+
        MoveX(key, stage);
        MoveY(key, stage);
 
@@ -173,11 +192,6 @@ void Player::MoveX(Key* key, Stage* stagebase)//‚wÀ•W‚ÌˆÚ“®
     }
     else if (speed.x != 0)
     {
-        if (++image_change_time > 10)
-        {
-            if (++image_type > 3)image_type = 0;
-            image_change_time = 0;
-        }
         if (speed.x > 0)direction = -1;
         else direction = 1;
     }
@@ -225,16 +239,20 @@ void Player::Draw(float camera_work) const
         }
     }
     cursor->Draw(camera_work);
-    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image[image_type], TRUE, direction);
+
+    int player_image_type = 0;
+    if ((speed.x == 0) && (speed.y == 0))player_image_type = 1;
+
+    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image[player_image_type][image_type], TRUE, direction);
 
     if (item_type == 0)
     {
         int angle = (50 * -direction) + ((now_item_set_time[0] * 10) * direction);
-        if (pickaxe_flg)DrawRotaGraph(location.x + camera_work + (direction * 4), location.y, 1, (M_PI / 180) * angle, item_image[item_type], TRUE);
+        if (pickaxe_flg)DrawRotaGraph(location.x + camera_work + (direction * 4), location.y + (player_image_type * image_type), 1, (M_PI / 180) * angle, item_image[item_type], TRUE);
     }
     else if (can_use_item[item_type])
     {
-        DrawRotaGraph(location.x + camera_work + (direction * 14), location.y, 1, (0.3 * direction), item_image[item_type], TRUE);
+        DrawRotaGraph(location.x + camera_work + (direction * 14), location.y + (player_image_type * image_type), 1, (0.3 * direction), item_image[item_type], TRUE);
     }
 }
 

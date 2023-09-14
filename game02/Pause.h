@@ -5,6 +5,9 @@ class Pause
 {
 private:
 
+    int select_se;
+    int decision_se;
+
     int input_time; //入力受付時間
     int select_menu_num; // 現在入力しているメニュー
     bool select_menu_decision;
@@ -14,9 +17,11 @@ private:
     int menu_image[4][2]; //画像
     int answer_image[2][2]; //最終確認画像
     int text_image[3];
-    int help_image;
+    int help_image[3];
+    int number_image[4];
     int back_ground_image; //背景黒
     int pause_image;
+    int help_num;
 
     int change_scene;
 

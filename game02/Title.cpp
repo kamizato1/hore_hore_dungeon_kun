@@ -28,7 +28,7 @@ Title::Title()
 
 	credit = false;
 
-	decision_se = LoadSoundMem("bgm/•ÒW‚µ‚Äg—p‚µ‚½‚â‚Â/Click (mp3cut.net).mp3");
+	decision_se = LoadSoundMem("bgm/click.mp3");
 	move_se = LoadSoundMem("bgm/MoveCursor.mp3");
 
 	help_image[0] = LoadGraph("images/Menu/help.png");

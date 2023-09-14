@@ -8,11 +8,15 @@ private:
     int roll_score_se;
     int set_score_se;
     int result_bgm;
+    int drum_roll_se;
+    int drum_se;
+    int stamp_se;
 
     int score;
     int treasure_num[TREASURE_TYPE_NUM];
     int treasure_score[TREASURE_TYPE_NUM];
     int treasure_price[TREASURE_TYPE_NUM];
+    int treasure_add_score[TREASURE_TYPE_NUM];
 
     int stamp_image;
     int sign_image[3];

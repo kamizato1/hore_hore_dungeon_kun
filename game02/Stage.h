@@ -67,6 +67,7 @@ protected:
     int explosion_se;
     int throw_pickaxe_se;
     int break_pickaxe_se;
+    int put_item_se;
 
     int image_change_time;
     int image_type;

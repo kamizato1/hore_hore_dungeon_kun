@@ -38,6 +38,7 @@ Stage::Stage(int stage_num, int stage_width)
 	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
 	throw_pickaxe_se = LoadSoundMem("bgm/PickaxeThrow.mp3");
 	break_pickaxe_se = LoadSoundMem("bgm/breakpickaxe.mp3");
+	put_item_se = LoadSoundMem("bgm/stamp.mp3");
 
 	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
 	LoadDivGraph("images/smoke.png", 10, 10, 1, 500, 500, smoke_image);
@@ -98,11 +99,14 @@ Stage::~Stage()
 void Stage::Init()
 {
 	flag = new Flag(flag_location);
+	delete pickaxe;
 	pickaxe = nullptr;
 	image_change_time = IMAGE_CHANGE_TIME;
 	image_type = 0;
 	break_block_num = 0;
 	fallingblock.clear();
+	effect.clear();
+	bom.clear();
 }
 
 void Stage::Update()
@@ -366,6 +370,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 		{
 			if ((block_type > 0) && (block_type <= 4))//ƒuƒƒbƒN‚ª“y‚¾‚Á‚½‚ç
 			{
+				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 				effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[block_type]);
 				if (block_type == 4) block.erase(block.begin() + hit_stage.num);
 				else
@@ -378,6 +383,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 					else block[hit_stage.num].SetBlockType(block_type);
 				}
 			}
+			else PlaySoundMem(hit_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
 		}
 		else
 		{
@@ -398,6 +404,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			if ((!HitTreasure(bc, FALSE).flg) && (!HitBom(bc, FALSE).flg))
 			{
 				block.emplace_back(bc->GetLocation(), 4);
+				PlaySoundMem(put_item_se, DX_PLAYTYPE_BACK, TRUE);
 				return TRUE;
 			}
 		}
@@ -409,6 +416,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			if ((!HitTreasure(bc, FALSE).flg) && (!HitBom(bc, FALSE).flg))
 			{
 				bom.emplace_back(bc->GetLocation(), DATA{ 0,0 });
+				PlaySoundMem(put_item_se, DX_PLAYTYPE_BACK, TRUE);
 				return TRUE;
 			}
 		}

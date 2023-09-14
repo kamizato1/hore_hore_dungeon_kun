@@ -15,6 +15,8 @@ private:
 	int stage_num;
 	int wait_time;
 
+	int game_over_bgm;
+
 public:
 
 	GameOver(int stage_num);

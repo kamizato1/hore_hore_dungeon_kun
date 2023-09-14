@@ -12,6 +12,9 @@ Result::Result(int stage_num, int* treasure_num)
 	roll_score_se = LoadSoundMem("bgm/PickaxeThrow.mp3");
 	set_score_se = LoadSoundMem("bgm/ExplosionSE.mp3");
 	result_bgm = LoadSoundMem("bgm/Result.mp3");
+	drum_roll_se = LoadSoundMem("bgm/DrumRoll.mp3");
+	drum_se = LoadSoundMem("bgm/drum.mp3");
+	stamp_se = LoadSoundMem("bgm/stamp.mp3");
 
 	stamp_image = LoadGraph("images/Result/stamp.png");
 	map_image = LoadGraph("images/Result/map.png");
@@ -19,7 +22,7 @@ Result::Result(int stage_num, int* treasure_num)
 	back_ground_image[0] = LoadGraph("images/background03.png");
 	back_ground_image[1] = LoadGraph("images/background02.png");
 	back_ground_image[2] = LoadGraph("images/background01.png");
-	LoadDivGraph("images/Result/number.png", 10, 10, 1, 140, 151, number_image);
+	LoadDivGraph("images/Result/number.png", 10, 10, 1, 140, 150, number_image);
 	LoadDivGraph("images/Result/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, 60, 60, treasure_image);
 	LoadDivGraph("images/Result/sign.png", 3, 3, 1, 150, 150, sign_image);
 
@@ -56,9 +59,12 @@ Result::Result(int stage_num, int* treasure_num)
 		treasure_score[i] = treasure_num[i] * treasure_price[i];
 		score += treasure_score[i];
 		if (treasure_score[i] > 9999999)treasure_score[i] = 9999999;
-	}
-	if (score > 9999999)score = 9999999;
 
+		treasure_add_score[i] = treasure_score[i] / 299;
+		if (treasure_score[i] < 299) treasure_add_score[i] = 1;
+	}
+	
+	if (score > 9999999)score = 9999999;
 	int hi_score[STAGE_NUM];
 	FILE* fp_s;//ステージ１ファイル読み込み
 	fopen_s(&fp_s, "data/hiscore.txt", "r");
@@ -113,6 +119,8 @@ void Result::Update(Key* key)
 	{
 		if (end_move_stamp)transition = TRUE;
 		else if(end_move_score)skip = TRUE;
+
+		StopSoundMem(drum_roll_se);
 	}
 
 	if (!end_move_score)MoveScore();
@@ -145,6 +153,8 @@ void Result::MoveScore()
 		{
 			end_move_score = TRUE;
 			wait_time = WAIT_TIME;
+			PlaySoundMem(result_bgm, DX_PLAYTYPE_LOOP, TRUE);
+			PlaySoundMem(drum_roll_se, DX_PLAYTYPE_LOOP, TRUE);
 		}
 	}
 }
@@ -157,13 +167,18 @@ void Result::AddScore()
 		for (int i = 0; i < TREASURE_TYPE_NUM; i++)
 		{
 			int add_score = treasure_score[i];
-			if (add_score >= 10000)add_score = 10000;
+			if (add_score >= treasure_add_score[i])add_score = treasure_add_score[i];
 			treasure_score[i] -= add_score;
 			score += add_score;
 			if (treasure_score[i] != 0)end_add_score = FALSE;
 		}
 		if (end_add_score)
 		{
+			if (wait_time == WAIT_TIME)
+			{
+				PlaySoundMem(drum_se, DX_PLAYTYPE_BACK, TRUE);
+				StopSoundMem(drum_roll_se);
+			}
 			if (--wait_time <= 0)wait_time = WAIT_TIME;
 			else end_add_score = FALSE;
 		}
@@ -191,10 +206,22 @@ void Result::MoveStamp()
 		else
 		{
 			stamp_image_size = 1.0f;
+			if (wait_time == WAIT_TIME)PlaySoundMem(stamp_se, DX_PLAYTYPE_BACK, TRUE);
 			if (--wait_time <= 0)wait_time = WAIT_TIME, end_move_stamp = TRUE;
 		}
+
+
 	}
-	else if (--wait_time <= 0)wait_time = WAIT_TIME, end_move_stamp = TRUE;
+	else
+	{
+		if ((wait_time == WAIT_TIME) && (skip))PlaySoundMem(drum_se, DX_PLAYTYPE_BACK, TRUE);
+
+		if (--wait_time <= 0)
+		{
+			wait_time = WAIT_TIME;
+			end_move_stamp = TRUE;
+		}
+	}
 }
 
 
@@ -268,6 +295,10 @@ void Result::Draw() const
 //-----------------------------------
 AbstractScene* Result::ChangeScene()
 {
-	if (transition)return new StageSelect(stage_num);
+	if (transition)
+	{
+		StopSoundMem(result_bgm);
+		return new StageSelect(stage_num);
+	}
 	return this;
 }
