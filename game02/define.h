@@ -46,7 +46,7 @@ struct PLAYER_UI
     float now_item_set_time[ITEM_TYPE_NUM];
     float item_set_time[ITEM_TYPE_NUM];
     int treasure_num[TREASURE_TYPE_NUM];
-    int bom_num;
+    int break_block_num;
 };
 
 struct DATA //座標,大きさ,スピードなどに使う

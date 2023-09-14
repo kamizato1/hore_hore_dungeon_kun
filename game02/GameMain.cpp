@@ -6,7 +6,7 @@
 #include"Result.h"
 #include"GameOver.h"
 
-#define TIME 160
+#define TIME 300
 #define MAX_SWAY_WIDTH 5
 #define SWAY_SIZE 0.5
 
@@ -55,7 +55,6 @@ void GameMain::Init()
     sway_flg = FALSE;
     screen_brightness = 255;
     Pause(TRUE);
-    StopSoundMem(stage_bgm);
     PlaySoundMem(stage_bgm, DX_PLAYTYPE_LOOP, TRUE);
 }
 
@@ -77,14 +76,22 @@ void GameMain::Update(Key* key)
             {
                 Pause(TRUE);
                 PlaySoundMem(stage_clear_bgm, DX_PLAYTYPE_BACK, TRUE);
-                StopSoundMem(stage_bgm);
             }
             clear = TRUE;   
         }
         else
         {
-            if (player->GetPlayerDie())die = TRUE;
-            if (remaining_time == 0)die = TRUE, stage->DeleteFlag();
+            if (player->GetPlayerDie())
+            {
+                if(!die)StopSoundMem(stage_bgm);
+                die = TRUE;
+            }
+            if (remaining_time == 0)
+            {
+                if (!die)StopSoundMem(stage_bgm);
+                die = TRUE;
+                stage->DeleteFlag();
+            }
         }
     }
     
@@ -122,7 +129,7 @@ void GameMain::Update(Key* key)
         }
         change_result_scene = ui->Update(clear);
     }
-    else if (pause->Update(key))stop = !stop;
+    else if (pause->Update(key))stop = !stop, Pause(FALSE);
 }
 
 void GameMain::Draw() const
@@ -147,11 +154,7 @@ void GameMain::Draw() const
 
 void GameMain::ReStart()
 {
-    if (--life == 0)
-    {
-        StopSoundMem(stage_bgm);
-        change_game_over_scene = TRUE;
-    }
+    if (--life == 0)change_game_over_scene = TRUE;
     else
     {
         Init();
@@ -189,13 +192,11 @@ AbstractScene* GameMain::ChangeScene()
     {
         if (pause->GetChangeScene() == 1)
         {
-            StopSoundMem(stage_bgm);
             Pause(TRUE);
             return new GameMain(stage_num);
         }
         else if (pause->GetChangeScene() == 2)
         {
-            StopSoundMem(stage_bgm);
             Pause(TRUE);
             return new StageSelect(stage_num);
         }
@@ -220,10 +221,12 @@ void GameMain::Pause(bool flg)
     if (flg)
     {
         StopSoundMem(earthquake_se);
+        StopSoundMem(stage_bgm);
     }
     else
     {
         if(sway_flg)PlaySoundMem(earthquake_se, DX_PLAYTYPE_BACK, FALSE);
+        PlaySoundMem(stage_bgm, DX_PLAYTYPE_LOOP, FALSE);
     }
 
     stage->Pause(flg);

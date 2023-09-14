@@ -11,6 +11,7 @@ Ui::Ui()
 	clear_image = LoadGraph("images/Ui/clear.png");
 	timer_image = LoadGraph("images/Ui/timer.png");
 	life_image = LoadGraph("images/Ui/player.png");
+	cross_image = LoadGraph("images/Ui/cross.png");
 
 	int dark_item_image[6];
 	int count = 0;
@@ -70,6 +71,8 @@ void Ui::Draw(int time, int life, int pickaxe_flg, PLAYER_UI player_ui) const
 	int treasure_num_digit = 10;
 	int count = 0;
 
+	player_ui.break_block_num = 50 - player_ui.break_block_num;
+
 	while (timer_digit > 0)
 	{
 		int image_type = (time / timer_digit);
@@ -85,6 +88,11 @@ void Ui::Draw(int time, int life, int pickaxe_flg, PLAYER_UI player_ui) const
 				DrawRotaGraph(65 + (count * 15), 150 + (i * 50), 0.9, 0, number_image[image_type], TRUE);
 				player_ui.treasure_num[i] -= (image_type * treasure_num_digit);
 			}
+			
+			image_type = (player_ui.break_block_num / treasure_num_digit);
+			DrawRotaGraph(24 + (count * 12), 150, 0.7, 0, number_image[image_type], TRUE);
+			player_ui.break_block_num -= (image_type * treasure_num_digit);
+
 			treasure_num_digit = (treasure_num_digit / 10);
 		}
 		count++;
@@ -95,8 +103,13 @@ void Ui::Draw(int time, int life, int pickaxe_flg, PLAYER_UI player_ui) const
 	if (player_ui.item_type == 0)
 	{
 		if (pickaxe_flg)DrawRotaGraph(640, 55, 1, 0, dark_item_image[player_ui.item_type][0], TRUE);
+		else DrawRotaGraph(640, 55, 1, 0, cross_image, TRUE);
 	}
-	else DrawCircleGauge(640, 55, player_ui.now_item_set_time[player_ui.item_type], dark_item_image[player_ui.item_type][0]);
+	else
+	{
+		DrawCircleGauge(640, 55, player_ui.now_item_set_time[player_ui.item_type], dark_item_image[player_ui.item_type][0]);
+		if(player_ui.now_item_set_time[player_ui.item_type] < 100)DrawRotaGraph(640, 55, 1, 0, cross_image, TRUE);
+	}
 
 	int item_type = player_ui.item_type - 1;
 	if (item_type < 0)item_type = 2;
