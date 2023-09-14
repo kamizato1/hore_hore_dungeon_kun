@@ -9,6 +9,10 @@
 //-----------------------------------
 Result::Result(int stage_num, int* treasure_num)
 {
+	roll_score_se = LoadSoundMem("bgm/PickaxeThrow.mp3");
+	set_score_se = LoadSoundMem("bgm/ExplosionSE.mp3");
+	result_bgm = LoadSoundMem("bgm/Result.mp3");
+
 	stamp_image = LoadGraph("images/Result/stamp.png");
 	map_image = LoadGraph("images/Result/map.png");
 	score_image = LoadGraph("images/Result/score.png");
@@ -32,6 +36,8 @@ Result::Result(int stage_num, int* treasure_num)
 	stamp_flg = FALSE;
 	new_record = FALSE;
 	skip = FALSE;
+
+	PlaySoundMem(roll_score_se, DX_PLAYTYPE_LOOP, TRUE);
 
 	treasure_price[0] = 50000;
 	treasure_price[1] = 150000;
@@ -124,6 +130,12 @@ void Result::MoveScore()
 	{
 		score_image_size -= 0.2f;
 		score_image_angle += 0.4f;
+
+		if (score_image_size <= 0.8f)
+		{
+			StopSoundMem(roll_score_se);
+			PlaySoundMem(set_score_se, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	else
 	{

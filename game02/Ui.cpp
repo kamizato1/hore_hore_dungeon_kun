@@ -90,7 +90,7 @@ void Ui::Draw(int time, int life, int pickaxe_flg, PLAYER_UI player_ui) const
 			}
 			
 			image_type = (player_ui.break_block_num / treasure_num_digit);
-			DrawRotaGraph(24 + (count * 12), 150, 0.7, 0, number_image[image_type], TRUE);
+			DrawRotaGraph(23 + (count * 12), 150, 0.7, 0, number_image[image_type], TRUE);
 			player_ui.break_block_num -= (image_type * treasure_num_digit);
 
 			treasure_num_digit = (treasure_num_digit / 10);

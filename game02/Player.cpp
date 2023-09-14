@@ -236,8 +236,6 @@ void Player::Draw(float camera_work) const
     {
         DrawRotaGraph(location.x + camera_work + (direction * 14), location.y, 1, (0.3 * direction), item_image[item_type], TRUE);
     }
-
-    DrawFormatString(0, 160, 0xffffff, "%d",break_block_num);
 }
 
 

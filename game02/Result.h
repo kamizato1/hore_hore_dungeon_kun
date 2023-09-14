@@ -5,6 +5,10 @@ class Result : public AbstractScene
 {
 private:
 
+    int roll_score_se;
+    int set_score_se;
+    int result_bgm;
+
     int score;
     int treasure_num[TREASURE_TYPE_NUM];
     int treasure_score[TREASURE_TYPE_NUM];

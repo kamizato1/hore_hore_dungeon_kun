@@ -18,7 +18,6 @@ Bom::Bom(DATA location, DATA speed)
         throw_flg = FALSE;
         radius = { BLOCK_SIZE_X / 2, BLOCK_SIZE_Y / 2 };
     }
-    
     image = LoadGraph("images/Bom/angrybom.png");
     blast_range_image = LoadGraph("images/Bom/wakuwaku.png");
     LoadDivGraph("images/Bom/bomnumber.png", 6, 6, 1, 14, 23, number_image);
