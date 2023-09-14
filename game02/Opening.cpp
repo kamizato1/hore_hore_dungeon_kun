@@ -46,7 +46,6 @@ void Opening::Update(Key* key)
 
 
 	if (CheckSoundMem(bgm) != 1) {   //BGM‚ª—¬‚ê‚Ä‚¢‚È‚©‚Á‚½‚çÄ¶
-		//ChangeVolumeSoundMem(255 * 80 / 100, bgm); //BGM‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç40%Ä¶
 		PlaySoundMem(bgm, DX_PLAYTYPE_BACK, TRUE); //BGMÄ¶
 	}
 
