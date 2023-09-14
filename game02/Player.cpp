@@ -211,7 +211,7 @@ void Player::MoveY(Key* key, Stage* stagebase)//Çxç¿ïWÇÃà⁄ìÆ
 
 void Player::Draw(float camera_work) const
 {
-    if (can_throw)
+    if ((can_throw) && (item_type != 1))
     {
         float throw_speed_y = throw_speed.y;
         DATA throw_location = location;
@@ -251,7 +251,7 @@ PLAYER_UI Player::GetPlayerUi()const
         player_ui.item_set_time[i] = item_set_time[i];
     }
     for (int i = 0; i < TREASURE_TYPE_NUM; i++)player_ui.treasure_num[i] = treasure_num[i];
-    player_ui.bom_num = 0;
+    player_ui.break_block_num = break_block_num;
     return player_ui;
 }
 
