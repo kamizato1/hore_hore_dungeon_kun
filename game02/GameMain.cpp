@@ -75,6 +75,7 @@ void GameMain::Update(Key* key)
         {
             if (clear == FALSE)
             {
+                Pause(TRUE);
                 PlaySoundMem(stage_clear_bgm, DX_PLAYTYPE_BACK, TRUE);
                 StopSoundMem(stage_bgm);
             }
