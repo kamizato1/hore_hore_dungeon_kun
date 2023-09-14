@@ -46,7 +46,7 @@ void Opening::Update(Key* key)
 
 
 	if (CheckSoundMem(bgm) != 1) {   //BGM‚ª—¬‚ê‚Ä‚¢‚È‚©‚Á‚½‚çÄ¶
-		ChangeVolumeSoundMem(255 * 80 / 100, bgm); //BGM‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç40%Ä¶
+		ChangeVolumeSoundMem(255, bgm); //BGM‰¹—Ê’²® 255Å‘å‰¹—Ê‚©‚ç40%Ä¶
 		PlaySoundMem(bgm, DX_PLAYTYPE_BACK, TRUE); //BGMÄ¶
 	}
 
@@ -88,7 +88,7 @@ void Opening::Draw() const
 {
 	
 
-	DrawRotaGraph(640, 360, 1, 0, background_image, false);
+	DrawRotaGraph(640, 360, 1.1f, 0, background_image, false);
 	
 	//https://scrapbox.io/dxlib/SetDrawBlendMode
 	//“§–¾“x
@@ -96,7 +96,7 @@ void Opening::Draw() const
 
 	DrawRotaGraph(640, 270,0.7f,0 ,image[story_no], false);
 
-	DrawRotaGraph(640, 600, 0.5, 0, character_image[story_no], true);
+	DrawRotaGraph(640, 600, 0.5f, 0, character_image[story_no], true);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 

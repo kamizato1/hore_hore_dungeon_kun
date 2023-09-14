@@ -13,12 +13,14 @@ private:
     int number_image[10];
     int operating_time;//操作受付
     int back_ground_image[5];//背景画像
+    int background_image;//背景画像
     int player_image[5]; //プレイヤー画像
     int player_image_type; //画像イメージ
     int player_image_change_time;
     int clear_stage; //クリアステージ
     DATA player_location[STAGE_NUM];
     bool transition;//次の画面に遷移するのか
+    bool title; //タイトル戻る
  
 public:
 

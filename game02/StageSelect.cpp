@@ -1,5 +1,6 @@
 #include"DxLib.h"
 #include "StageSelect.h"
+#include"Title.h"
 #include "GameMain.h"
 
 //操作受付時間
@@ -21,10 +22,12 @@ StageSelect::StageSelect(int stage_num)
 
 	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
 	LoadDivGraph("images/Player/player1.png", 5, 5, 1, 30, 30, player_image);
+	background_image= LoadGraph("images/StageSelect/草原.png");
 	stage_number = stage_num;
 	operating_time = TIME / 2;
 	player_image_change_time = TIME;
 	transition = false;
+	title = false;
 	player_image_type = 0;
 	
 	FILE* fp_s;//スコアファイル読み込み
@@ -88,13 +91,18 @@ void StageSelect::Update(Key* key)
 	}
 
 	if (key->KeyDown(B))transition = TRUE;
-	}
+
+	if (key->KeyDown(A))title = TRUE;
+
+}
 
 	//-----------------------------------
 	// 描画
 	//-----------------------------------
 	void StageSelect::Draw() const
 	{
+		DrawGraph(0, 0, background_image, false);
+
 		DrawRotaGraph(640, 360, 1, 0, back_ground_image[clear_stage - 1], TRUE);
 
 		int score_digit = 1000000;
@@ -133,6 +141,11 @@ void StageSelect::Update(Key* key)
 		if (transition)
 		{
 			return new GameMain(stage_number);
+		}
+
+		if (title)
+		{
+			return new Title();
 		}
 
 		return this;
