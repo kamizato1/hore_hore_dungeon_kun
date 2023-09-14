@@ -185,7 +185,7 @@ void Title::Draw() const
 		DrawRotaGraph(640, 400, 1.15f, 0, help_image[help_menu], TRUE);
 		DrawRotaGraph(1000, 100, 1, 0, num_image[help_menu + 1], TRUE);
 		DrawRotaGraph(1040, 100, 1, 0, slash_image[1], TRUE);
-		DrawRotaGraph(1080, 100, 1, 0, num_image[4], TRUE);
+		DrawRotaGraph(1080, 100, 1, 0, num_image[3], TRUE);
 	}
 
 	if (credit)
