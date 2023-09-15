@@ -28,6 +28,24 @@ Ui::Ui()
 	clear_image_size = 0.0f;
 }
 
+void Ui::Delete()
+{
+	DeleteGraph(life_image);
+	DeleteGraph(clear_image);
+	DeleteGraph(life_image);
+	DeleteGraph(timer_image);
+	DeleteGraph(cross_image);
+
+	for (int i = 0; i < 10; i++)DeleteGraph(number_image[i]);
+	for (int i = 0; i < 10; i++)DeleteGraph(item_image[i]);
+	for (int i = 0; i < TREASURE_TYPE_NUM; i++)DeleteGraph(treasure_image[i]);
+	for (int i = 0; i < ITEM_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < 2; j++)DeleteGraph(dark_item_image[i][j]);
+	}
+
+}
+
 bool Ui::Update(bool clear)
 {
 	if (clear)

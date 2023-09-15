@@ -35,12 +35,24 @@ GameMain::GameMain(int stage_num)
     Init();
 }
 
-GameMain::~GameMain()
+void GameMain::Delete()
 {
+    stage->Delete();
+    //player->Delete();
+    ui->Delete();
+    pause->Delete();
+
     delete player;
     delete stage;
     delete ui;
-    delete pause; 
+    delete pause;
+
+    StopSoundMem(stage_bgm);
+    StopSoundMem(stage_clear_bgm);
+    DeleteSoundMem(stage_bgm);
+    DeleteSoundMem(stage_clear_bgm);
+    DeleteSoundMem(pause_se);
+    DeleteSoundMem(earthquake_se);
 }
 
 void GameMain::Init()
@@ -194,28 +206,28 @@ AbstractScene* GameMain::ChangeScene()
     {
         if (pause->GetChangeScene() == 1)
         {
-            Pause(TRUE);
-            stage->Delete();
+            //Pause(TRUE);
+           // stage->Delete();
             return new GameMain(stage_num);
         }
         else if (pause->GetChangeScene() == 2)
         {
-            Pause(TRUE);
-            stage->Delete();
+            //Pause(TRUE);
+            //stage->Delete();
             return new StageSelect(stage_num);
         }
     }
     else if (change_result_scene)
     {
-        Pause(TRUE);
-        stage->Delete();
+        //Pause(TRUE);
+        //stage->Delete();
         return new Result(stage_num, player->GetTreasureNum());
     }
 
     if (change_game_over_scene)
     {
-        Pause(TRUE);
-        stage->Delete();
+        //Pause(TRUE);
+        //stage->Delete();
         return new GameOver(stage_num);
     }
 

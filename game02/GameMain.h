@@ -43,9 +43,7 @@ private:
 public:
 
     GameMain(int stage_num);
-    ~GameMain();
-
-    void Delete() override {};
+    void Delete() override;
     void Update(Key* key) override; //•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é
     void Draw() const override; //•`‰æ‚ÉŠÖ‚·‚é‚±‚Æ‚ğÀ‘•‚·‚é
 

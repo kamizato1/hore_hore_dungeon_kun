@@ -32,7 +32,7 @@ public:
 
     
     Pause();//コンストラクタ
-    ~Pause(); //デストラクタ
+    void Delete();
 
     bool Update(Key* key);//描画以外の更新を実装する
     void Draw() const;//描画に関することを実装する

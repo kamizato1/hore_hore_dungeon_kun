@@ -45,12 +45,28 @@ void Pause::Init()
 	help_num = 0;
 }
 
-//-----------------------------------
-// デストラクタ
-//-----------------------------------
-Pause::~Pause()
+void Pause::Delete()
 {
+	DeleteSoundMem(select_se);
+	DeleteSoundMem(decision_se);
+	DeleteSoundMem(return_se);
 
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 2; j++)DeleteGraph(menu_image[i][j]);
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)DeleteGraph(answer_image[i][j]);
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		help_image[i];
+		text_image[i];
+	}
+	for (int i = 0; i < 4; i++)number_image[i];
+	DeleteGraph(back_ground_image);
+	DeleteGraph(pause_image);
 }
 
 //-----------------------------------

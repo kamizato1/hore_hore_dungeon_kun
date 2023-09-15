@@ -19,6 +19,7 @@ private:
    
 public:
 
+    void Delete();
     Ui();
     bool Update(bool clear);
     void Draw(int time, int life, int pickaxe_flg, PLAYER_UI player_ui) const;

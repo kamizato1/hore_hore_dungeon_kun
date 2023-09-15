@@ -102,8 +102,8 @@ void Stage::Delete()
 	fallingblock.clear();
 	fallingblock.shrink_to_fit();
 
-	delete pickaxe;
-	delete flag;
+	//delete pickaxe;
+	//delete flag;
 }
 
 Stage::~Stage()
