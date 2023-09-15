@@ -8,6 +8,7 @@
 //-----------------------------------
 Pause::Pause()
 {
+	return_se = LoadSoundMem("bgm/return.mp3");
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	select_se = LoadSoundMem("bgm/MoveCursor.mp3");
 	
@@ -92,7 +93,11 @@ void Pause::MenuUpdate(Key* key)
 		if (select_menu_num == 0)can_close = TRUE;
 		PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE);
 	}
-	else if(key->KeyDown(A))can_close = TRUE;
+	else if (key->KeyDown(A))
+	{
+		can_close = TRUE;
+		PlaySoundMem(return_se, DX_PLAYTYPE_BACK, TRUE);
+	}
 }
 
 void Pause::TextUpdate(Key* key)
@@ -130,7 +135,11 @@ void Pause::TextUpdate(Key* key)
 		}
 		
 	}
-	else if (key->KeyDown(A))select_menu_decision = FALSE, answer_num = 0;
+	else if (key->KeyDown(A))
+	{
+		PlaySoundMem(return_se, DX_PLAYTYPE_BACK, TRUE);
+		select_menu_decision = FALSE, answer_num = 0;
+	}
 }
 
 //-----------------------------------

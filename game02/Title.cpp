@@ -28,6 +28,7 @@ Title::Title()
 
 	credit = false;
 
+	return_se = LoadSoundMem("bgm/return.mp3");
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	move_se = LoadSoundMem("bgm/MoveCursor.mp3");
 
@@ -107,7 +108,7 @@ void Title::Update(Key* key)
 
 		if (key->KeyDown(A))
 		{
-			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
+			PlaySoundMem(return_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 			input_time = 1;
 			help_menu = 0;
 			help = false;
@@ -120,7 +121,7 @@ void Title::Update(Key* key)
 
 		if (key->KeyDown(A))
 		{
-			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
+			PlaySoundMem(return_se, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 			credit = false;
 		}
 	}

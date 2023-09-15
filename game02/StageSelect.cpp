@@ -14,6 +14,7 @@
 //-----------------------------------
 StageSelect::StageSelect(int stage_num)
 {
+	return_se = LoadSoundMem("bgm/return.mp3");
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	select_se = LoadSoundMem("bgm/MoveCursor.mp3");
 	stage_select_bgm = LoadSoundMem("bgm/stageselect.mp3");
@@ -108,7 +109,11 @@ void StageSelect::Update(Key* key)
 			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE);
 			transition = TRUE;
 		}
-		else if (key->KeyDown(A))title = TRUE;
+		else if (key->KeyDown(A))
+		{
+			PlaySoundMem(return_se, DX_PLAYTYPE_BACK, TRUE);
+			title = TRUE;
+		}
 	}
 }
 

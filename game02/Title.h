@@ -20,6 +20,7 @@ private:
     int select_menu; // 現在入力しているメニュー
     int bgm; //BGM
     int move_se; //動くときのSE
+    int return_se;
     int decision_se; //決定オン
     int help_menu; //ヘルプメニュ
 
