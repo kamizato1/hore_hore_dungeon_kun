@@ -169,15 +169,15 @@ void Title::Draw() const
 
 	if (help)
 	{
-		DrawRotaGraph(640, 400, 1.15f, 0, help_image[help_menu], TRUE);
-		DrawRotaGraph(890, 100, 0.3, 0, num_image[0], TRUE);
-		DrawRotaGraph(970, 100, 0.3, 0, num_image[help_menu + 1], TRUE);
-		DrawRotaGraph(1050, 100, 0.3, 0, num_image[0], TRUE,TRUE);
+		DrawRotaGraph(640, 360, 1, 0, help_image[help_menu], TRUE);
+		DrawRotaGraph(890, 90, 0.3, 0, num_image[0], TRUE,TRUE);
+		DrawRotaGraph(970, 90, 0.3, 0, num_image[help_menu + 1], TRUE);
+		DrawRotaGraph(1050, 90, 0.3, 0, num_image[0], TRUE);
 	}
 
 	if (credit)
 	{
-		DrawRotaGraph(640, 400, 1.15f, 0, credit_image, TRUE);
+		DrawRotaGraph(640, 360, 1, 0, credit_image, TRUE);
 	}
 
 }
