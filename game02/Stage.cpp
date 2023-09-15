@@ -56,6 +56,8 @@ void Stage::LoadImages()
 	{
 		for (int j = 0; j < 4; j++)block_image[i][j] = set_block_image[count++];
 	}
+	block_warning_image = LoadGraph("images/warning.png");
+
 	//”š’e‰æ‘œ
 	bom_image = LoadGraph("images/Bom/bom.png");
 	bom_frame_image = LoadGraph("images/Bom/frame.png");
@@ -112,6 +114,7 @@ void Stage::Delete()
 	{
 		for (int j = 0; j < 4; j++)DeleteGraph(block_image[i][j]);
 	}
+	DeleteGraph(block_warning_image);
 
 	//”š’e‰æ‘œ
 	DeleteGraph(bom_frame_image);
@@ -298,10 +301,14 @@ void Stage::Draw1(float camera_work) const
 		treasure[i].Draw(camera_work);
 		//DrawRotaGraph(treasure[i].GetLocation().x + camera_work, treasure[i].GetLocation().y, 1, 0, change_block_image[0][image_type], TRUE);
 	}
-	for (int i = 0; i < block.size(); i++)
+	for (int i = 0; i < block.size(); i++)//ƒuƒƒbƒN•\Ž¦
 	{
-		int block_type = static_cast<int>(block[i].GetBlockType());
-		if(block_type != 0)DrawRotaGraph(block[i].GetLocation().x + camera_work, block[i].GetLocation().y, 1, 0, block_image[block_type][image_type], TRUE);	
+		GET_DRAW_BLOCK gdb = block[i].GetDrawBlock();
+		if (gdb.block_type != 0)
+		{
+			DrawRotaGraph(gdb.location.x + camera_work, gdb.location.y, 1, 0, block_image[gdb.block_type][image_type], TRUE);
+			if(gdb.hit_explosion)DrawRotaGraph(gdb.location.x + camera_work, gdb.location.y, 1, 0, block_warning_image, TRUE);
+		}
 	}
 }
 
@@ -311,7 +318,7 @@ void Stage::Draw2(float camera_work) const
 
 	for (int i = 0; i < bom.size(); i++)//”š’e‚Ì•\Ž¦
 	{
-		GET_DRAW_BOM gdb = bom[i].GetBomDraw();
+		GET_DRAW_BOM gdb = bom[i].GetDrawBom();
 		DrawRotaGraph(gdb.location.x + camera_work, gdb.location.y, 1, 0, bom_frame_image, TRUE);
 		int count = gdb.count / FPS;
 		DrawRotaGraph(gdb.location.x + camera_work, gdb.location.y, gdb.bom_size, ((M_PI / 180) * gdb.angle), bom_image, TRUE);

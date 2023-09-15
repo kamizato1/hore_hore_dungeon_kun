@@ -3,7 +3,12 @@
 #include"BoxCollider.h"
 #include"define.h"
 
-
+struct GET_DRAW_BLOCK
+{
+    DATA location;
+    bool hit_explosion;
+    int block_type;
+};
 
 class Block : public BoxCollider
 {
@@ -18,4 +23,5 @@ public:
     BLOCK_TYPE GetBlockType() const{ return type; }
     void SetBlockType(int type);
     void SetHitEcplosion(bool flg) { hit_explosion = flg; }
+    GET_DRAW_BLOCK GetDrawBlock() const;
 };

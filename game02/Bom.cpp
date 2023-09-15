@@ -74,7 +74,7 @@ bool Bom::HitExplosion(BoxCollider* bc)
     return flg;
 }
 
-GET_DRAW_BOM Bom::GetBomDraw()const
+GET_DRAW_BOM Bom::GetDrawBom()const
 {
     GET_DRAW_BOM get_draw_bom;
     get_draw_bom.location = location;

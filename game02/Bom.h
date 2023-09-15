@@ -35,6 +35,6 @@ public:
     bool HitExplosion(BoxCollider* bc);
     bool GetCanDelete() { return can_delete; }
     void SetCanDelete(bool flg) { can_delete = flg; }
-    GET_DRAW_BOM GetBomDraw()const;
+    GET_DRAW_BOM GetDrawBom()const;
 
 };

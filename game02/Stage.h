@@ -55,13 +55,15 @@ protected:
     //ƒuƒƒbƒN
     int set_block_image[32];
     int block_image[BLOCK_TYPE_NUM][4];
+    int block_warning_image;
 
     //”š’e
     int bom_image;
     int bom_frame_image;
     int bom_number_image[6];
 
-
+    //•ó
+    //int treasure_image[]
 
 
     int set_break_block_image[80];

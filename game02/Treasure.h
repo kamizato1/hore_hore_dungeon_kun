@@ -4,7 +4,6 @@
 #include"Stage.h"
 #include"define.h"
 
-
 class Treasure : public BoxCollider
 {
 private:
