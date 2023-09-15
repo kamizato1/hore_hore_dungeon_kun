@@ -18,13 +18,16 @@ void Block::Delete()
 
 void Block::Draw(float camera_work) const
 {
-    DrawRotaGraphF(location.x + camera_work, location.y, 1, 0, image, TRUE);
-    if(hit_explosion)DrawRotaGraphF(location.x + camera_work, location.y, 1, 0, caveat_image, TRUE);
+    if (type != BLOCK_TYPE::NONE)
+    {
+        DrawRotaGraphF(location.x + camera_work, location.y, 1, 0, image, TRUE);
+        if (hit_explosion)DrawRotaGraphF(location.x + camera_work, location.y, 1, 0, caveat_image, TRUE);
+   }
 }
 
 void Block::SetBlockType(int type, int image)
 { 
-    SetBlockImage(image);
+    if(type != -1)SetBlockImage(image);
     this->type = static_cast<BLOCK_TYPE>(type);
 }
 

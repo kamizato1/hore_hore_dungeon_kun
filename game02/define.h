@@ -72,7 +72,8 @@ enum class TREASURE_TYPE
 
 enum class BLOCK_TYPE
 {
-    NONE,//ブロックが置けない
+    NONE = -1,
+    NO_BLOCK,//ブロックが置けない
     BROKEN_BLOCK,//壊れそうなブロック
     WOUNDED_BLOCK,//傷ついているブロック
     NORMAL_BLOCK,//ブロック

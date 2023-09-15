@@ -261,8 +261,7 @@ void Stage::HitBlastRange(int bom_num)
 					int image_type = block_type;
 					if (block_type < 4)image_type = 1;
 					effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
-					block.erase(block.begin() + i);
-					i--;
+					block[i].SetBlockType(-1, -1);
 				}
 				else block[i].SetHitEcplosion(TRUE);
 			}
@@ -311,11 +310,14 @@ HIT_STAGE Stage::HitBlock(BoxCollider* bc)
 	{
 		if (block[i].HitBox(bc))
 		{
-			if (block[i].GetBlockType() == BLOCK_TYPE::NONE)hit_stage.can_put = FALSE;
-			else
+			if (block[i].GetBlockType() != BLOCK_TYPE::NONE)
 			{
-				hit_stage = { TRUE, i, block[i].GetBlockType() };
-				break;
+				if (block[i].GetBlockType() == BLOCK_TYPE::NO_BLOCK)hit_stage.can_put = FALSE;
+				else
+				{
+					hit_stage = { TRUE, i, block[i].GetBlockType() };
+					break;
+				}
 			}
 		}
 	}
@@ -424,9 +426,8 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 				int image_type = block_type;
 				if (block_type < 4)image_type = 1, break_block_num++;
 				effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
-				block.erase(block.begin() + i);
+				block[i].SetBlockType(-1, -1);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
-				i--;
 			}
 			else if (block_type >= 5)return TRUE;//Ç©ÇΩÇ¢ÉuÉçÉbÉNÇ…ìñÇΩÇ¡ÇΩÇÃÇ≈flgÇTRUEÇ…Ç∑ÇÈ
 		}
@@ -449,12 +450,12 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			{
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 				effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[block_type]);
-				if (block_type == 4) block.erase(block.begin() + hit_stage.num);
+				if (block_type == 4) block[hit_stage.num].SetBlockType(-1, -1);
 				else
 				{
 					if (--block_type == 0)
 					{
-						block.erase(block.begin() + hit_stage.num);
+						block[hit_stage.num].SetBlockType(-1, -1);
 						return TRUE;
 					}
 					else block[hit_stage.num].SetBlockType(block_type, block_image[block_type]);
@@ -532,8 +533,7 @@ void Stage::Sway()
 				effect.emplace_back(block[i].GetLocation(), break_block_image[block_type]);
 				if ((block_type == 1) || (block_type == 4))
 				{
-					block.erase(block.begin() + i);
-					i--;
+					block[i].SetBlockType(-1, -1);
 				}
 				else block[i].SetBlockType(block_type - 1, block_image[block_type - 1]);
 			}
