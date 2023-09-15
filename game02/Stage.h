@@ -63,7 +63,7 @@ protected:
     int bom_number_image[6];
 
     //•ó
-    //int treasure_image[]
+    int treasure_image[TREASURE_TYPE_NUM];
 
 
     int set_break_block_image[80];

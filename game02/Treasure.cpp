@@ -6,18 +6,10 @@ Treasure::Treasure(DATA location, int type)
     radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2 };
     this->location = location;
     this->type = static_cast<TREASURE_TYPE>(type);
-    
-    LoadDivGraph("images/Treasure/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, set_image);
-    this->image = set_image[type];
     old_hit = FALSE;
     can_delete = FALSE;
 }
 
-void Treasure::Delete()
-{
-    for(int i = 0; i < TREASURE_TYPE_NUM; i++)DeleteGraph(set_image[i]);
-    DeleteGraph(image);
-}
 
 void Treasure::Update(Stage* stage)
 {
@@ -28,11 +20,6 @@ void Treasure::Update(Stage* stage)
         location.y = (y * BLOCK_SIZE_Y) + (radius.y);
     }
     if (location.y > SCREEN_HEIGHT)can_delete = TRUE;
-}
-
-void Treasure::Draw(float camera_work) const
-{
-    DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
 }
 
 bool Treasure::GetOldHit(Stage* stage)

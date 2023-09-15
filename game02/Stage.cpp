@@ -63,6 +63,9 @@ void Stage::LoadImages()
 	bom_frame_image = LoadGraph("images/Bom/frame.png");
 	LoadDivGraph("images/Bom/number.png", 6, 6, 1, 14, 23, bom_number_image);
 
+	//宝画像
+	LoadDivGraph("images/Treasure/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, 36, 36, treasure_image);
+
 
 
 	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
@@ -121,6 +124,8 @@ void Stage::Delete()
 	DeleteGraph(bom_image);
 	for (int i = 0; i < 6; i++)DeleteGraph(bom_number_image[i]);
 
+	//宝画像
+	for (int i = 0; i < TREASURE_TYPE_NUM; i++)DeleteGraph(treasure_image[i]);
 
 	DeleteGraph(falling_block_image);
 	for (int i = 0; i < 4; i++)DeleteGraph(back_ground_image[i]);
@@ -157,7 +162,6 @@ void Stage::Delete()
 	block.clear();
 	block.shrink_to_fit();
 
-	for (int i = 0; i < treasure.size(); i++)treasure[i].Delete();
 	treasure.clear();
 	treasure.shrink_to_fit();
 
@@ -298,8 +302,7 @@ void Stage::Draw1(float camera_work) const
 	if(flag != nullptr)flag->Draw(camera_work);
 	for (int i = 0; i < treasure.size(); i++)
 	{
-		treasure[i].Draw(camera_work);
-		//DrawRotaGraph(treasure[i].GetLocation().x + camera_work, treasure[i].GetLocation().y, 1, 0, change_block_image[0][image_type], TRUE);
+		DrawRotaGraph(treasure[i].GetLocation().x + camera_work, treasure[i].GetLocation().y, 1, 0, treasure_image[static_cast<int>(treasure[i].GetTreasureType())], TRUE);
 	}
 	for (int i = 0; i < block.size(); i++)//ブロック表示
 	{
