@@ -112,6 +112,39 @@ Result::~Result()
 
 }
 
+void Result::Delete()
+{
+	DeleteSoundMem(decision_se);
+	DeleteSoundMem(roll_score_se);
+	DeleteSoundMem(set_score_se);
+	DeleteSoundMem(result_bgm);
+	DeleteSoundMem(drum_roll_se);
+	DeleteSoundMem(drum_se);
+	DeleteSoundMem(stamp_se);
+	
+
+	DeleteGraph(stamp_image);
+	DeleteGraph(map_image);
+	DeleteGraph(score_image);
+	
+	for (int i = 0; i < 5; i++)
+	{
+		DeleteGraph(treasure_image[i]);
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		DeleteGraph(number_image[i]);
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		DeleteGraph(sign_image[i]);
+		DeleteGraph(back_ground_image[i]);
+	}
+
+}
+
 //-----------------------------------
 // XV
 //-----------------------------------

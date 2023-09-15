@@ -19,7 +19,7 @@ private:
 	int game_over_bgm;
 
 public:
-	void Delete() override {};
+	void Delete() override;
 	GameOver(int stage_num);
 	void Update(Key* key) override;
 	void Draw() const override;

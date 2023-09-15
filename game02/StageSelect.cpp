@@ -9,6 +9,7 @@
 //スティックの感度
 #define SENSITIVITY 1000
 
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -66,6 +67,31 @@ StageSelect::StageSelect(int stage_num)
 StageSelect::~StageSelect()
 {
 
+}
+
+void StageSelect::Delete()
+{
+	DeleteSoundMem(return_se);
+	DeleteSoundMem(select_se);
+	DeleteSoundMem(decision_se);
+	DeleteSoundMem(stage_select_bgm);
+
+	for (int i = 0; i < 5; i++)
+	{
+		DeleteGraph(back_ground_image[i]);
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		DeleteGraph(number_image[i]);
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		DeleteGraph(player_image[i]);
+	}
+
+	DeleteGraph(background_image);
 }
 
 //-----------------------------------

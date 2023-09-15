@@ -51,13 +51,45 @@ Title::~Title()
 
 }
 
+void Title::Delete()
+{
+	StopSoundMem(bgm);
+	DeleteSoundMem(bgm);
+	DeleteSoundMem(return_se);
+	DeleteSoundMem(decision_se);
+	DeleteSoundMem(move_se);
+
+	DeleteGraph(image);
+
+	for (int i = 0; i < MENU_NUM; i++)
+	{
+		for (int j = 0; j < 2; j++)DeleteGraph(this->menu_image[i][j]);
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		DeleteGraph(help_image[i]);
+	}
+
+	DeleteGraph(credit_image);
+
+	DeleteGraph(slash_image);
+
+	for (int i = 0; i < 4; i++)
+	{
+		DeleteGraph(num_image[i]);
+	}
+}
+
+
 //-----------------------------------
 // XV
 //-----------------------------------
 void Title::Update(Key* key)
 {
 
-	if (CheckSoundMem(bgm) != 1) {   //SE‚ª—¬‚ê‚Ä‚¢‚È‚©‚Á‚½‚çÄ¶
+	if (CheckSoundMem(bgm) != 1) 
+	{   //SE‚ª—¬‚ê‚Ä‚¢‚È‚©‚Á‚½‚çÄ¶
 		PlaySoundMem(bgm, DX_PLAYTYPE_BACK, TRUE); //SEÄ¶
 	}
 
@@ -194,7 +226,6 @@ AbstractScene* Title::ChangeScene()
 		switch (select_menu)
 		{
 		case 0: //ƒQ[ƒ€ƒƒCƒ“‚É‘JˆÚ
-			StopSoundMem(bgm);
 			return new StageSelect(0);
 			break;
 
@@ -209,7 +240,6 @@ AbstractScene* Title::ChangeScene()
 		//‘€ì‚µ‚È‚©‚Á‚½‚çŽ†ŽÅ‹
 		if (input_time % 600 == 0)
 		{
-			StopSoundMem(bgm);
 			return new Opening();
 		}
 	}

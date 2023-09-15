@@ -48,6 +48,7 @@ void Opening::Delete()
 
 Opening::~Opening()
 {
+
 }
 
 void Opening::Update(Key* key)

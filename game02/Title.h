@@ -42,7 +42,7 @@ public:
 
     //•`‰æ‚ÉŠÖ‚·‚é‚±‚Æ‚ğÀ‘•‚·‚é
     void Draw() const override;
-    void Delete() override {};
+    void Delete() override;
     //ƒV[ƒ“Ø‚è‘Ö‚¦
     AbstractScene* ChangeScene() override;
 

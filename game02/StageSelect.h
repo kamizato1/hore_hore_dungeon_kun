@@ -31,7 +31,7 @@ private:
  
 public:
 
-    void Delete() override {};
+    void Delete() override;
     StageSelect(int stage_num);//コンストラクタ
     ~StageSelect();//デストラクタ
 

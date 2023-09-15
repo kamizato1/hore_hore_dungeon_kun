@@ -27,6 +27,21 @@ GameOver::GameOver(int stage_num)
 	this->stage_num = stage_num;
 }
 
+void GameOver::Delete()
+{
+	DeleteSoundMem(decision_se);
+	DeleteSoundMem(game_over_bgm);
+	
+	DeleteGraph(back_ground_image);
+
+	for (int i = 0; i < 8; i++)
+	{
+		DeleteGraph(font_image[i]);
+	}
+
+}
+
+
 void GameOver::Update(Key* key)
 {
 	for (int i = 0; i < FONT_NUM; i++)
