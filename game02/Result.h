@@ -12,13 +12,6 @@ private:
     int drum_se;
     int stamp_se;
     int decision_se;
-    
-
-    int score;
-    int treasure_num[TREASURE_TYPE_NUM];
-    int treasure_score[TREASURE_TYPE_NUM];
-    int treasure_price[TREASURE_TYPE_NUM];
-    int treasure_add_score[TREASURE_TYPE_NUM];
 
     int stamp_image;
     int sign_image[3];
@@ -27,6 +20,14 @@ private:
     int score_image;
     int back_ground_image[3];
     int number_image[10];
+    
+
+    int score;
+    int treasure_num[TREASURE_TYPE_NUM];
+    int treasure_score[TREASURE_TYPE_NUM];
+    int treasure_price[TREASURE_TYPE_NUM];
+    int treasure_add_score[TREASURE_TYPE_NUM];
+
     int stage_num;
 
     int wait_time;
@@ -51,7 +52,6 @@ private:
 public:
 
     Result(int stage_num, int* treasure_num);//壊したブロックの数、時間、持っているブロックの数,宝の種類と種類    
-    ~Result(); //デストラクタ
     void Delete() override;
     void Update(Key* key) override;//描画以外の更新を実装する
     void Draw() const override;//描画に関することを実装する

@@ -16,6 +16,7 @@ GameOver::GameOver(int stage_num)
 
 	back_ground_image = LoadGraph("images/GameOver/gameoverimage.png");
 	LoadDivGraph("images/GameOver/gameover.png", 8, 8, 1, 110, 110, font_image);
+
 	for (int i = 0; i < FONT_NUM; i++)
 	{
 		font_location[i].y = -100 + -GetRand(100);
@@ -38,7 +39,6 @@ void GameOver::Delete()
 	{
 		DeleteGraph(font_image[i]);
 	}
-
 }
 
 

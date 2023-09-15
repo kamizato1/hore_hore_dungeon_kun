@@ -14,24 +14,17 @@ Title::Title()
 	input_time = 0;
 	can_scene_change = FALSE;
 	select_menu = 0;
-	image = LoadGraph("images/Title.png");
-	int menu_image[8];
-	LoadDivGraph("images/Menu/menu.png", 8, 2, 4, 600, 100, menu_image);
-	bgm = LoadSoundMem("bgm/Title.mp3");
-	help = false;
-	int count = 0;
-	for (int i = 0; i < MENU_NUM; i++)
-	{
-		for (int j = 0; j < 2; j++)this->menu_image[i][j] = menu_image[count++];
-	}
-	help_menu = 0;
 
+	help_menu = 0;
+	help = false;
 	credit = false;
 
+	bgm = LoadSoundMem("bgm/Title.mp3");
 	return_se = LoadSoundMem("bgm/return.mp3");
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	move_se = LoadSoundMem("bgm/MoveCursor.mp3");
 
+	image = LoadGraph("images/Title.png");
 	help_image[0] = LoadGraph("images/Menu/help.png");
 	help_image[1] = LoadGraph("images/Menu/map (2).png");
 	help_image[2] = LoadGraph("images/Menu/map (3).png");
@@ -41,6 +34,12 @@ Title::Title()
 
 	LoadDivGraph("images/Menu/number.png", 4, 4, 1, 140, 150, num_image);
 
+	LoadDivGraph("images/Menu/menu.png", 8, 2, 4, 600, 100, set_menu_image);
+	int count = 0;
+	for (int i = 0; i < MENU_NUM; i++)
+	{
+		for (int j = 0; j < 2; j++)menu_image[i][j] = set_menu_image[count++];
+	}
 }
 
 //-----------------------------------
@@ -63,8 +62,10 @@ void Title::Delete()
 
 	for (int i = 0; i < MENU_NUM; i++)
 	{
-		for (int j = 0; j < 2; j++)DeleteGraph(this->menu_image[i][j]);
+		for (int j = 0; j < 2; j++)DeleteGraph(menu_image[i][j]);
 	}
+
+	for (int i = 0; i < 8; i++)DeleteGraph(set_menu_image[i]);
 
 	for (int i = 0; i < 3; i++)
 	{

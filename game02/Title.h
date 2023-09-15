@@ -16,12 +16,15 @@ private:
     int menu_image[MENU_NUM][2]; //メニュー画像
     int num_image[4];
     int slash_image;
-    int input_time; //入力受付時間
-    int select_menu; // 現在入力しているメニュー
+    int set_menu_image[8];
+
     int bgm; //BGM
     int move_se; //動くときのSE
     int return_se;
     int decision_se; //決定オン
+
+    int input_time; //入力受付時間
+    int select_menu; // 現在入力しているメニュー
     int help_menu; //ヘルプメニュ
 
 

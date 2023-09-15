@@ -29,6 +29,7 @@ StageSelect::StageSelect(int stage_num)
 	LoadDivGraph("images/StageSelect/number.png", 10, 10, 1, 35, 38, number_image);
 	LoadDivGraph("images/StageSelect/player.png", 4, 4, 1, 30, 30, player_image);
 	background_image= LoadGraph("images/StageSelect/草原.png");
+
 	stage_number = stage_num;
 	operating_time = TIME / 2;
 	player_image_change_time = TIME;
@@ -59,14 +60,6 @@ StageSelect::StageSelect(int stage_num)
 
 	wait_time = TIME * 2;
 	PlaySoundMem(stage_select_bgm, DX_PLAYTYPE_LOOP, TRUE);
-}
-
-//-----------------------------------
-// デストラクタ
-//-----------------------------------
-StageSelect::~StageSelect()
-{
-
 }
 
 void StageSelect::Delete()

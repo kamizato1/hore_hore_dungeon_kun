@@ -84,7 +84,6 @@ Result::Result(int stage_num, int* treasure_num)
 	score = 0;
 
 	int stage = stage_num + 2;
-
 	int clear_stage;
 
 	FILE* fp_c; //クリア済みのステージ
@@ -102,14 +101,6 @@ Result::Result(int stage_num, int* treasure_num)
 			fclose(fp_c);
 		}
 	}
-}
-
-//-----------------------------------
-// デストラクタ
-//-----------------------------------
-Result::~Result()
-{
-
 }
 
 void Result::Delete()
