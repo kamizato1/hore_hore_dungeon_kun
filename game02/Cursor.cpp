@@ -11,6 +11,11 @@ Cursor::Cursor(DATA location)
     cursor_sign_y = 0;
 }
 
+void Cursor::Delete()
+{
+    DeleteGraph(image);
+}
+
 void Cursor::Update(BoxCollider* bc, DATA r_stick_angle)
 {
     if ((r_stick_angle.x != 0) || (r_stick_angle.y != 0))

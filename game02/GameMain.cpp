@@ -38,7 +38,7 @@ GameMain::GameMain(int stage_num)
 void GameMain::Delete()
 {
     stage->Delete();
-    //player->Delete();
+    player->Delete();
     ui->Delete();
     pause->Delete();
 

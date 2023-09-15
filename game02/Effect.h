@@ -17,7 +17,7 @@ private:
 public:
 
 	Effect(DATA location, int *image);
-	//~BreakBlock();
+	void Delete();
 
 	void Update();
 	void Draw(float camera_work) const;

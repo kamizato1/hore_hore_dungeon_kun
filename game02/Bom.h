@@ -25,7 +25,7 @@ private:
 public:
 
     Bom(DATA location, DATA speed);
-
+    void Delete();
     void Update(class Stage* stage);
     void Draw(float camera_work) const;
     bool HitExplosion(BoxCollider* bc);

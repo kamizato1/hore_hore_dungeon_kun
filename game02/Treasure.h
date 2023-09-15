@@ -18,6 +18,7 @@ private:
 public:
 
     Treasure(DATA location, int type);
+    void Delete();
     void Update(class Stage* stage);
     void Draw(float camera_work) const;
     

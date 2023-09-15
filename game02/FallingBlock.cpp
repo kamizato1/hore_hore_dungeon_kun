@@ -12,6 +12,11 @@ FallingBlock::FallingBlock(int image)
 	image_angle = GetRand(100);
 }
 
+void FallingBlock::Delete()
+{
+	DeleteGraph(image);
+}
+
 void FallingBlock::Update()
 {
 	location.y += speed;

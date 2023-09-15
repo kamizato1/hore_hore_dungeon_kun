@@ -32,6 +32,13 @@ Bom::Bom(DATA location, DATA speed)
     old_hit = FALSE;
 }
 
+void Bom::Delete()
+{
+    DeleteGraph(image);
+    DeleteGraph(frame_image);
+    for(int i = 0; i < 6; i++)DeleteGraph(number_image[i]);
+}
+
 void Bom::Update(Stage* stage)
 {
     if (--bom_size_change_time == 0)

@@ -31,6 +31,24 @@ Player::Player()
     break_block_num = 0;
 }
 
+void Player::Delete()
+{
+    for (int i = 0; i < 2; i++)
+    {
+        for(int j = 0; j < 5; j++)DeleteGraph(image[i][j]);
+    }
+    for (int i = 0; i < ITEM_TYPE_NUM; i++)DeleteGraph(item_image[ITEM_TYPE_NUM]);
+    DeleteGraph(sign_image);
+    DeleteGraph(frame_image);
+
+    DeleteSoundMem(jump_se);
+    DeleteSoundMem(get_treasure_se);
+    DeleteSoundMem(die_se);
+
+    cursor->Delete();
+    delete cursor;
+}
+
 void Player::Init()
 {
     location = { 50, 669 };
@@ -79,8 +97,8 @@ void Player::Update(Key* key, Stage* stage)
        //‚±‚±‚©‚ç‰º«‚Â‚é‚Í‚µ‚ğ“Š‚°‚é‚Æ‚«‚Ìˆ—
        DATA all_r_stick_angle_record_calculation = { 0,0 };
        DATA now_r_stick_angle, old_r_stick_angle;
-       now_r_stick_angle.x = (key->GetStickAngle(R).x / 50);//Æ€‚ğ•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ğ•Ï‚¦‚Ä‚Ë
-       now_r_stick_angle.y = (key->GetStickAngle(R).y/ 50);//Æ€‚ğ•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ğ•Ï‚¦‚Ä‚Ë
+       now_r_stick_angle.x = (key->GetStickAngle(R).y / 50);//Æ€‚ğ•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ğ•Ï‚¦‚Ä‚Ë
+       now_r_stick_angle.y = (key->GetStickAngle(R).x/ 50);//Æ€‚ğ•Ï‚¦‚é‚Æ‚«‚Í‚±‚±‚ğ•Ï‚¦‚Ä‚Ë
 
        for (int i = 0; i < R_STICK_ANGLE_RECORD_NUM; i++)
        {

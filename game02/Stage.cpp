@@ -87,18 +87,60 @@ Stage::Stage(int stage_num, int stage_width)
 
 void Stage::Delete()
 {
+	DeleteSoundMem(hit_pickaxe_se);
+	DeleteSoundMem(break_block_se);
+	DeleteSoundMem(explosion_se);
+	DeleteSoundMem(throw_pickaxe_se);
+	DeleteSoundMem(break_pickaxe_se);
+	DeleteSoundMem(put_item_se);
+
+	DeleteGraph(falling_block_image);
+	for (int i = 0; i < 4; i++)DeleteGraph(back_ground_image[i]);
+
+	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)
+		{
+			DeleteGraph(break_block_image[i][j]);
+			DeleteGraph(explosion_image[j]);
+			DeleteGraph(smoke_image[i]);
+		}
+	}
+
+	for (int i = 0; i < TREASURE_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)DeleteGraph(break_treasure_image[i][j]);
+	}
+
+	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			DeleteGraph(change_block_image[i][j]);
+			DeleteGraph(change_flag_image[j]);
+			DeleteGraph(kira_kira_image[j]);
+		}
+	}
+	DeleteGraph(pickaxe_image);
+
+
+	for (int i = 0; i < block.size(); i++)block[i].Delete();
 	block.clear();
 	block.shrink_to_fit();
 
+	for (int i = 0; i < treasure.size(); i++)treasure[i].Delete();
 	treasure.clear();
 	treasure.shrink_to_fit();
 
+	for (int i = 0; i < effect.size(); i++)effect[i].Delete();
 	effect.clear();
 	effect.shrink_to_fit();
 
+	for (int i = 0; i < bom.size(); i++)bom[i].Delete();
 	bom.clear();
 	bom.shrink_to_fit();
 
+	for (int i = 0; i < fallingblock.size(); i++)fallingblock[i].Delete();
 	fallingblock.clear();
 	fallingblock.shrink_to_fit();
 

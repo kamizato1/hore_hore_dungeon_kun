@@ -17,6 +17,7 @@ private:
 public:
 
     Block(DATA location, int type);
+    void Delete();
 
     //•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é
     void Update();

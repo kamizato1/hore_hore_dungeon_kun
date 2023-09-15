@@ -14,7 +14,7 @@ private:
 public:
 
     Cursor(DATA location);
-
+    void Delete();
     void Update(BoxCollider* bc, DATA r_stick_angle);
     void Draw(float camera_work) const;
 };

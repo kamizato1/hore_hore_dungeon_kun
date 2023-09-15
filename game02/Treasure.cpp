@@ -13,6 +13,11 @@ Treasure::Treasure(DATA location, int type)
     can_delete = FALSE;
 }
 
+void Treasure::Delete()
+{
+    DeleteGraph(image);
+}
+
 void Treasure::Update(Stage* stage)
 {
     if ((!stage->HitBlock(this).flg) && (!stage->HitBom(this, FALSE).flg) && (!stage->HitTreasure(this, TRUE).flg))location.y += 1;

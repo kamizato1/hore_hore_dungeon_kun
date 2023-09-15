@@ -10,9 +10,10 @@ Block::Block(DATA location, int type)
     hit_explosion = FALSE;
 }
 
-void Block::Update()
+void Block::Delete()
 {
-
+    DeleteGraph(image);
+    DeleteGraph(caveat_image);
 }
 
 void Block::Draw(float camera_work) const

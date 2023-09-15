@@ -16,7 +16,8 @@ private:
 public:
 
 	FallingBlock(int image);
-	
+	void Delete();
+
 	void Update();
 	void Draw(float camera_work) const;
 

@@ -12,6 +12,11 @@ Effect::Effect(DATA location, int *image)
 	for (int i = 0; i < EFFECT_IMAGE_NUM; i++)this->image[i] = image[i];
 }
 
+void Effect::Delete()
+{
+	for(int i = 0; i < EFFECT_IMAGE_NUM; i++)DeleteGraph(image[i]);
+}
+
 void Effect::Update()
 {
 	if (++image_change_time > IMAGE_CHANGE_TIME)

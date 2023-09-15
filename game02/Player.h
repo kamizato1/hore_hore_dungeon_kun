@@ -54,7 +54,7 @@ private:
 public:
 
     Player();
-
+    void Delete();
     void Update(Key* key, Stage* stagebase);
     void Draw(float camera_work) const;
 
