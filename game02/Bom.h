@@ -21,6 +21,7 @@ private:
     int count;
     int number_image[6];
     bool old_hit;
+    bool exist;
 
 public:
 
@@ -31,6 +32,7 @@ public:
     bool HitExplosion(BoxCollider* bc);
     bool GetCanDelete() { return can_delete; }
     void SetCanDelete(bool flg) { can_delete = flg; }
-
+    void SetExist(bool flg) { exist = flg; }
+    bool GetExist() { return exist; }
 
 };

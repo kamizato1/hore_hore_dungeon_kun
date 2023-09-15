@@ -217,8 +217,11 @@ void Stage::Update()
 	}
 	for (int i = 0; i < bom.size(); i++)
 	{
-		bom[i].Update(this);
-		HitBlastRange(i);
+		if (bom[i].GetExist())
+		{
+			bom[i].Update(this);
+			HitBlastRange(i);
+		}
 	}
 	if (pickaxe != nullptr)
 	{
@@ -234,47 +237,56 @@ void Stage::Update()
 
 void Stage::HitBlastRange(int bom_num)
 {
-	if (bom[bom_num].GetCanDelete())
+	if (bom[bom_num].GetExist())
 	{
-		for (int i = 0; i < bom.size(); i++)if (bom[bom_num].HitExplosion(&bom[i]))bom[i].SetCanDelete(TRUE);
-		for (int i = 0; i < treasure.size(); i++)
+		if (bom[bom_num].GetCanDelete())
 		{
-			if ((bom[bom_num].HitExplosion(&treasure[i])) && (!HitBlock(&treasure[i]).flg))
+			for (int i = 0; i < bom.size(); i++)
 			{
-				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
-				effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
-				treasure.erase(treasure.begin() + i);
-				i--;
-			}
-		}
-	}
-
-	for (int i = 0; i < block.size(); i++)
-	{
-		if (bom[bom_num].HitExplosion(&block[i]))
-		{
-			int block_type = static_cast<int>(block[i].GetBlockType());
-			if ((block_type != 7) && (block_type != 0))
-			{
-				if (bom[bom_num].GetCanDelete())
+				if (bom[i].GetExist())
 				{
-					int image_type = block_type;
-					if (block_type < 4)image_type = 1;
-					effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
-					block[i].SetBlockType(-1, -1);
+					if (bom[bom_num].HitExplosion(&bom[i]))bom[i].SetCanDelete(TRUE);
 				}
-				else block[i].SetHitEcplosion(TRUE);
+			}
+			for (int i = 0; i < treasure.size(); i++)
+			{
+				if ((bom[bom_num].HitExplosion(&treasure[i])) && (!HitBlock(&treasure[i]).flg))
+				{
+					PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
+					effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
+					treasure.erase(treasure.begin() + i);
+					i--;
+				}
 			}
 		}
+
+		for (int i = 0; i < block.size(); i++)
+		{
+			if (bom[bom_num].HitExplosion(&block[i]))
+			{
+				int block_type = static_cast<int>(block[i].GetBlockType());
+				if ((block_type != 7) && (block_type != 0))
+				{
+					if (bom[bom_num].GetCanDelete())
+					{
+						int image_type = block_type;
+						if (block_type < 4)image_type = 1;
+						effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
+						block[i].SetBlockType(-1, -1);
+					}
+					else block[i].SetHitEcplosion(TRUE);
+				}
+			}
+		}
+		if (bom[bom_num].GetCanDelete())
+		{
+			effect.emplace_back(bom[bom_num].GetLocation(), smoke_image);
+			effect.emplace_back(bom[bom_num].GetLocation(), explosion_image);
+			bom[bom_num].SetExist(FALSE);
+			PlaySoundMem(explosion_se, DX_PLAYTYPE_BACK, TRUE);
+		}
+		else if (bom[bom_num].GetLocation().y > SCREEN_HEIGHT + 200)bom[bom_num].SetExist(FALSE);
 	}
-	if (bom[bom_num].GetCanDelete())
-	{
-		effect.emplace_back(bom[bom_num].GetLocation(), smoke_image);
-		effect.emplace_back(bom[bom_num].GetLocation(), explosion_image);
-		bom.erase(bom.begin() + bom_num);
-		PlaySoundMem(explosion_se, DX_PLAYTYPE_BACK, TRUE);
-	}
-	else if (bom[bom_num].GetLocation().y > SCREEN_HEIGHT + 200)bom.erase(bom.begin() + bom_num);
 }
 
 void Stage::Draw1(float camera_work) const
@@ -331,18 +343,21 @@ HIT_BOM Stage::HitBom(BoxCollider* bc, bool is_it_bom)
 	{
 		if (bom[i].HitBox(bc))
 		{
-			if (is_it_bom)
+			if (bom[i].GetExist())
 			{
-				if ((bc->GetLocation().x != bom[i].GetLocation().x) || (bc->GetLocation().y != bom[i].GetLocation().y))
+				if (is_it_bom)
+				{
+					if ((bc->GetLocation().x != bom[i].GetLocation().x) || (bc->GetLocation().y != bom[i].GetLocation().y))
+					{
+						hit_bom = { TRUE, i };
+						break;
+					}
+				}
+				else
 				{
 					hit_bom = { TRUE, i };
 					break;
 				}
-			}
-			else
-			{
-				hit_bom = { TRUE, i };
-				break;
 			}
 		}
 	}
