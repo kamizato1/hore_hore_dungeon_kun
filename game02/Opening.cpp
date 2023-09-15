@@ -34,9 +34,20 @@ Opening::Opening()
 
 }
 
+void Opening::Delete()
+{
+	StopSoundMem(bgm);
+	DeleteSoundMem(bgm);
+	for (int i = 0; i < 5; i++)
+	{
+		DeleteGraph(image[i]);
+		DeleteGraph(character_image[i]);
+	}
+	DeleteGraph(background_image);
+}
+
 Opening::~Opening()
 {
-
 }
 
 void Opening::Update(Key* key)
@@ -107,9 +118,7 @@ AbstractScene* Opening::ChangeScene()
 	if (can_scene_change)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-		StopSoundMem(bgm);
 		return new Title();
-		
 	}
 
 	return this;

@@ -85,15 +85,30 @@ Stage::Stage(int stage_num, int stage_width)
 	Init();
 }
 
-Stage::~Stage()
+void Stage::Delete()
 {
 	block.clear();
+	block.shrink_to_fit();
+
 	treasure.clear();
+	treasure.shrink_to_fit();
+
 	effect.clear();
+	effect.shrink_to_fit();
+
 	bom.clear();
+	bom.shrink_to_fit();
+
 	fallingblock.clear();
+	fallingblock.shrink_to_fit();
+
 	delete pickaxe;
 	delete flag;
+}
+
+Stage::~Stage()
+{
+	Delete();
 }
 
 void Stage::Init()
@@ -104,6 +119,7 @@ void Stage::Init()
 	image_change_time = IMAGE_CHANGE_TIME;
 	image_type = 0;
 	break_block_num = 0;
+
 	fallingblock.clear();
 	effect.clear();
 	bom.clear();
@@ -111,6 +127,8 @@ void Stage::Init()
 
 void Stage::Update()
 {
+	
+
 	break_block_num = 0;
 	if (--image_change_time < 0)
 	{

@@ -15,10 +15,11 @@ private:
 	int stage_num;
 	int wait_time;
 
+	int decision_se;
 	int game_over_bgm;
 
 public:
-
+	void Delete() override {};
 	GameOver(int stage_num);
 	void Update(Key* key) override;
 	void Draw() const override;

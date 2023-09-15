@@ -47,7 +47,7 @@ public:
 
     //•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é
     void Update(Key* key) override;
-
+    void Delete() override;
     //•`‰æ‚ÉŠÖ‚·‚é‚±‚Æ‚ğÀ‘•‚·‚é
     void Draw() const override;
 

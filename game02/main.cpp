@@ -45,6 +45,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     {
         sceneMng->Update(key);
         key->Update();
+
         sceneMng->ChangeScene();
         
         ClearDrawScreen();		// ‰æ–Ê‚Ì‰Šú‰»

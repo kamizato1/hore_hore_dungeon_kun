@@ -10,6 +10,7 @@
 
 GameOver::GameOver(int stage_num)
 {
+	decision_se = LoadSoundMem("bgm/click.mp3");
 	game_over_bgm = LoadSoundMem("bgm/gameover.mp3");
 	PlaySoundMem(game_over_bgm, DX_PLAYTYPE_BACK, TRUE);
 
@@ -33,10 +34,14 @@ void GameOver::Update(Key* key)
 		if ((font_location[i].y += FONT_SPEED) > 220)font_location[i].y = 220;
 	}
 
-	if (--wait_time < 0)
+	if (--wait_time < 0)wait_time = 0;
+	if (key->KeyDown(B))
 	{
-		wait_time = 0;
-		if (key->KeyDown(B))change_scene = TRUE;
+		if (wait_time == 0)
+		{
+			change_scene = TRUE;
+			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 }
 

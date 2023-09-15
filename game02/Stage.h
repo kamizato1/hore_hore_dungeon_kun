@@ -103,4 +103,6 @@ public:
     void DeleteFlag();
     void Init();
     void Pause(bool flg);
+
+    void Delete();
 };

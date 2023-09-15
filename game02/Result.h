@@ -52,7 +52,7 @@ public:
 
     Result(int stage_num, int* treasure_num);//壊したブロックの数、時間、持っているブロックの数,宝の種類と種類    
     ~Result(); //デストラクタ
-
+    void Delete() override {};
     void Update(Key* key) override;//描画以外の更新を実装する
     void Draw() const override;//描画に関することを実装する
     AbstractScene* ChangeScene() override;//シーン切り替え

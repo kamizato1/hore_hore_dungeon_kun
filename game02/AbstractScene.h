@@ -5,6 +5,8 @@ class AbstractScene
 {
 public:
 
+	virtual void Delete() = 0;
+
 	//•`‰æˆÈŠO‚ÌXV‚ğÀ‘•‚·‚é
 	virtual void Update(Key* key) = 0;
 
