@@ -56,7 +56,10 @@ protected:
     int set_block_image[32];
     int block_image[BLOCK_TYPE_NUM][4];
 
-
+    //”š’e
+    int bom_image;
+    int bom_frame_image;
+    int bom_number_image[6];
 
 
 

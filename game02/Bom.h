@@ -4,12 +4,19 @@
 #include"Stage.h"
 #include"define.h"
 
+struct GET_DRAW_BOM
+{
+    DATA location;
+    bool throw_flg;
+    int count;
+    int angle;
+    float bom_size;
+};
+
 class Bom : public BoxCollider
 {
 private:
 
-    int image;
-    int frame_image;
     int angle;
     int angle_direction;
     float bom_size;
@@ -19,20 +26,15 @@ private:
     bool can_delete;
     bool throw_flg;
     int count;
-    int number_image[6];
     bool old_hit;
-    bool exist;
 
 public:
 
     Bom(DATA location, DATA speed);
-    void Delete();
     void Update(class Stage* stage);
-    void Draw(float camera_work) const;
     bool HitExplosion(BoxCollider* bc);
     bool GetCanDelete() { return can_delete; }
     void SetCanDelete(bool flg) { can_delete = flg; }
-    void SetExist(bool flg) { exist = flg; }
-    bool GetExist() { return exist; }
+    GET_DRAW_BOM GetBomDraw()const;
 
 };
