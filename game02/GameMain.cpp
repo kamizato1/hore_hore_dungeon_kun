@@ -40,13 +40,12 @@ GameMain::GameMain(int stage_num)
 void GameMain::Delete()
 {
     stage->Delete();
-    player->Delete();
-    ui->Delete();
-    pause->Delete();
-
-    delete player;
     delete stage;
+    player->Delete();
+    delete player;
+    ui->Delete();
     delete ui;
+    pause->Delete();
     delete pause;
 
     StopSoundMem(stage_bgm);
@@ -55,6 +54,22 @@ void GameMain::Delete()
     DeleteSoundMem(stage_clear_bgm);
     DeleteSoundMem(pause_se);
     DeleteSoundMem(earthquake_se);
+}
+
+void GameMain::Redo()
+{
+    stage->Delete();
+    delete stage;
+    player->Delete();
+    delete player;
+    
+
+    stage = new Stage(stage_num, max_scroll + 4);
+    player = new Player();
+
+    life = 3;
+   
+    Init();
 }
 
 void GameMain::Init()
@@ -206,32 +221,13 @@ AbstractScene* GameMain::ChangeScene()
 {
     if (stop)
     {
-        if (pause->GetChangeScene() == 1)
-        {
-            //Pause(TRUE);
-           // stage->Delete();
-            return new GameMain(stage_num);
-        }
-        else if (pause->GetChangeScene() == 2)
-        {
-            //Pause(TRUE);
-            //stage->Delete();
-            return new StageSelect(stage_num);
-        }
-    }
-    else if (change_result_scene)
-    {
-        //Pause(TRUE);
-        //stage->Delete();
-        return new Result(stage_num, player->GetTreasureNum());
-    }
+        if (pause->GetChangeScene() == 1)Redo();
 
-    if (change_game_over_scene)
-    {
-        //Pause(TRUE);
-        //stage->Delete();
-        return new GameOver(stage_num);
+        else if (pause->GetChangeScene() == 2)return new StageSelect(stage_num);
     }
+    else if (change_result_scene)return new Result(stage_num, player->GetTreasureNum());
+    
+    if (change_game_over_scene)return new GameOver(stage_num);
 
     return this;
 }
