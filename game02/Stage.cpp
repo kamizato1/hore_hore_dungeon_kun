@@ -171,6 +171,7 @@ void Stage::HitBlastRange(int bom_num)
 		{
 			if ((bom[bom_num].HitExplosion(&treasure[i])) && (!HitBlock(&treasure[i]).flg))
 			{
+				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
 				effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
 				treasure.erase(treasure.begin() + i);
 				i--;

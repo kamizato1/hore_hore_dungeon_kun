@@ -7,6 +7,7 @@ private:
 
     int select_se;
     int decision_se;
+    int return_se;
 
     int input_time; //“ü—Íó•tŠÔ
     int select_menu_num; // Œ»İ“ü—Í‚µ‚Ä‚¢‚éƒƒjƒ…[

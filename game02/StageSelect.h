@@ -11,6 +11,7 @@ private:
     int select_se;
     int decision_se;
     int stage_select_bgm;
+    int return_se;
 
     int wait_time;
 

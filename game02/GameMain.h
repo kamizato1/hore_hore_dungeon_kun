@@ -23,7 +23,7 @@ private:
 
     int stage_bgm;
     int stage_clear_bgm;
-
+    int pause_se;
     int earthquake_se;
 
     int max_scroll;

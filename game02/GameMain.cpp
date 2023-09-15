@@ -19,7 +19,8 @@ GameMain::GameMain(int stage_num)
     fclose(fp_w);
 
     stage_bgm = LoadSoundMem("bgm/GameMain.mp3");
-    stage_clear_bgm = LoadSoundMem("bgm/GameClearSe.mp3");
+    stage_clear_bgm = LoadSoundMem("bgm/clear.mp3");
+   pause_se = LoadSoundMem("bgm/pause.mp3");
     earthquake_se = LoadSoundMem("bgm/earthquake.mp3");
 
     stage = new Stage(stage_num, stage_width[stage_num]);
@@ -104,6 +105,7 @@ void GameMain::Update(Key* key)
             pause->Init();
         }
         else Pause(FALSE);
+        PlaySoundMem(pause_se, DX_PLAYTYPE_BACK, TRUE);
     }
 
     if (!stop)

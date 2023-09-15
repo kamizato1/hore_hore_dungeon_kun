@@ -9,6 +9,8 @@
 //-----------------------------------
 Result::Result(int stage_num, int* treasure_num)
 {
+	
+	decision_se = LoadSoundMem("bgm/click.mp3");
 	roll_score_se = LoadSoundMem("bgm/PickaxeThrow.mp3");
 	set_score_se = LoadSoundMem("bgm/ExplosionSE.mp3");
 	result_bgm = LoadSoundMem("bgm/Result.mp3");
@@ -117,7 +119,11 @@ void Result::Update(Key* key)
 {
 	if (key->KeyDown(B))
 	{
-		if (end_move_stamp)transition = TRUE;
+		if (end_move_stamp)
+		{
+			PlaySoundMem(decision_se, DX_PLAYTYPE_BACK, TRUE);
+			transition = TRUE;
+		}
 		else if(end_move_score)skip = TRUE;
 
 		StopSoundMem(drum_roll_se);

@@ -11,6 +11,8 @@ private:
     int drum_roll_se;
     int drum_se;
     int stamp_se;
+    int decision_se;
+    
 
     int score;
     int treasure_num[TREASURE_TYPE_NUM];
