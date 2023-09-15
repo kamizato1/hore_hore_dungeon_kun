@@ -87,6 +87,8 @@ void Stage::LoadImages()
 	LoadDivGraph("images/Effect/explosion.png", 10, 10, 1, 320, 320, explosion_image);
 	LoadDivGraph("images/Effect/smoke.png", 10, 10, 1, 500, 500, smoke_image);
 
+	//地震ブロック
+	falling_block_image = LoadGraph("images/FallingBlock/fallingblock.png");
 
 
 
@@ -95,7 +97,7 @@ void Stage::LoadImages()
 	back_ground_image[1] = LoadGraph("images/background02.png");
 	back_ground_image[2] = LoadGraph("images/background03.png");
 	back_ground_image[3] = LoadGraph("images/background04.png");
-	falling_block_image = LoadGraph("images/fallingblock.png");
+
 	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
 	
 
@@ -134,27 +136,32 @@ void Stage::Delete()
 	//宝画像
 	for (int i = 0; i < TREASURE_TYPE_NUM; i++)DeleteGraph(treasure_image[i]);
 
-	DeleteGraph(falling_block_image);
-	for (int i = 0; i < 4; i++)DeleteGraph(back_ground_image[i]);
+	//旗画像
+	for (int i = 0; i < 4; i++)DeleteGraph(flag_image[i]);
 
+	//壊れるエフェクト
 	for (int i = 0; i < 80; i++)DeleteGraph(set_break_block_image[i]);
 	for (int i = 0; i < 50; i++)DeleteGraph(set_break_treasure_image[i]);
-	
-
-	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
-	{
-		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)
-		{
-			DeleteGraph(break_block_image[i][j]);
-			DeleteGraph(explosion_image[j]);
-			DeleteGraph(smoke_image[i]);
-		}
-	}
-
 	for (int i = 0; i < TREASURE_TYPE_NUM; i++)
 	{
 		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)DeleteGraph(break_treasure_image[i][j]);
 	}
+	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)DeleteGraph(break_block_image[i][j]);
+	}
+
+	//爆発エフェクト
+	for (int i = 0; i < EFFECT_IMAGE_NUM; i++)
+	{
+		DeleteGraph(explosion_image[i]);
+		DeleteGraph(smoke_image[i]);
+	}
+
+	//地震エフェクト
+	DeleteGraph(falling_block_image);
+
+	for (int i = 0; i < 4; i++)DeleteGraph(back_ground_image[i]);
 
 	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
 	{
@@ -177,7 +184,6 @@ void Stage::Delete()
 	bom.clear();
 	bom.shrink_to_fit();
 
-	for (int i = 0; i < fallingblock.size(); i++)fallingblock[i].Delete();
 	fallingblock.clear();
 	fallingblock.shrink_to_fit();
 
@@ -207,7 +213,6 @@ void Stage::Update()
 		if (++image_type > 3)image_type = 0;
 		image_change_time = IMAGE_CHANGE_TIME;
 	}
-
 
 	for (int i = 0; i < fallingblock.size(); i++)
 	{
@@ -294,8 +299,17 @@ void Stage::Draw1(float camera_work) const
 	DrawGraph(0, 0, back_ground_image[3], TRUE);
 	for (int i = 0; i < KIRA_KIRA_NUM; i++)DrawRotaGraph(kira_kira[i].location.x, kira_kira[i].location.y, kira_kira[i].size, 0, kira_kira_image[image_type], TRUE);
 	DrawGraph((camera_work / 10), 0, back_ground_image[2], TRUE);
+
+	for (int i = 0; i < fallingblock.size(); i++)//落ちてくるブロック（奥）
+	{
+		if (fallingblock[i].GetSize() < 0.5)
+		{
+			GET_DRAW_FALLING_BLOCK gdfb = fallingblock[i].GetDrawFallingBlock();
+			DrawRotaGraph(gdfb.location.x, gdfb.location.y, gdfb.image_size, gdfb.image_angle, falling_block_image, TRUE);
+		}
+	}
+
 	DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
-	for (int i = 0; i < fallingblock.size(); i++)if(fallingblock[i].GetSize() < 0.5)fallingblock[i].Draw(camera_work);
 	DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
 	if (flag != nullptr)DrawRotaGraph(flag->GetLocation().x + camera_work, flag->GetLocation().y, 1, 0, flag_image[image_type], TRUE);
 	for (int i = 0; i < treasure.size(); i++)
@@ -334,7 +348,14 @@ void Stage::Draw2(float camera_work) const
 	}
 
 	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
-	for (int i = 0; i < fallingblock.size(); i++)if (fallingblock[i].GetSize() >= 0.5)fallingblock[i].Draw(camera_work);
+	for (int i = 0; i < fallingblock.size(); i++)
+	{
+		if (fallingblock[i].GetSize() >= 0.5)
+		{
+			GET_DRAW_FALLING_BLOCK gdfb = fallingblock[i].GetDrawFallingBlock();
+			DrawRotaGraph(gdfb.location.x, gdfb.location.y, gdfb.image_size, gdfb.image_angle, falling_block_image, TRUE);
+		}
+	}
 }
 
 HIT_STAGE Stage::HitBlock(BoxCollider* bc)
@@ -552,7 +573,7 @@ bool Stage::GetPickaxeFlg()
 
 void Stage::Sway()
 {
-	if (GetRand(10) == 0) fallingblock.emplace_back(falling_block_image);
+	if (GetRand(10) == 0) fallingblock.emplace_back();
 
 	for (int i = 0; i < block.size(); i++)  // 全要素に対するループ
 	{

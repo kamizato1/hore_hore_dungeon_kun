@@ -69,5 +69,4 @@ public:
     int* GetTreasureNum() { return treasure_num; }
     PLAYER_UI GetPlayerUi()const;
 
-    
 };

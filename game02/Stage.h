@@ -77,11 +77,9 @@ protected:
     int explosion_image[EFFECT_IMAGE_NUM];
     int smoke_image[EFFECT_IMAGE_NUM];
 
-
-
-
-
+    //地震ブロック
     int falling_block_image;
+
 
 
     int back_ground_image[4];

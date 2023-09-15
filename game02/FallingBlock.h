@@ -1,13 +1,19 @@
 #pragma once
-
 #include"define.h"
+
+struct GET_DRAW_FALLING_BLOCK
+{
+	DATA location;
+	float image_size;
+	float image_angle;
+};
 
 class FallingBlock
 {
 private:
 
 	DATA location;
-	int image;
+	
 	bool can_delete;
 	float speed;
 	float image_size;
@@ -15,12 +21,11 @@ private:
 
 public:
 
-	FallingBlock(int image);
-	void Delete();
+	FallingBlock();
 
 	void Update();
-	void Draw(float camera_work) const;
 
 	bool CanDelete() { return can_delete; }
 	float GetSize()const { return image_size; }
+	GET_DRAW_FALLING_BLOCK GetDrawFallingBlock()const;
 };
