@@ -66,6 +66,8 @@ void Stage::LoadImages()
 	//•ó‰æ‘œ
 	LoadDivGraph("images/Treasure/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, 36, 36, treasure_image);
 
+	//Šø‰æ‘œ
+	LoadDivGraph("images/Flag/flag.png", 4, 4, 1, 36, 36, flag_image);
 
 
 	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
@@ -77,7 +79,6 @@ void Stage::LoadImages()
 	back_ground_image[3] = LoadGraph("images/background04.png");
 	falling_block_image = LoadGraph("images/fallingblock.png");
 	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
-	LoadDivGraph("images/changeflag.png", 4, 4, 1, 36, 36, change_flag_image);
 	
 
 	count = 0;
@@ -153,7 +154,6 @@ void Stage::Delete()
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			DeleteGraph(change_flag_image[j]);
 			DeleteGraph(kira_kira_image[j]);
 		}
 	}
@@ -176,13 +176,8 @@ void Stage::Delete()
 	fallingblock.clear();
 	fallingblock.shrink_to_fit();
 
-	//delete pickaxe;
+	delete pickaxe;
 	//delete flag;
-}
-
-Stage::~Stage()
-{
-	Delete();
 }
 
 void Stage::Init()
@@ -206,7 +201,6 @@ void Stage::Update()
 	{
 		if (++image_type > 3)image_type = 0;
 		image_change_time = IMAGE_CHANGE_TIME;
-		if(flag != nullptr)flag->SetFlagImage(change_flag_image[image_type]);
 	}
 
 
@@ -299,7 +293,7 @@ void Stage::Draw1(float camera_work) const
 	DrawGraph((camera_work / 7), 0, back_ground_image[1], TRUE);
 	for (int i = 0; i < fallingblock.size(); i++)if(fallingblock[i].GetSize() < 0.5)fallingblock[i].Draw(camera_work);
 	DrawGraph((camera_work / 5), 0, back_ground_image[0], TRUE);
-	if(flag != nullptr)flag->Draw(camera_work);
+	if (flag != nullptr)DrawRotaGraph(flag->GetLocation().x + camera_work, flag->GetLocation().y, 1, 0, flag_image[image_type], TRUE);
 	for (int i = 0; i < treasure.size(); i++)
 	{
 		DrawRotaGraph(treasure[i].GetLocation().x + camera_work, treasure[i].GetLocation().y, 1, 0, treasure_image[static_cast<int>(treasure[i].GetTreasureType())], TRUE);
@@ -418,7 +412,6 @@ void Stage::DeleteFlag()
 {
 	effect.emplace_back(flag->GetLocation(), break_treasure_image[0]);
 	flag = nullptr;
-
 }
 
 void Stage::DeleteTreasure(int num)

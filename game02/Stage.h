@@ -50,7 +50,7 @@ protected:
     std::vector<class Effect>effect;
     std::vector<class Bom>bom;
     class Pickaxe* pickaxe;
-    Flag* flag;
+    Flag *flag;
 
     //ブロック
     int set_block_image[32];
@@ -64,6 +64,9 @@ protected:
 
     //宝
     int treasure_image[TREASURE_TYPE_NUM];
+
+    //旗
+    int flag_image[4];
 
 
     int set_break_block_image[80];
@@ -83,7 +86,6 @@ protected:
     
     int explosion_image[EFFECT_IMAGE_NUM];
     int smoke_image[EFFECT_IMAGE_NUM];
-    int change_flag_image[4];
     int kira_kira_image[4];
     
 
@@ -103,8 +105,7 @@ protected:
 public:
 
     Stage(int stage_num, int stage_width);
-    ////デストラクタ
-    ~Stage();
+    void Delete();
 
     void LoadImages();
 
@@ -130,5 +131,5 @@ public:
     void Init();
     void Pause(bool flg);
 
-    void Delete();
+    
 };

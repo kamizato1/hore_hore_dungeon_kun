@@ -8,14 +8,10 @@ class Flag : public BoxCollider
 {
 private:
 
-    int image;
     bool can_delete;
 
 public:
 
     Flag(DATA location);
-    void Update();
-    void Draw(float camera_work) const;
     bool GetCanDelete() { return can_delete; }
-    void SetFlagImage(int image) { this->image = image; }
 };
