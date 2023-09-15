@@ -9,10 +9,6 @@ Flag::Flag(DATA location)
     image = LoadGraph("images/Flag/flag.png");
 }
 
-void Flag::Update()
-{
-}
-
 void Flag::Draw(float camera_work) const
 {
     DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image, TRUE);
