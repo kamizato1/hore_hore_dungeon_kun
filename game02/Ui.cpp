@@ -19,9 +19,8 @@ Ui::Ui()
 	{
 		for (int j = 0; j < 2; j++)this->dark_item_image[i][j] = set_dark_item_image[count++];
 	}
-
-
 	LoadDivGraph("images/Ui/number.png", 10, 10, 1, 20, 40, number_image);
+
 	wait_time = WAIT_TIME;
 	end_clear_walk = FALSE;
 	clear_image_size = 0.0f;
@@ -29,16 +28,19 @@ Ui::Ui()
 
 void Ui::Delete()
 {
-	DeleteGraph(life_image);
 	DeleteGraph(clear_image);
 	DeleteGraph(life_image);
 	DeleteGraph(timer_image);
 	DeleteGraph(cross_image);
 
 	for (int i = 0; i < 10; i++)DeleteGraph(number_image[i]);
+
 	for (int i = 0; i < ITEM_TYPE_NUM; i++)DeleteGraph(item_image[i]);
+
 	for (int i = 0; i < 6; i++)DeleteGraph(set_dark_item_image[i]);
+
 	for (int i = 0; i < TREASURE_TYPE_NUM; i++)DeleteGraph(treasure_image[i]);
+
 	for (int i = 0; i < ITEM_TYPE_NUM; i++)
 	{
 		for (int j = 0; j < 2; j++)DeleteGraph(dark_item_image[i][j]);

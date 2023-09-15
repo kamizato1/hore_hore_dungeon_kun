@@ -25,9 +25,3 @@ GET_DRAW_FALLING_BLOCK FallingBlock::GetDrawFallingBlock()const
 	get_draw_falling_block.image_angle = image_angle;
 	return get_draw_falling_block;
 }
-
-
-//void FallingBlock::Draw(float camera_work)const
-//{
-//	DrawRotaGraph(location.x, location.y, image_size, image_angle, image, TRUE, FALSE);
-//}

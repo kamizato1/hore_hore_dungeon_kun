@@ -27,11 +27,13 @@ GameMain::GameMain(int stage_num)
     player = new Player();
     ui = new Ui();
     pause = new class Pause();
+
     this->stage_num = stage_num;
     life = 3;
     max_scroll = stage_width[stage_num] - 4;
     change_result_scene = FALSE;
     change_game_over_scene = FALSE;
+
     Init();
 }
 

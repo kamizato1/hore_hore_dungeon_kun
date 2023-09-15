@@ -277,7 +277,6 @@ void Player::Draw(float camera_work) const
     }
 }
 
-
 PLAYER_UI Player::GetPlayerUi()const
 {
     PLAYER_UI player_ui;

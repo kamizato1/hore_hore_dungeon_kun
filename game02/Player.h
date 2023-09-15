@@ -27,6 +27,7 @@ private:
     int get_treasure_se;
     int die_se;
     
+    Cursor* cursor;
 
     int now_item_set_time[ITEM_TYPE_NUM];
     int item_set_time[ITEM_TYPE_NUM] = { PICKAXE_SET_TIME , BLOCK_SET_TIME ,BOM_SET_TIME };
@@ -39,7 +40,7 @@ private:
     int item_type;
     int treasure_num[TREASURE_TYPE_NUM];
     int break_block_num;
-    Cursor* cursor;
+    
     bool clear;
     bool can_use_item[ITEM_TYPE_NUM];
 

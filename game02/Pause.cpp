@@ -61,12 +61,12 @@ void Pause::Delete()
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		help_image[i];
-		text_image[i];
+		DeleteGraph(help_image[i]);
+		DeleteGraph(text_image[i]);
 	}
 	for (int i = 0; i < 4; i++)
 	{
-		number_image[i];
+		DeleteGraph(number_image[i]);
 		DeleteGraph(set_answer_image[i]);
 	}
 
