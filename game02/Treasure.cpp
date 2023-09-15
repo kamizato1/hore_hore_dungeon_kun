@@ -6,15 +6,16 @@ Treasure::Treasure(DATA location, int type)
     radius = { BLOCK_SIZE_X / 2 ,BLOCK_SIZE_Y / 2 };
     this->location = location;
     this->type = static_cast<TREASURE_TYPE>(type);
-    int image[TREASURE_TYPE_NUM];
-    LoadDivGraph("images/Treasure/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, image);
-    this->image = image[type];
+    
+    LoadDivGraph("images/Treasure/treasure.png", TREASURE_TYPE_NUM, TREASURE_TYPE_NUM, 1, BLOCK_SIZE_X, BLOCK_SIZE_Y, set_image);
+    this->image = set_image[type];
     old_hit = FALSE;
     can_delete = FALSE;
 }
 
 void Treasure::Delete()
 {
+    for(int i = 0; i < TREASURE_TYPE_NUM; i++)DeleteGraph(set_image[i]);
     DeleteGraph(image);
 }
 

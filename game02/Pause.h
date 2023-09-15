@@ -22,10 +22,12 @@ private:
     int number_image[4];
     int back_ground_image; //”wŒi•
     int pause_image;
+
+    int set_menu_image[8]; //‰æ‘œ
+    int set_answer_image[4]; //ÅIŠm”F‰æ‘œ
+
     int help_num;
-
     int change_scene;
-
     bool can_close;
 
 public:

@@ -16,19 +16,19 @@ Pause::Pause()
 	LoadDivGraph("images/Pause/help.png", 3, 3, 1, 1000, 700, help_image);
 	LoadDivGraph("images/Pause/number.png", 4, 4, 1, 140, 150, number_image);
 	pause_image = LoadGraph("images/Pause/pause.png");
-	int menu_image[8];
+
 	int count = 0;
-	LoadDivGraph("images/Pause/menu.png", 8, 2, 4, 630, 90, menu_image);
+	LoadDivGraph("images/Pause/menu.png", 8, 2, 4, 630, 90, set_menu_image);
 	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j < 2; j++)this->menu_image[i][j] = menu_image[count++];
+		for (int j = 0; j < 2; j++)this->menu_image[i][j] = set_menu_image[count++];
 	}
-	int answer_image[4];
+
 	count = 0;
-	LoadDivGraph("images/Pause/answer.png", 4, 2, 2, 288, 90, answer_image);
+	LoadDivGraph("images/Pause/answer.png", 4, 2, 2, 288, 90, set_answer_image);
 	for (int i = 0; i < 2; i++)
 	{
-		for (int j = 0; j < 2; j++)this->answer_image[i][j] = answer_image[count++];
+		for (int j = 0; j < 2; j++)this->answer_image[i][j] = set_answer_image[count++];
 	}
 	LoadDivGraph("images/Pause/text.png", 3, 1, 3, 750, 60, text_image);
 }
@@ -64,7 +64,14 @@ void Pause::Delete()
 		help_image[i];
 		text_image[i];
 	}
-	for (int i = 0; i < 4; i++)number_image[i];
+	for (int i = 0; i < 4; i++)
+	{
+		number_image[i];
+		DeleteGraph(set_answer_image[i]);
+	}
+
+	for (int i = 0; i < 8; i++)DeleteGraph(set_menu_image[i]);
+	
 	DeleteGraph(back_ground_image);
 	DeleteGraph(pause_image);
 }

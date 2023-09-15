@@ -54,13 +54,21 @@ protected:
 
     int back_ground_image[4];
     int falling_block_image;
+
+    int set_break_block_image[80];
+    int set_break_treasure_image[50];
+    int set_change_block_image[32];
+
     int break_block_image[BLOCK_TYPE_NUM][EFFECT_IMAGE_NUM];
     int break_treasure_image[TREASURE_TYPE_NUM][EFFECT_IMAGE_NUM];
+    int change_block_image[BLOCK_TYPE_NUM][4];
     int explosion_image[EFFECT_IMAGE_NUM];
     int smoke_image[EFFECT_IMAGE_NUM];
-    int change_block_image[BLOCK_TYPE_NUM][4];
     int change_flag_image[4];
     int pickaxe_image;
+    int kira_kira_image[4];
+
+    int block_image[BLOCK_TYPE_NUM];
 
     int hit_pickaxe_se;
     int break_block_se;
@@ -74,7 +82,6 @@ protected:
     int break_block_num;
     DATA flag_location;
     KIRA_KIRA kira_kira[KIRA_KIRA_NUM];
-    int kira_kira_image[4];
    
 public:
 
@@ -82,9 +89,11 @@ public:
     ////デストラクタ
     ~Stage();
 
-    virtual void Update();
-    virtual void Draw1(float camera_work) const;
-    virtual void Draw2(float camera_work) const;
+    void LoadImages();
+
+    void Update();
+    void Draw1(float camera_work) const;
+    void Draw2(float camera_work) const;
 
     bool HitPickaxe(BoxCollider* bc);
 

@@ -16,16 +16,14 @@ private:
 
 public:
 
-    Block(DATA location, int type);
+    Block(DATA location, int type, int image);
     void Delete();
 
-    //•`‰æˆÈŠO‚ÌXV‚ðŽÀ‘•‚·‚é
-    void Update();
     //•`‰æ‚ÉŠÖ‚·‚é‚±‚Æ‚ðŽÀ‘•‚·‚é
     void Draw(float camera_work) const;
 
     BLOCK_TYPE GetBlockType() { return type; }
-    void SetBlockType(int type);
+    void SetBlockType(int type, int image);
     void SetHitEcplosion(bool flg) { hit_explosion = flg; }
-    void SetBlockImage(int image) { this->image = image; }
+    void SetBlockImage(int image);
 };

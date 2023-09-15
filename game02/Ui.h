@@ -14,6 +14,9 @@ private:
     int timer_image;
     int dark_item_image[ITEM_TYPE_NUM][2];
     int treasure_image[TREASURE_TYPE_NUM];
+
+    int set_dark_item_image[6];
+
     int cross_image;
     bool end_clear_walk;
    

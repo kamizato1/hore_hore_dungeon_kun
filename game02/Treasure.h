@@ -10,6 +10,7 @@ class Treasure : public BoxCollider
 private:
 
     int image;
+    int set_image[TREASURE_TYPE_NUM];
     bool old_hit;
     DATA speed;
     TREASURE_TYPE type;

@@ -14,12 +14,11 @@ Player::Player()
     Init();
     for(int i = 0; i < TREASURE_TYPE_NUM; i++)treasure_num[i] = 0;
 
-    int image[10];
     int count = 0;
-    LoadDivGraph("images/Player/player.png", 10, 5, 2, 30, 30, image);
+    LoadDivGraph("images/Player/player.png", 10, 5, 2, 30, 30, set_image);
     for (int i = 0; i < 2; i++)
     {
-        for (int j = 0; j < 5; j++)this->image[i][j] = image[count++];
+        for (int j = 0; j < 5; j++)this->image[i][j] = set_image[count++];
     }
     LoadDivGraph("images/Player/item.png", ITEM_TYPE_NUM, ITEM_TYPE_NUM, 1, 50, 50, item_image);
     frame_image = LoadGraph("images/Player/frame.png");
@@ -37,7 +36,8 @@ void Player::Delete()
     {
         for(int j = 0; j < 5; j++)DeleteGraph(image[i][j]);
     }
-    for (int i = 0; i < ITEM_TYPE_NUM; i++)DeleteGraph(item_image[ITEM_TYPE_NUM]);
+    for (int i = 0; i < ITEM_TYPE_NUM; i++)DeleteGraph(item_image[i]);
+    for (int i = 0; i < 10; i++)DeleteGraph(set_image[i]);
     DeleteGraph(sign_image);
     DeleteGraph(frame_image);
 

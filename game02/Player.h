@@ -21,6 +21,7 @@ private:
     int item_image[ITEM_TYPE_NUM];
     int sign_image;
     int frame_image;
+    int set_image[10];
 
     int jump_se;
     int get_treasure_se;

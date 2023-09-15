@@ -13,12 +13,11 @@ Ui::Ui()
 	life_image = LoadGraph("images/Ui/player.png");
 	cross_image = LoadGraph("images/Ui/cross.png");
 
-	int dark_item_image[6];
 	int count = 0;
-	LoadDivGraph("images/Ui/darkitem.png", 6, 2, ITEM_TYPE_NUM, 160, 160, dark_item_image);
+	LoadDivGraph("images/Ui/darkitem.png", 6, 2, ITEM_TYPE_NUM, 160, 160, set_dark_item_image);
 	for (int i = 0; i < ITEM_TYPE_NUM; i++)
 	{
-		for (int j = 0; j < 2; j++)this->dark_item_image[i][j] = dark_item_image[count++];
+		for (int j = 0; j < 2; j++)this->dark_item_image[i][j] = set_dark_item_image[count++];
 	}
 
 
@@ -37,7 +36,8 @@ void Ui::Delete()
 	DeleteGraph(cross_image);
 
 	for (int i = 0; i < 10; i++)DeleteGraph(number_image[i]);
-	for (int i = 0; i < 10; i++)DeleteGraph(item_image[i]);
+	for (int i = 0; i < ITEM_TYPE_NUM; i++)DeleteGraph(item_image[i]);
+	for (int i = 0; i < 6; i++)DeleteGraph(set_dark_item_image[i]);
 	for (int i = 0; i < TREASURE_TYPE_NUM; i++)DeleteGraph(treasure_image[i]);
 	for (int i = 0; i < ITEM_TYPE_NUM; i++)
 	{
