@@ -69,9 +69,27 @@ void Stage::LoadImages()
 	//旗画像
 	LoadDivGraph("images/Flag/flag.png", 4, 4, 1, 36, 36, flag_image);
 
+	//壊れるエフェクト
+	count = 0;
+	LoadDivGraph("images/Effect/breakblock.png", 80, EFFECT_IMAGE_NUM, BLOCK_TYPE_NUM, 250, 250, set_break_block_image);
+	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)this->break_block_image[i][j] = set_break_block_image[count++];
+	}
 
-	LoadDivGraph("images/explosion.png", 10, 10, 1, 320, 320, explosion_image);
-	LoadDivGraph("images/smoke.png", 10, 10, 1, 500, 500, smoke_image);
+	count = 0;
+	LoadDivGraph("images/Effect/breaktreasure.png", 50, EFFECT_IMAGE_NUM, TREASURE_TYPE_NUM, 250, 250, set_break_treasure_image);
+	for (int i = 0; i < TREASURE_TYPE_NUM; i++)
+	{
+		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)this->break_treasure_image[i][j] = set_break_treasure_image[count++];
+	}
+	//爆発エフェクト
+	LoadDivGraph("images/Effect/explosion.png", 10, 10, 1, 320, 320, explosion_image);
+	LoadDivGraph("images/Effect/smoke.png", 10, 10, 1, 500, 500, smoke_image);
+
+
+
+
 	pickaxe_image = LoadGraph("images/tsuruhashi.png");
 	back_ground_image[0] = LoadGraph("images/background01.png");
 	back_ground_image[1] = LoadGraph("images/background02.png");
@@ -81,19 +99,7 @@ void Stage::LoadImages()
 	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
 	
 
-	count = 0;
-	LoadDivGraph("images/breakblock.png", 80, EFFECT_IMAGE_NUM, BLOCK_TYPE_NUM, 250, 250, set_break_block_image);
-	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
-	{
-		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)this->break_block_image[i][j] = set_break_block_image[count++];
-	}
-
-	count = 0;
-	LoadDivGraph("images/breaktreasure.png", 50, EFFECT_IMAGE_NUM, TREASURE_TYPE_NUM, 250, 250, set_break_treasure_image);
-	for (int i = 0; i < TREASURE_TYPE_NUM; i++)
-	{
-		for (int j = 0; j < EFFECT_IMAGE_NUM; j++)this->break_treasure_image[i][j] = set_break_treasure_image[count++];
-	}
+	
 
 	for (int i = 0; i < KIRA_KIRA_NUM; i++)
 	{
@@ -165,7 +171,6 @@ void Stage::Delete()
 	treasure.clear();
 	treasure.shrink_to_fit();
 
-	for (int i = 0; i < effect.size(); i++)effect[i].Delete();
 	effect.clear();
 	effect.shrink_to_fit();
 
@@ -232,7 +237,7 @@ void Stage::Update()
 		pickaxe->Update(this);
 		if (pickaxe->GetCanDelete())
 		{
-			effect.emplace_back(pickaxe->GetLocation(), break_block_image[0]);
+			effect.emplace_back(pickaxe->GetLocation(), 0, 0);
 			delete pickaxe;
 			pickaxe = nullptr;
 		}
@@ -249,7 +254,7 @@ void Stage::HitBlastRange(int bom_num)
 			if ((bom[bom_num].HitExplosion(&treasure[i])) && (!HitBlock(&treasure[i]).flg))
 			{
 				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
-				effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
+				effect.emplace_back(treasure[i].GetLocation(), 1, static_cast<int>(treasure[i].GetTreasureType()));
 				treasure.erase(treasure.begin() + i);
 				i--;
 			}
@@ -265,9 +270,8 @@ void Stage::HitBlastRange(int bom_num)
 			{
 				if (bom[bom_num].GetCanDelete())
 				{
-					int image_type = block_type;
-					if (block_type < 4)image_type = 1;
-					effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
+					if (block_type < 4)block_type = 1;
+					effect.emplace_back(block[i].GetLocation(), 0, block_type);
 					block.erase(block.begin() + i);
 					i--;
 				}
@@ -277,8 +281,8 @@ void Stage::HitBlastRange(int bom_num)
 	}
 	if (bom[bom_num].GetCanDelete())
 	{
-		effect.emplace_back(bom[bom_num].GetLocation(), smoke_image);
-		effect.emplace_back(bom[bom_num].GetLocation(), explosion_image);
+		effect.emplace_back(bom[bom_num].GetLocation(), 2, 0);
+		effect.emplace_back(bom[bom_num].GetLocation(), 3, 0);
 		bom.erase(bom.begin() + bom_num);
 		PlaySoundMem(explosion_se, DX_PLAYTYPE_BACK, TRUE);
 	}
@@ -311,7 +315,14 @@ void Stage::Draw1(float camera_work) const
 
 void Stage::Draw2(float camera_work) const
 {
-	for (int i = 0; i < effect.size(); i++)effect[i].Draw(camera_work);
+	for (int i = 0; i < effect.size(); i++)
+	{
+		GET_DRAW_EFFECT gde = effect[i].GetDrawEffect();
+		if (gde.effect_type == 0)DrawRotaGraph(gde.location.x + camera_work, gde.location.y, 1, 0, break_block_image[gde.item_type][gde.image_type], TRUE);
+		else if(gde.effect_type == 1)DrawRotaGraph(gde.location.x + camera_work, gde.location.y, 1, 0, break_treasure_image[gde.item_type][gde.image_type], TRUE);
+		else if (gde.effect_type == 2)DrawRotaGraph(gde.location.x + camera_work, gde.location.y, 1, 0, explosion_image[gde.image_type], TRUE);
+		else DrawRotaGraph(gde.location.x + camera_work, gde.location.y, 1, 0, smoke_image[gde.image_type], TRUE);
+	}
 
 	for (int i = 0; i < bom.size(); i++)//爆弾の表示
 	{
@@ -410,7 +421,7 @@ bool Stage::HitFlag(BoxCollider* bc)
 
 void Stage::DeleteFlag()
 {
-	effect.emplace_back(flag->GetLocation(), break_treasure_image[0]);
+	effect.emplace_back(flag->GetLocation(), 1, 0);
 	flag = nullptr;
 }
 
@@ -429,7 +440,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 			if (!treasure[i].GetOldHit(this))
 			{
 				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
-				effect.emplace_back(treasure[i].GetLocation(), break_treasure_image[static_cast<int>(treasure[i].GetTreasureType())]);
+				effect.emplace_back(treasure[i].GetLocation(), 1, static_cast<int>(treasure[i].GetTreasureType()));
 				treasure.erase(treasure.begin() + i);
 				i--;
 			}
@@ -443,9 +454,8 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 			int block_type = static_cast<int>(block[i].GetBlockType());
 			if ((block_type > 0) && (block_type <= 5))//壊せるブロックなら
 			{
-				int image_type = block_type;
-				if (block_type < 4)image_type = 1, break_block_num++;
-				effect.emplace_back(block[i].GetLocation(), break_block_image[image_type]);
+				if (block_type < 4)block_type = 1, break_block_num++;
+				effect.emplace_back(block[i].GetLocation(), 0, block_type);
 				block.erase(block.begin() + i);
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
 				i--;
@@ -470,7 +480,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			if ((block_type > 0) && (block_type <= 4))//ブロックが土だったら
 			{
 				PlaySoundMem(break_block_se, DX_PLAYTYPE_BACK, TRUE);
-				effect.emplace_back(block[hit_stage.num].GetLocation(), break_block_image[block_type]);
+				effect.emplace_back(block[hit_stage.num].GetLocation(), 0, block_type);
 				if (block_type == 4) block.erase(block.begin() + hit_stage.num);
 				else
 				{
@@ -492,7 +502,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			if (hit_treasure.flg)
 			{
 				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
-				effect.emplace_back(treasure[hit_treasure.num].GetLocation(), break_treasure_image[static_cast<int>(treasure[hit_treasure.num].GetTreasureType())]);
+				effect.emplace_back(treasure[hit_treasure.num].GetLocation(), 1, static_cast<int>(treasure[hit_treasure.num].GetTreasureType()));
 				treasure.erase(treasure.begin() + hit_treasure.num);
 			}
 		}
@@ -551,7 +561,7 @@ void Stage::Sway()
 			int block_type = static_cast<int>(block[i].GetBlockType());
 			if ((block_type > 0) && (block_type <= 4))//ブロックが土だったら
 			{
-				effect.emplace_back(block[i].GetLocation(), break_block_image[block_type]);
+				effect.emplace_back(block[i].GetLocation(), 0, block_type);
 				if ((block_type == 1) || (block_type == 4))
 				{
 					block.erase(block.begin() + i);
@@ -562,7 +572,6 @@ void Stage::Sway()
 		}
 	}
 }
-
 
 void Stage::Pause(bool flg)
 {

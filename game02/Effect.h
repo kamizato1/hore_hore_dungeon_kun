@@ -1,26 +1,29 @@
 #pragma once
 #include"define.h"
 
-#define EFFECT_IMAGE_NUM 10
-
+struct GET_DRAW_EFFECT
+{
+	DATA location;
+	int effect_type;
+	int item_type;
+	int image_type;
+};
 
 class Effect
 {
 private:
 
 	DATA location;
-	int image[EFFECT_IMAGE_NUM];
 	int image_change_time;
 	int image_type;
+	int effect_type;
+	int item_type;
 	bool can_delete;
 
 public:
 
-	Effect(DATA location, int *image);
-	void Delete();
-
+	Effect(DATA location, int effect_type, int item_type);
 	void Update();
-	void Draw(float camera_work) const;
-
 	bool CanDelete() { return can_delete; }
+	GET_DRAW_EFFECT GetDrawEffect()const;
 };

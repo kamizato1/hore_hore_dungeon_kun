@@ -68,8 +68,17 @@ protected:
     //旗
     int flag_image[4];
 
-
+    //壊れるエフェクト
     int set_break_block_image[80];
+    int set_break_treasure_image[50];
+    int break_block_image[BLOCK_TYPE_NUM][EFFECT_IMAGE_NUM];
+    int break_treasure_image[TREASURE_TYPE_NUM][EFFECT_IMAGE_NUM];
+    //爆発エフェクト
+    int explosion_image[EFFECT_IMAGE_NUM];
+    int smoke_image[EFFECT_IMAGE_NUM];
+
+
+
 
 
     int falling_block_image;
@@ -79,13 +88,11 @@ protected:
     int pickaxe_image;
 
     
-    int set_break_treasure_image[50];
+   
     
-    int break_block_image[BLOCK_TYPE_NUM][EFFECT_IMAGE_NUM];
-    int break_treasure_image[TREASURE_TYPE_NUM][EFFECT_IMAGE_NUM];
     
-    int explosion_image[EFFECT_IMAGE_NUM];
-    int smoke_image[EFFECT_IMAGE_NUM];
+    
+    
     int kira_kira_image[4];
     
 

@@ -1,20 +1,17 @@
 #include"DxLib.h"
 #include"Effect.h"
 
+#define EFFECT_IMAGE_NUM 10
 #define IMAGE_CHANGE_TIME 2
 
-Effect::Effect(DATA location, int *image)
+Effect::Effect(DATA location, int effect_type, int item_type)
 {
+	this->item_type = item_type;
+	this->effect_type = effect_type;
 	this->location = location;
 	image_change_time = 0;
 	can_delete = FALSE;
 	image_type = 0;
-	for (int i = 0; i < EFFECT_IMAGE_NUM; i++)this->image[i] = image[i];
-}
-
-void Effect::Delete()
-{
-	for(int i = 0; i < EFFECT_IMAGE_NUM; i++)DeleteGraph(image[i]);
 }
 
 void Effect::Update()
@@ -26,7 +23,12 @@ void Effect::Update()
 	}
 }
 
-void Effect::Draw(float camera_work)const
+GET_DRAW_EFFECT Effect::GetDrawEffect()const
 {
-	DrawRotaGraph(location.x + camera_work, location.y, 1, 0, image[image_type], TRUE, FALSE);
+	GET_DRAW_EFFECT get_draw_effect;
+	get_draw_effect.location = location;
+	get_draw_effect.effect_type = effect_type;
+	get_draw_effect.item_type = item_type;
+	get_draw_effect.image_type = image_type;
+	return get_draw_effect;
 }
