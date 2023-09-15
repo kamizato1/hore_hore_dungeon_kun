@@ -12,26 +12,27 @@ private:
     int break_pickaxe_se;
     int throw_pickaxe_se;
     int hit_pickaxe_se;
-
-    int can_throw_pickaxe_se;
-
     int image;
+
+    bool can_throw_pickaxe_se;
     int angle;
     int angle_direction;
-    bool can_delete;
+    bool can_throw;
     DATA speed;
     DATA old_location;
    
-
 public:
 
-    Pickaxe(DATA location, DATA speed, int image, int throw_pickaxe_se, int hit_pickaxe_se, int break_pickaxe_se);
-    ~Pickaxe();
+    Pickaxe();
+    void Delete();
 
     void Update(class Stage* stage);
+
     void Draw(float camera_work) const;
 
-    bool GetCanDelete() { return can_delete; }
+    bool GetCanThrow() { return can_throw; }
 
     void Pause(bool flg);
+
+    void ThrowPickaxe(DATA location, DATA speed);
 };

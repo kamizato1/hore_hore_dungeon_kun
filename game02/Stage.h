@@ -80,25 +80,13 @@ protected:
     //地震ブロック
     int falling_block_image;
 
-
-
     int back_ground_image[4];
-    int pickaxe_image;
-
-    
-   
-    
-    
-    
-    
     int kira_kira_image[4];
     
-
-    int hit_pickaxe_se;
+    int hit_hard_block_se;
     int break_block_se;
     int explosion_se;
-    int throw_pickaxe_se;
-    int break_pickaxe_se;
+    int break_treasure_se;
     int put_item_se;
 
     int image_change_time;

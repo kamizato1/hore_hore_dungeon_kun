@@ -37,6 +37,8 @@ Stage::Stage(int stage_num, int stage_width)
 	fclose(fp_s);
 	fclose(fp_t);
 
+	pickaxe = new Pickaxe();
+
 	Init();
 }
 
@@ -44,9 +46,8 @@ void Stage::LoadImages()
 {
 	explosion_se = LoadSoundMem("bgm/ExplosionSE.mp3");
 	break_block_se = LoadSoundMem("bgm/breakblock3.mp3");
-	hit_pickaxe_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
-	throw_pickaxe_se = LoadSoundMem("bgm/PickaxeThrow.mp3");
-	break_pickaxe_se = LoadSoundMem("bgm/breakpickaxe.mp3");
+	hit_hard_block_se = LoadSoundMem("bgm/hitpickaxe2.mp3");
+	break_treasure_se = LoadSoundMem("bgm/breakpickaxe.mp3");
 	put_item_se = LoadSoundMem("bgm/stamp.mp3");
 
 	//ブロック画像
@@ -90,9 +91,6 @@ void Stage::LoadImages()
 	//地震ブロック
 	falling_block_image = LoadGraph("images/FallingBlock/fallingblock.png");
 
-
-
-	pickaxe_image = LoadGraph("images/tsuruhashi.png");
 	back_ground_image[0] = LoadGraph("images/background01.png");
 	back_ground_image[1] = LoadGraph("images/background02.png");
 	back_ground_image[2] = LoadGraph("images/background03.png");
@@ -113,11 +111,10 @@ void Stage::LoadImages()
 
 void Stage::Delete()
 {
-	DeleteSoundMem(hit_pickaxe_se);
+	DeleteSoundMem(hit_hard_block_se);
 	DeleteSoundMem(break_block_se);
 	DeleteSoundMem(explosion_se);
-	DeleteSoundMem(throw_pickaxe_se);
-	DeleteSoundMem(break_pickaxe_se);
+	DeleteSoundMem(break_treasure_se);
 	DeleteSoundMem(put_item_se);
 
 	//ブロック画像
@@ -170,7 +167,6 @@ void Stage::Delete()
 			DeleteGraph(kira_kira_image[j]);
 		}
 	}
-	DeleteGraph(pickaxe_image);
 
 	block.clear();
 	block.shrink_to_fit();
@@ -187,15 +183,14 @@ void Stage::Delete()
 	fallingblock.clear();
 	fallingblock.shrink_to_fit();
 
+	pickaxe->Delete();
 	delete pickaxe;
-	//delete flag;
+	delete flag;
 }
 
 void Stage::Init()
 {
 	flag = new Flag(flag_location);
-	delete pickaxe;
-	pickaxe = nullptr;
 	image_change_time = IMAGE_CHANGE_TIME;
 	image_type = 0;
 	break_block_num = 0;
@@ -237,16 +232,10 @@ void Stage::Update()
 		bom[i].Update(this);
 		HitBlastRange(i);
 	}
-	if (pickaxe != nullptr)
-	{
-		pickaxe->Update(this);
-		if (pickaxe->GetCanDelete())
-		{
-			effect.emplace_back(pickaxe->GetLocation(), 0, 0);
-			delete pickaxe;
-			pickaxe = nullptr;
-		}
-	}
+
+	bool pickaxe_throw_flg = pickaxe->GetCanThrow();
+	pickaxe->Update(this);
+	if ((!pickaxe_throw_flg) && (pickaxe->GetCanThrow()))effect.emplace_back(pickaxe->GetLocation(), 0, 0);
 }
 
 void Stage::HitBlastRange(int bom_num)
@@ -258,7 +247,7 @@ void Stage::HitBlastRange(int bom_num)
 		{
 			if ((bom[bom_num].HitExplosion(&treasure[i])) && (!HitBlock(&treasure[i]).flg))
 			{
-				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
+				PlaySoundMem(break_treasure_se, DX_PLAYTYPE_BACK, TRUE);
 				effect.emplace_back(treasure[i].GetLocation(), 1, static_cast<int>(treasure[i].GetTreasureType()));
 				treasure.erase(treasure.begin() + i);
 				i--;
@@ -347,7 +336,8 @@ void Stage::Draw2(float camera_work) const
 		if (!gdb.throw_flg)DrawRotaGraph((gdb.location.x - 2) + camera_work, gdb.location.y + 1, gdb.bom_size, 0, bom_number_image[count], TRUE);
 	}
 
-	if (pickaxe != nullptr)pickaxe->Draw(camera_work);
+	pickaxe->Draw(camera_work);
+
 	for (int i = 0; i < fallingblock.size(); i++)
 	{
 		if (fallingblock[i].GetSize() >= 0.5)
@@ -460,7 +450,7 @@ bool Stage::HitPickaxe(BoxCollider* bc)
 		{
 			if (!treasure[i].GetOldHit(this))
 			{
-				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
+				PlaySoundMem(break_treasure_se, DX_PLAYTYPE_BACK, TRUE);
 				effect.emplace_back(treasure[i].GetLocation(), 1, static_cast<int>(treasure[i].GetTreasureType()));
 				treasure.erase(treasure.begin() + i);
 				i--;
@@ -513,7 +503,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 					else block[hit_stage.num].SetBlockType(block_type);
 				}
 			}
-			else PlaySoundMem(hit_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
+			else PlaySoundMem(hit_hard_block_se, DX_PLAYTYPE_BACK, TRUE);
 		}
 		else
 		{
@@ -522,7 +512,7 @@ bool Stage::PutItem(BoxCollider* bc, ITEM_TYPE item_type)
 			HIT_TREASURE hit_treasure = HitTreasure(bc, FALSE);
 			if (hit_treasure.flg)
 			{
-				PlaySoundMem(break_pickaxe_se, DX_PLAYTYPE_BACK, TRUE);
+				PlaySoundMem(break_treasure_se, DX_PLAYTYPE_BACK, TRUE);
 				effect.emplace_back(treasure[hit_treasure.num].GetLocation(), 1, static_cast<int>(treasure[hit_treasure.num].GetTreasureType()));
 				treasure.erase(treasure.begin() + hit_treasure.num);
 			}
@@ -559,7 +549,7 @@ void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 {
 	if (item_type == ITEM_TYPE::PICKAXE)
 	{
-		if (pickaxe == nullptr)pickaxe = new Pickaxe(location, speed, pickaxe_image, throw_pickaxe_se, hit_pickaxe_se, break_pickaxe_se);
+		if (pickaxe->GetCanThrow())pickaxe->ThrowPickaxe(location, speed);
 		for (int i = 0; i < treasure.size(); i++)treasure[i].SetOldHit(FALSE);
 	}
 	else if (item_type == ITEM_TYPE::BOM)bom.emplace_back(location, speed);
@@ -567,8 +557,7 @@ void Stage::ThrowItem(DATA location, DATA speed, ITEM_TYPE item_type)
 
 bool Stage::GetPickaxeFlg()
 {
-	if (pickaxe == nullptr)return TRUE;
-	else return FALSE;
+	return pickaxe->GetCanThrow();
 }
 
 void Stage::Sway()
@@ -598,10 +587,10 @@ void Stage::Pause(bool flg)
 {
 	if (flg)
 	{
-		if (pickaxe != nullptr)pickaxe->Pause(TRUE);
+		if (!pickaxe->GetCanThrow())pickaxe->Pause(TRUE);
 	}
 	else
 	{
-		if (pickaxe != nullptr)pickaxe->Pause(FALSE);
+		if (!pickaxe->GetCanThrow())pickaxe->Pause(FALSE);
 	}
 }
