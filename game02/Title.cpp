@@ -39,7 +39,7 @@ Title::Title()
 	credit_image = LoadGraph("images/Menu/map.png");
 	slash_image = LoadGraph("images/Menu/éŒê¸çïâè.png");
 
-	LoadDivGraph("images/Menu/number.png", 10, 10, 1, 20, 40, num_image);
+	LoadDivGraph("images/Menu/number.png", 4, 4, 1, 140, 150, num_image);
 
 }
 
@@ -171,9 +171,9 @@ void Title::Draw() const
 	if (help)
 	{
 		DrawRotaGraph(640, 400, 1.15f, 0, help_image[help_menu], TRUE);
-		DrawRotaGraph(1000, 90, 1, 0, num_image[help_menu + 1], TRUE);
-		DrawRotaGraph(1040, 100, 1, 0, slash_image, TRUE);
-		DrawRotaGraph(1080, 100, 1, 0, num_image[3], TRUE);
+		DrawRotaGraph(890, 100, 0.3, 0, num_image[0], TRUE);
+		DrawRotaGraph(970, 100, 0.3, 0, num_image[help_menu + 1], TRUE);
+		DrawRotaGraph(1050, 100, 0.3, 0, num_image[0], TRUE,TRUE);
 	}
 
 	if (credit)

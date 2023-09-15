@@ -14,7 +14,7 @@ private:
     int help_image[3]; //ヘルプイメージ
     int credit_image; //クレジット画面
     int menu_image[MENU_NUM][2]; //メニュー画像
-    int num_image[10];
+    int num_image[4];
     int slash_image;
     int input_time; //入力受付時間
     int select_menu; // 現在入力しているメニュー
