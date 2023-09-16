@@ -4,6 +4,9 @@
 
 Opening::Opening()
 {
+	InitGraph();
+	InitSoundMem();
+
 	//†Å‹‰æ‘œ
 	image[0] = LoadGraph("images/Opening/†Å‹2.png");
 	image[1] = LoadGraph("images/Opening/†Å‹3.png");

@@ -9,6 +9,9 @@
 //-----------------------------------
 Result::Result(int stage_num, int* treasure_num)
 {
+	InitGraph();
+	InitSoundMem();
+
 	
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	roll_score_se = LoadSoundMem("bgm/PickaxeThrow.mp3");

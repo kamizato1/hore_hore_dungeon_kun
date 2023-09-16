@@ -12,6 +12,9 @@
 
 GameMain::GameMain(int stage_num)
 {
+    InitGraph();
+    InitSoundMem();
+
     int stage_width[STAGE_NUM];
     FILE* fp_w;//スコアファイル読み込み
     fopen_s(&fp_w, "data/stagewidth.txt", "r");
@@ -39,6 +42,9 @@ GameMain::GameMain(int stage_num)
 
 void GameMain::Delete()
 {
+   /* InitGraph();
+    InitSoundMem();*/
+
     stage->Delete();
     delete stage;
     player->Delete();

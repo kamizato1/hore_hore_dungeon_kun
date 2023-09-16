@@ -37,6 +37,7 @@ Stage::Stage(int stage_num, int stage_width)
 	fclose(fp_s);
 	fclose(fp_t);
 
+	flag = nullptr;
 	pickaxe = new Pickaxe();
 
 	Init();
@@ -98,9 +99,6 @@ void Stage::LoadImages()
 
 	LoadDivGraph("images/kirakira.png", 4, 4, 1, 10, 10, kira_kira_image);
 	
-
-	
-
 	for (int i = 0; i < KIRA_KIRA_NUM; i++)
 	{
 		kira_kira[i].location.y = 250 + GetRand(250);
@@ -159,14 +157,7 @@ void Stage::Delete()
 	DeleteGraph(falling_block_image);
 
 	for (int i = 0; i < 4; i++)DeleteGraph(back_ground_image[i]);
-
-	for (int i = 0; i < BLOCK_TYPE_NUM; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			DeleteGraph(kira_kira_image[j]);
-		}
-	}
+	for (int i = 0; i < 4; i++)DeleteGraph(kira_kira_image[i]);
 
 	block.clear();
 	block.shrink_to_fit();
@@ -190,7 +181,7 @@ void Stage::Delete()
 
 void Stage::Init()
 {
-	flag = new Flag(flag_location);
+	if(flag == nullptr)flag = new Flag(flag_location);
 	image_change_time = IMAGE_CHANGE_TIME;
 	image_type = 0;
 	break_block_num = 0;
@@ -423,6 +414,7 @@ bool Stage::HitFlag(BoxCollider* bc)
 	{
 		if (flag->HitBox(bc))
 		{
+			delete flag;
 			flag = nullptr;
 			return TRUE;
 		}
@@ -432,8 +424,12 @@ bool Stage::HitFlag(BoxCollider* bc)
 
 void Stage::DeleteFlag()
 {
-	effect.emplace_back(flag->GetLocation(), 1, 0);
-	flag = nullptr;
+	if (flag != nullptr)
+	{
+		effect.emplace_back(flag->GetLocation(), 1, 0);
+		delete flag;
+		flag = nullptr;
+	}
 }
 
 void Stage::DeleteTreasure(int num)
