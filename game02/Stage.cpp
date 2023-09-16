@@ -34,6 +34,7 @@ Stage::Stage(int stage_num, int stage_width)
 			else if ((treasure_type != -1) && treasure_type != 0)treasure.emplace_back(location, treasure_type);
 		}
 	}
+
 	fclose(fp_s);
 	fclose(fp_t);
 
@@ -301,8 +302,8 @@ void Stage::Draw1(float camera_work) const
 		GET_DRAW_BLOCK gdb = block[i].GetDrawBlock();
 		if (gdb.block_type != 0)
 		{
-			DrawRotaGraph(gdb.location.x + camera_work, gdb.location.y, 1, 0, block_image[gdb.block_type][image_type], TRUE);
-			if(gdb.hit_explosion)DrawRotaGraph(gdb.location.x + camera_work, gdb.location.y, 1, 0, block_warning_image, TRUE);
+			DrawRotaGraphF(gdb.location.x + camera_work, gdb.location.y, 1, 0, block_image[gdb.block_type][image_type], TRUE);
+			if(gdb.hit_explosion)DrawRotaGraphF(gdb.location.x + camera_work, gdb.location.y, 1, 0, block_warning_image, TRUE);
 		}
 	}
 }

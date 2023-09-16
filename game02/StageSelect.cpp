@@ -3,6 +3,8 @@
 #include"Title.h"
 #include "GameMain.h"
 
+#include"Result.h"
+
 //‘€ìó•tŠÔ
 #define TIME 30
 
