@@ -9,10 +9,6 @@
 //-----------------------------------
 Result::Result(int stage_num, int* treasure_num)
 {
-	InitGraph();
-	InitSoundMem();
-
-	
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	roll_score_se = LoadSoundMem("bgm/PickaxeThrow.mp3");
 	set_score_se = LoadSoundMem("bgm/ExplosionSE.mp3");
@@ -187,7 +183,10 @@ void Result::MoveScore()
 			end_move_score = TRUE;
 			wait_time = WAIT_TIME;
 			PlaySoundMem(result_bgm, DX_PLAYTYPE_LOOP, TRUE);
-			PlaySoundMem(drum_roll_se, DX_PLAYTYPE_LOOP, TRUE);
+
+			bool se_flg = FALSE;
+			for (int i = 0; i < TREASURE_TYPE_NUM; i++)if (treasure_score[i] > 0)se_flg = TRUE;
+			if(se_flg)PlaySoundMem(drum_roll_se, DX_PLAYTYPE_LOOP, TRUE);
 		}
 	}
 }

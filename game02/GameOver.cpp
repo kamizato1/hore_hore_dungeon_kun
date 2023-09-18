@@ -10,9 +10,6 @@
 
 GameOver::GameOver(int stage_num)
 {
-	InitGraph();
-	InitSoundMem();
-
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	game_over_bgm = LoadSoundMem("bgm/gameover.mp3");
 	PlaySoundMem(game_over_bgm, DX_PLAYTYPE_BACK, TRUE);

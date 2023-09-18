@@ -12,9 +12,6 @@
 
 GameMain::GameMain(int stage_num)
 {
-    InitGraph();
-    InitSoundMem();
-
     int stage_width[STAGE_NUM];
     FILE* fp_w;//スコアファイル読み込み
     fopen_s(&fp_w, "data/stagewidth.txt", "r");
@@ -42,9 +39,6 @@ GameMain::GameMain(int stage_num)
 
 void GameMain::Delete()
 {
-   /* InitGraph();
-    InitSoundMem();*/
-
     stage->Delete();
     delete stage;
     player->Delete();
@@ -173,6 +167,7 @@ void GameMain::Draw() const
 {
     float camera_work = 0.0f;
     if (player->GetLocation().x >= 350.0f)camera_work = -player->GetLocation().x + 350.0f;
+    camera_work = floorf(camera_work);
     if (camera_work <= -(BLOCK_SIZE_X * max_scroll) + SCREEN_WIDTH)camera_work = -(BLOCK_SIZE_X * max_scroll) + SCREEN_WIDTH;
     camera_work += sway_width;
 
