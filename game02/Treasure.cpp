@@ -19,7 +19,7 @@ void Treasure::Update(Stage* stage)
         int y = location.y / BLOCK_SIZE_Y;
         location.y = (y * BLOCK_SIZE_Y) + (radius.y);
     }
-    if (location.y > SCREEN_HEIGHT)can_delete = TRUE;
+    if (location.y > SCREEN_HEIGHT + 50)can_delete = TRUE;
 }
 
 bool Treasure::GetOldHit(Stage* stage)

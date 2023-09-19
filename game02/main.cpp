@@ -64,6 +64,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //消去
     delete key;
 
+    InitGraph();
+    InitSoundMem();
+
     DxLib_End();	// DXライブラリ使用の終了処理
 
     return 0;	// ソフトの終了
