@@ -26,6 +26,7 @@ private:
     int jump_se;
     int get_treasure_se;
     int die_se;
+    int select_se;
     
     Cursor* cursor;
 

@@ -26,6 +26,7 @@ Player::Player()
     jump_se = LoadSoundMem("bgm/JumpSE.mp3");
     get_treasure_se = LoadSoundMem("bgm/GetItem.mp3");
     die_se = LoadSoundMem("bgm/playerdie.mp3");
+    select_se = LoadSoundMem("bgm/MoveCursor.mp3");
 
     break_block_num = 0;
 }
@@ -44,6 +45,7 @@ void Player::Delete()
     DeleteSoundMem(jump_se);
     DeleteSoundMem(get_treasure_se);
     DeleteSoundMem(die_se);
+    DeleteSoundMem(select_se);
 
     cursor->Delete();
     delete cursor;
@@ -122,10 +124,12 @@ void Player::Update(Key* key, Stage* stage)
            if (key->KeyDown(RIGHT))
            {
                if (++item_type == ITEM_TYPE_NUM)item_type = 0;
+               PlaySoundMem(select_se, DX_PLAYTYPE_BACK, TRUE);
            }
            else if (key->KeyDown(LEFT))
            {
                if (--item_type == -1)item_type = ITEM_TYPE_NUM - 1;
+               PlaySoundMem(select_se, DX_PLAYTYPE_BACK, TRUE);
            }
        }
 
@@ -197,20 +201,19 @@ void Player::MoveX(Key* key, Stage* stagebase)//Ｘ座標の移動
         now_speed_x = old_speed_x;
         all_speed_x_record_calculation += speed_x_record[i];
     }
-    float l_stick_angle_record_num = static_cast<float>(L_STICK_ANGLE_RECORD_NUM);
-    speed.x = (all_speed_x_record_calculation / l_stick_angle_record_num);
+    speed.x = static_cast<float>((all_speed_x_record_calculation / L_STICK_ANGLE_RECORD_NUM));
     location.x += speed.x;
 
-    if (stagebase->HitBlock(this).flg)
-    {
-        location.x = floor(location.x);
-        float sign = -(speed.x / fabsf(speed.x));
-        while (stagebase->HitBlock(this).flg)location.x += sign;
-    }
-    else if (speed.x != 0)
+    if (speed.x != 0)
     {
         if (speed.x > 0)direction = -1;
         else direction = 1;
+    }
+
+    if (stagebase->HitBlock(this).flg)
+    {
+        location.x = floorf(location.x);
+        while (stagebase->HitBlock(this).flg)location.x += static_cast<float>(direction);
     }
 }
 
@@ -221,7 +224,7 @@ void Player::MoveY(Key* key, Stage* stagebase)//Ｙ座標の移動
 
     if (stagebase->HitBlock(this).flg)//ステージにぶつかっていたら、
     {
-        location.y = floor(location.y);
+        location.y = floorf(location.y);
         float sign = -(speed.y / fabsf(speed.y));
         while (stagebase->HitBlock(this).flg)location.y += sign;
 
