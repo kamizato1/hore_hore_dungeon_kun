@@ -12,8 +12,8 @@
 
 GameMain::GameMain(int stage_num)
 {
-    InitGraph();
-    InitSoundMem();
+   /* InitGraph();
+    InitSoundMem();*/
 
     int stage_width[STAGE_NUM];
     FILE* fp_w;//スコアファイル読み込み

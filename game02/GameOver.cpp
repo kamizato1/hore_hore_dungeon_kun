@@ -10,8 +10,8 @@
 
 GameOver::GameOver(int stage_num)
 {
-	InitGraph();
-	InitSoundMem();
+	/*InitGraph();
+	InitSoundMem();*/
 
 	decision_se = LoadSoundMem("bgm/click.mp3");
 	game_over_bgm = LoadSoundMem("bgm/gameover.mp3");

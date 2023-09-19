@@ -11,8 +11,8 @@
 //-----------------------------------
 Title::Title()
 {
-	InitGraph();
-	InitSoundMem();
+	/*InitGraph();
+	InitSoundMem();*/
 
 	input_time = 0;
 	can_scene_change = FALSE;

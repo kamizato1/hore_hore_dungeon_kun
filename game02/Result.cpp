@@ -9,8 +9,8 @@
 //-----------------------------------
 Result::Result(int stage_num, int* treasure_num)
 {
-	InitGraph();
-	InitSoundMem();
+	//InitGraph();
+	//InitSoundMem();
 
 	
 	decision_se = LoadSoundMem("bgm/click.mp3");

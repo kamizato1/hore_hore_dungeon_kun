@@ -17,8 +17,8 @@
 //-----------------------------------
 StageSelect::StageSelect(int stage_num)
 {
-	InitGraph();
-	InitSoundMem();
+	//InitGraph();
+	//InitSoundMem();
 
 	return_se = LoadSoundMem("bgm/return.mp3");
 	decision_se = LoadSoundMem("bgm/click.mp3");

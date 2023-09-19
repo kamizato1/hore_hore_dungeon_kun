@@ -4,8 +4,8 @@
 
 Opening::Opening()
 {
-	InitGraph();
-	InitSoundMem();
+	/*InitGraph();
+	InitSoundMem();*/
 
 	//†Å‹‰æ‘œ
 	image[0] = LoadGraph("images/Opening/†Å‹2.png");
