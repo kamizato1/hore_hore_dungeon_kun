@@ -43,9 +43,9 @@ Result::Result(int stage_num, int* treasure_num)
 
 	PlaySoundMem(roll_score_se, DX_PLAYTYPE_LOOP, TRUE);
 
-	treasure_price[0] = 50000;
-	treasure_price[1] = 150000;
-	treasure_price[2] = 500000;
+	treasure_price[0] = 25000;
+	treasure_price[1] = 75000;
+	treasure_price[2] = 250000;
 	treasure_price[3] = 1000000;
 	treasure_price[4] = 2000000;
 
