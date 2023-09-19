@@ -224,15 +224,18 @@ void Player::MoveY(Key* key, Stage* stagebase)//Ｙ座標の移動
     if ((speed.y += GRAVITY_POWER) > MAX_FALL_SPEED )speed.y = MAX_FALL_SPEED;//重力の大きさが一定に達すまでスピードに重力を足し続けて下に落とす。
     location.y += speed.y;//スピードをY座標に足す。
 
+    int direction_y = 1;
+    if (speed.y > 0)direction_y = -1;
+   
+
     if (stagebase->HitBlock(this).flg)//ステージにぶつかっていたら、
     {
         location.y = floorf(location.y);
-        float sign = -(speed.y / fabsf(speed.y));
-        while (stagebase->HitBlock(this).flg)location.y += sign;
+        while (stagebase->HitBlock(this).flg)location.y += direction_y;
 
         speed.y = 0;
 
-        if (sign == -1)//地面に触れているとき
+        if (direction_y == -1)//地面に触れているとき
         {
             if (key->KeyDown(A))
             {
