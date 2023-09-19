@@ -167,13 +167,15 @@ void Player::Update(Key* key, Stage* stage)
        {
            treasure_num[0] += (break_block_num / 50);
            break_block_num -= (break_block_num / 50) * 50;
+           if (treasure_num[0] >= 100)treasure_num[0] = 99;
        }
 
        HIT_TREASURE hit_treasure = stage->HitTreasure(this, FALSE);
        if (hit_treasure.flg)
        {
+           int treasure_type = static_cast<int>(hit_treasure.treasure_type);
            stage->DeleteTreasure(hit_treasure.num);
-           treasure_num[static_cast<int>(hit_treasure.treasure_type)]++;
+           if (++treasure_num[treasure_type] >= 100)treasure_num[treasure_type] = 99;
            PlaySoundMem(get_treasure_se, DX_PLAYTYPE_BACK, TRUE);
        }
 
